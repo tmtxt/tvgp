@@ -10,3 +10,12 @@ tvgp-auth-token: c5531766-dccf-4ab8-bd89-6337602ed2fa
   "password": "hello",
   "helloAbc": "def"
 }
+
+# login
+POST http://127.0.0.1:4000/api/login
+Content-Type: application/json
+
+{
+  "username": "test14g",
+  "password": "hello"
+}
