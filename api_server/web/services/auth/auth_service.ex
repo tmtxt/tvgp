@@ -22,6 +22,14 @@ defmodule ApiServer.Services.Auth do
     expired_at: number
   }
 
+  @typedoc """
+  The return data for ensure user functions
+  """
+  @type ensure_user_data :: %{
+    username: String.t,
+    user_role: String.t
+  }
+
 
   @doc """
   Create new user
@@ -84,6 +92,53 @@ defmodule ApiServer.Services.Auth do
       auth_token: token,
       expired_at: expired_at * 1000
     }
+  end
+
+
+  @doc """
+  Ensure this user is a logged in user
+  """
+  @spec ensure_logged_in_user(context) :: ensure_user_data
+  def ensure_logged_in_user(conn) do
+    token = Conn.get_req_header(conn, "dkcn-auth-token")
+    token_key = build_token_key token
+
+    # find token from redis
+    res = RedisPool.pipeline([
+      ~w(HGET #{token_key} username),
+      ~w(HGET #{token_key} userrole)
+    ])
+
+    res = case res do
+            {:ok, res} -> res
+            {:error, _} -> raise AuthErrors.UnauthorizedError
+          end
+    res = case res do
+            [nil, _] -> raise AuthErrors.UnauthorizedError
+            [_, nil] -> raise AuthErrors.UnauthorizedError
+            result -> result
+          end
+
+    [username, user_role] = res
+    %{
+      username: username,
+      user_role: user_role
+    }
+  end
+
+
+  @doc """
+  Ensure this user is an admin user
+  """
+  @spec ensure_logged_in_user(context) :: ensure_user_data
+  def ensure_admin_user(conn) do
+    user_data = ensure_logged_in_user(conn)
+    %{user_role: user_role} = user_data
+    if user_role !== User.user_role_admin do
+      raise AuthErrors.UnauthorizedError
+    end
+
+    user_data
   end
 
 

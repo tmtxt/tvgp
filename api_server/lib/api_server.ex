@@ -6,7 +6,8 @@ defmodule ApiServer do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    spawn(EnsureStorage, :ensure, [])
+    spawn(ApiServer.EnsureStorage, :run, [])
+    spawn(ApiServer.SeedData, :run, [])
 
     # Define workers and child supervisors to be supervised
     children = [

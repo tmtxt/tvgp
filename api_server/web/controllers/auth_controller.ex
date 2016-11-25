@@ -10,11 +10,10 @@ defmodule ApiServer.AuthController do
 
 
   @doc """
-  Response: see create_both_user function
+  Response: see create_user function
   """
   def create_user(conn, params) do
     AuthService.ensure_admin_user(conn)
-    params = Map.put params, "user_role", "user"
     res = AuthService.create_user conn, params
     json(conn, res)
   end
