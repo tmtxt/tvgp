@@ -31,8 +31,7 @@ defmodule ApiServer.Web do
       use Phoenix.Controller
 
       alias Plug.Conn
-      alias ApiServer.MainRepo
-      alias ApiServer.AuthRepo
+      alias ApiServer.Repo
 
       import Ecto
       import Ecto.Query
@@ -50,8 +49,6 @@ defmodule ApiServer.Web do
       use Phoenix.HTML
 
       import ApiServer.Router.Helpers
-      import ApiServer.ErrorHelpers
-      import ApiServer.Gettext
     end
   end
 

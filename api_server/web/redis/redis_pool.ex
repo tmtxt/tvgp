@@ -2,7 +2,7 @@ defmodule ApiServer.RedisPool do
   def create_redis_pools(pool_size) do
     for i <- 0..(pool_size - 1) do
       Supervisor.Spec.worker(
-        Redix, [[host: "redis", port: 6379], [name: :"redix_#{i}"]], id: {Redix, i}
+        Redix, [[host: "localhost", port: 6379], [name: :"redix_#{i}"]], id: {Redix, i}
       )
     end
   end

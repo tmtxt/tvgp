@@ -6,6 +6,8 @@ defmodule ApiServer do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    spawn(EnsureStorage, :ensure, [])
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository

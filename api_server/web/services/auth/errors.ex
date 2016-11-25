@@ -1,5 +1,20 @@
 defmodule ApiServer.Services.Auth.Errors do
 
+  defmodule CreateUserError do
+    @moduledoc """
+    Exception raised when create user fail
+    """
+    import ApiServer.EctoUtil, only: [errors_to_map: 1]
+
+    defexception plug_status: 400, changeset: nil
+
+    def message(e) do
+      %Ecto.Changeset{} = e.changeset
+      changeset = e.changeset
+    end
+  end
+
+
   defmodule LoginError do
     @moduledoc """
     Exception raised when login fail
