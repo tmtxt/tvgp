@@ -21,10 +21,11 @@ defmodule ApiServer.Services.Auth do
   @spec create_user(context, map) :: map
   def create_user(conn, user_data) do
     user = User.changeset(%User{}, user_data)
-    # user = case User.insert(user) do
-    #          {:ok, user} -> user
-    #          {:error, changeset} -> raise
-    #        end
+    user = case Repo.insert(user) do
+             {:ok, user} -> user
+             {:error, changeset} -> raise AuthErrors.CreateUserError, changeset: changeset
+           end
+    user
   end
 
 end

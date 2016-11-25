@@ -13,16 +13,10 @@ defmodule ApiServer.AuthController do
   Response: see create_both_user function
   """
   def create_user(conn, params) do
-    AuthService.ensure_admin_user(conn)
+    # AuthService.ensure_admin_user(conn)
     params = Map.put params, "user_role", "user"
-    try do
-      res = AuthService.create_both_user conn, params
-      json(conn, res)
-    catch
-      changeset = %Ecto.Changeset{} -> conn
-      |> put_status(400)
-      |> json(errors_to_map(changeset))
-    end
+    res = AuthService.create_user conn, params
+    json(conn, res)
   end
 
 
@@ -43,7 +37,7 @@ defmodule ApiServer.AuthController do
   #   try do
   #     res = create_both_user conn, params
   #     json(conn, res)
-  #   catch
+    #   catch
   #     changeset = %Ecto.Changeset{} -> conn
   #     |> put_status(400)
   #     |> json(errors_to_map(changeset))

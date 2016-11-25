@@ -11,6 +11,8 @@ defmodule ApiServer.Services.Auth.Errors do
     def message(e) do
       %Ecto.Changeset{} = e.changeset
       changeset = e.changeset
+      changeset = errors_to_map changeset
+      inspect changeset, pretty: true
     end
   end
 
