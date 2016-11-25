@@ -1,9 +1,11 @@
 defmodule EnsureStorage do
+  alias Ecto.Migrator
+
   def ensure() do
     if System.get_env("POSTGRES_ENSURE_STORAGE") == "true" do
-      IO.puts "1"
-    else
-      IO.puts "2"
+      {:ok, _} = Application.ensure_all_started(:api_server)
+      directory = Application.app_dir(:api_server, "priv/repo/migrations")
+      Migrator.run(ApiServer.Repo, directory, :up, all: true)
     end
   end
 end
