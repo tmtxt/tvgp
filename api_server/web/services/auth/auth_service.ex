@@ -100,7 +100,7 @@ defmodule ApiServer.Services.Auth do
   """
   @spec ensure_logged_in_user(context) :: ensure_user_data
   def ensure_logged_in_user(conn) do
-    token = Conn.get_req_header(conn, "dkcn-auth-token")
+    token = Conn.get_req_header(conn, "tvgp-auth-token")
     token_key = build_token_key token
 
     # find token from redis
@@ -130,7 +130,7 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Ensure this user is an admin user
   """
-  @spec ensure_logged_in_user(context) :: ensure_user_data
+  @spec ensure_admin_user(context) :: ensure_user_data
   def ensure_admin_user(conn) do
     user_data = ensure_logged_in_user(conn)
     %{user_role: user_role} = user_data

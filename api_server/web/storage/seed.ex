@@ -13,13 +13,27 @@ defmodule ApiServer.SeedData do
   end
 
   defp insert_admin() do
-    admin = User.changeset(
-      %User{}, %{
+    admin = Repo.get_by(User, username: "admin")
+
+    if admin do
+      admin = Ecto.Changeset.change(
+        admin,
         username: "admin",
         password: "admin",
-        email: "admin@admin.admin"
-      }
-    )
-    Repo.insert(admin)
+        email: "admin@admin.admin",
+        user_role: "admin"
+      )
+      Repo.update! admin
+    else
+      data = User.changeset(
+        %User{}, %{
+          username: "admin",
+          password: "admin",
+          email: "admin@admin.admin",
+          user_role: "admin"
+        }
+      )
+      Repo.insert! data
+    end
   end
 end
