@@ -1,0 +1,48 @@
+version: '2'
+services:
+  # citus_master:
+  #   image: 'citusdata/citus:5.2.1'
+  #   ports: ['5432:5432']
+  #   volumes: ['./citus:/etc/citus']
+
+  # citus_worker_1:
+  #   image: 'citusdata/citus:5.2.1'
+  #   ports: ['5433:5432']
+
+  # citus_worker_2:
+  #   image: 'citusdata/citus:5.2.1'
+  #   ports: ['5434:5432']
+
+
+  # database
+  postgres:
+    build: ./postgres
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:3.0.7
+    ports:
+      - 6379:6379
+
+
+  # migration services
+  schemup_main:
+    image: tmtxt/schemup:v0.0.2
+    volumes:
+      - ./schema/main:/schemup
+
+  schemup_auth:
+    image: tmtxt/schemup:v0.0.2
+    volumes:
+      - ./schema/auth:/schemup
+
+
+  # app services
+  api_server:
+    build: './api_server'
+    ports: ['4000:4000']
+    volumes: ['./api_server:/usr/src/app']
+    env_file:
+      - ./env/app.env
+      - ./env/${DKCN_ENV}.env
