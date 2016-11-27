@@ -19,7 +19,7 @@ defmodule ApiServer.Mixfile do
   def application do
     [mod: {ApiServer, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :proper_case, :ex_bcrypt, :redix]]
+                    :phoenix_ecto, :postgrex, :proper_case, :comeonin, :redix]]
   end
 
   # Specifies which paths to compile per environment.
@@ -39,7 +39,7 @@ defmodule ApiServer.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:proper_case, "~> 0.1.3"},
-     {:ex_bcrypt, "~> 0.0.1"},
+     {:comeonin, "~> 2.5"},
      {:redix, ">= 0.0.0"},
      {:uuid, "~> 1.1"}]
   end
@@ -51,8 +51,6 @@ defmodule ApiServer.Mixfile do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"],
-     "test": ["test"]]
+    ["test": ["test"]]
   end
 end

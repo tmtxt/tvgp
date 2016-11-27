@@ -18,7 +18,7 @@ defmodule ApiServer.Models.Postgres.User do
     |> validate_required([:username, :email, :password])
     |> unique_constraint(:username, name: "user_username_unique")
     |> unique_constraint(:email, name: "user_email_unique")
-    |> update_change(:password, &ExBcrypt.hash/1)
+    |> update_change(:password, &Comeonin.Bcrypt.hashpwsalt/1)
   end
 
 

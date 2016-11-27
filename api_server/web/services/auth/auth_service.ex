@@ -59,7 +59,7 @@ defmodule ApiServer.Services.Auth do
     end
 
     # compare password
-    match = ExBcrypt.match(password, user.password)
+    match = Comeonin.Bcrypt.checkpw(password, user.password)
     if !match do
       raise AuthErrors.LoginError
     end
