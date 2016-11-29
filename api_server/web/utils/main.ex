@@ -1,6 +1,11 @@
 defmodule ApiServer.Util do
 
   @doc """
+  Return current timestamp
+  """
+  def now(unit \\ :milli_seconds), do: :os.system_time(:milli_seconds)
+
+  @doc """
   Convert a map to a specified struct
   to_struct $User{}, params
   """

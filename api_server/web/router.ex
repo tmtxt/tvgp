@@ -3,7 +3,7 @@ defmodule ApiServer.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-    plug ApiServer.LogTrace.Plug
+    plug ApiServer.LogTrace.HttpLogTrace
     plug Plug.Parsers,
       parsers: [:urlencoded, :multipart, :json],
       pass: ["*/*"],
