@@ -1,7 +1,6 @@
 defmodule ApiServer.LogTrace.HttpLogTrace do
-  import ProperCase
   alias Plug.Conn
-  alias ApiServer.LogTrace.Core, as: LogTraceCore
+  alias ApiServer.LogTrace.Core, as: LogTrace
 
   # plug
   def init(opts), do: opts
@@ -10,16 +9,31 @@ defmodule ApiServer.LogTrace.HttpLogTrace do
     log_opts = %{
       correlation_id: get_correlation_id(conn)
     }
-    log_trace = LogTraceCore.create(log_opts)
-    request_data = process_request_data conn
+    log_trace = LogTrace.create(log_opts)
 
-    # conn = Conn.assign conn, :log_trace, log_trace
+    # set request data to the log trace instance
+    request_data = process_request_data conn
+    LogTrace.set_in(log_trace, [:http], %{})
+    LogTrace.set_in(log_trace, [:http, :request], request_data);
+
+    conn = Conn.assign conn, :log_trace, log_trace
     Conn.register_before_send(conn, fn conn ->
+      response_data = process_response_data(conn)
+      LogTrace.set_in(log_trace, [:http, :request], response_data)
       conn
     end)
   end
 
 
+  # Process the connection for the response data
+  def process_response_data(conn) do
+    %{
+      status: conn.status
+    }
+  end
+
+
+  # Process the connection to store the request data
   defp process_request_data(conn) do
     %{
       method: String.upcase(conn.method),
@@ -31,6 +45,7 @@ defmodule ApiServer.LogTrace.HttpLogTrace do
     }
   end
 
+  # Get correlation id from request header
   defp get_correlation_id(conn) do
     conn |> Conn.get_req_header("correlation-id") |> List.first
   end
