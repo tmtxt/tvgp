@@ -7,10 +7,6 @@ defmodule ApiServer.Services.Auth do
   alias ApiServer.Models.Postgres.User
   import Ecto.Query
 
-  @typedoc """
-  Context data type for logging
-  """
-  @type context :: %{log_trace: map}
 
   @typedoc """
   The return data after login
@@ -35,8 +31,8 @@ defmodule ApiServer.Services.Auth do
   Create new user
   Raise CreateUserError if not success
   """
-  @spec create_user(context, map) :: User
-  def create_user(conn, user_data) do
+  @spec create_user(map) :: User
+  def create_user(user_data) do
     user = User.changeset(%User{}, user_data)
     user = case Repo.insert(user) do
              {:ok, user} -> user
@@ -49,8 +45,8 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Login with username and password, generate the auth token and write to redis
   """
-  @spec login(context, String.t, String.t) :: login_data
-  def login(conn, username, password) do
+  @spec login(String.t, String.t) :: login_data
+  def login(username, password) do
     # get user
     user = User |> Repo.get_by(username: username)
 
@@ -98,7 +94,7 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Ensure this user is a logged in user
   """
-  @spec ensure_logged_in_user(context) :: ensure_user_data
+  @spec ensure_logged_in_user(Plug.Conn) :: ensure_user_data
   def ensure_logged_in_user(conn) do
     token = Conn.get_req_header(conn, "tvgp-auth-token")
     token_key = build_token_key token
@@ -130,7 +126,7 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Ensure this user is an admin user
   """
-  @spec ensure_admin_user(context) :: ensure_user_data
+  @spec ensure_admin_user(Plug.Conn) :: ensure_user_data
   def ensure_admin_user(conn) do
     user_data = ensure_logged_in_user(conn)
     %{user_role: user_role} = user_data

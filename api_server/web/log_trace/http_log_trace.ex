@@ -16,6 +16,9 @@ defmodule ApiServer.LogTrace.HttpLogTrace do
     LogTrace.set_in(log_trace, [:http], %{})
     LogTrace.set_in(log_trace, [:http, :request], request_data);
 
+    # add initial log data
+    LogTrace.add(log_trace, :info, "Request", "STARTED")
+
     conn = Conn.assign conn, :log_trace, log_trace
     Conn.register_before_send(conn, fn conn ->
       response_data = process_response_data(conn)

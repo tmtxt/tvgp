@@ -32,6 +32,7 @@ defmodule ApiServer.Web do
 
       alias Plug.Conn
       alias ApiServer.Repo
+      alias ApiServer.LogTrace.Core, as: LogTrace
 
       import Ecto
       import Ecto.Query
