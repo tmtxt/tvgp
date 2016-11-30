@@ -31,6 +31,31 @@ defmodule ApiServer.LogTrace.Core do
   end
 
 
+  def add(log_trace_instance, level, title, message)
+  when is_pid(log_trace_instance) and is_atom(level) and is_binary(title) do
+    # log message
+    if (!is_binary(message)) do
+      message = Poison.encode!(message, pretty: true)
+    end
+
+    # log entry
+    log_entry = %{
+      level: level,
+      title: title,
+      message: message
+    }
+
+    # add to messages
+    data = Agent.get(log_trace_instance, &(&1))
+    messages = data.messages
+    messages = [ log_entry | messages ]
+
+    Agent.update(log_trace_instance, fn(data) ->
+      %{ data | messages: messages }
+    end)
+  end
+
+
   # Create initial log trace data, including messages list, started time and the correlation id
   defp create_log_trace_data(opts \\ %{}) do
     started_at = Util.now
