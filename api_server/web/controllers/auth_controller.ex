@@ -21,7 +21,7 @@ defmodule ApiServer.AuthController do
     log_trace = conn.assigns.log_trace
     %{"username" => username, "password" => password} = params
 
-    res = AuthService.login(username, password, log_trace)
+    res = AuthService.login(username, password)
     LogTrace.add(log_trace, :info, "login", "User #{username} logged in")
 
     json(conn, res)

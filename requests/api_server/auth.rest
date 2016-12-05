@@ -1,14 +1,13 @@
 # Create new auth user
 POST http://127.0.0.1:4000/api/auth-users
 Content-Type: application/json
-tvgp-auth-token: d2a66a8d-517a-491f-b7e2-bcb1c8ae7d63
+tvgp-auth-token: 4163b045-1b62-48af-95d2-d4a617407c64
 
 {
-  "user_role": "admin",
-  "username": "test14",
+  "user_role": "user",
+  "username": "test100",
   "email": "test14",
-  "password": "hello",
-  "helloAbc": "def"
+  "password": "hello"
 }
 
 # login

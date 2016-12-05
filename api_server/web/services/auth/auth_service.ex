@@ -45,8 +45,8 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Login with username and password, generate the auth token and write to redis
   """
-  @spec login(String.t, String.t, pid) :: login_data
-  def login(username, password, log_trace) do
+  @spec login(String.t, String.t) :: login_data
+  def login(username, password) do
     # get user
     user = User |> Repo.get_by(username: username)
 
