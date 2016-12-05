@@ -23,7 +23,16 @@ defmodule ApiServer.LogTrace.HttpLogTrace do
 
     Conn.register_before_send(conn, fn conn ->
       response_data = process_response_data(conn)
-      LogTrace.set_in(log_trace, [:http, :request], response_data)
+
+      if (conn.status >= 500) do
+        LogTrace.add log_trace, :error, "Request", Exception.message(conn.assigns.reason)
+      end
+
+      if (conn.status >= 400) do
+        LogTrace.add(log_trace, :warn, "Request", Exception.message(conn.assigns.reason))
+      end
+
+      LogTrace.set_in(log_trace, [:http, :response], response_data)
       LogTrace.add(log_trace, :info, "Request", "END")
       LogTrace.write(log_trace)
       conn

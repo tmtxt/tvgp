@@ -32,6 +32,9 @@ defmodule ApiServer.LogTrace.Core do
   end
 
 
+  @doc """
+  Add log entry to the trace
+  """
   def add(log_trace_instance, level, title, message)
   when is_pid(log_trace_instance) and is_atom(level) and is_binary(title) do
     # log message
@@ -58,6 +61,9 @@ defmodule ApiServer.LogTrace.Core do
   end
 
 
+  @doc """
+  Write the whole log trace to console
+  """
   def write(log_trace_instance) do
     # retrive the log data
     data = Agent.get(log_trace_instance, &(&1))
@@ -80,7 +86,7 @@ defmodule ApiServer.LogTrace.Core do
     # processing time
     finished_at = Util.now
     processing_time = finished_at - data.started_at
-    data = put_in(data, [:processing_time], processing_time)
+    data = put_in(data, [:processing_time], "#{processing_time} ms")
 
     # process other data
     data = data
@@ -101,6 +107,7 @@ defmodule ApiServer.LogTrace.Core do
   end
 
 
+  # write log based on the level
   defp write_log(level, message) do
     case level do
       :debug -> Logger.debug message
@@ -111,13 +118,13 @@ defmodule ApiServer.LogTrace.Core do
   end
 
 
+  # detect the log level based on all the traces
   defp detect_log_level(messages) do
     try_get_level(messages, :error) ||
       try_get_level(messages, :warn) ||
       try_get_level(messages, :info) ||
       try_get_level(messages, :debug)
   end
-
 
   defp try_get_level(messages, level) do
     Enum.find(
