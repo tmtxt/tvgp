@@ -77,10 +77,27 @@ defmodule ApiServer.LogTrace.Core do
     end)
     |> Enum.join("\n")
 
-    # process other data
-    data = Map.delete(data, :messages)
+    # processing time
+    finished_at = Util.now
+    processing_time = finished_at - data.started_at
+    data = put_in(data, [:processing_time], processing_time)
 
-    Logger.info messages
+    # process other data
+    data = data
+    |> Map.delete(:messages)
+    |> Map.delete(:started_at)
+
+    # format other props
+    str = data
+    |> Enum.map(fn({k, v}) ->
+      value = Poison.encode!(v, pretty: true)
+      "\t#{k}: #{value}"
+    end)
+    |> Enum.join("\n")
+
+    # write log
+    log_message = str <> "\n" <> messages
+    Logger.info log_message
   end
 
 
