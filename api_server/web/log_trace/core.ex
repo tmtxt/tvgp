@@ -16,8 +16,8 @@ defmodule ApiServer.LogTrace.Core do
   @spec create(map) :: pid
   def create(opts) do
     log_trace_data = create_log_trace_data(opts)
-    {:ok, pid} = Agent.start_link(fn -> log_trace_data end)
-    pid
+  {:ok, pid} = Agent.start_link(fn -> log_trace_data end)
+  pid
   end
 
 
@@ -97,7 +97,17 @@ defmodule ApiServer.LogTrace.Core do
 
     # write log
     log_message = str <> "\n" <> messages
-    Logger.info log_message
+    write_log log_level, log_message
+  end
+
+
+  defp write_log(level, message) do
+    case level do
+      :debug -> Logger.debug message
+      :info -> Logger.info message
+      :warn -> Logger.warn message
+      _ -> Logger.error message
+    end
   end
 
 
