@@ -1,4 +1,5 @@
 defmodule ApiServer.LogTrace.Core do
+  require Logger
   alias ApiServer.Util
 
   @moduledoc """
@@ -34,8 +35,9 @@ defmodule ApiServer.LogTrace.Core do
   def add(log_trace_instance, level, title, message)
   when is_pid(log_trace_instance) and is_atom(level) and is_binary(title) do
     # log message
-    if (!is_binary(message)) do
-      message = Poison.encode!(message, pretty: true)
+    message = cond do
+      !is_binary(message) -> Poison.encode!(message, pretty: true)
+      true -> message
     end
 
     # log entry
@@ -48,11 +50,55 @@ defmodule ApiServer.LogTrace.Core do
     # add to messages
     data = Agent.get(log_trace_instance, &(&1))
     messages = data.messages
-    messages = [ log_entry | messages ]
+    messages = messages ++ [ log_entry ]
 
     Agent.update(log_trace_instance, fn(data) ->
       %{ data | messages: messages }
     end)
+  end
+
+
+  def write(log_trace_instance) do
+    # retrive the log data
+    data = Agent.get(log_trace_instance, &(&1))
+    messages = data.messages;
+
+    # detect the log level
+    log_level = detect_log_level(messages)
+
+    # process the messages
+    messages = messages
+    |> Enum.with_index(1)
+    |> Enum.map(fn {message, index} ->
+      level = message.level
+      |> Atom.to_string
+      |> String.upcase
+      "\t[#{index}] #{level} #{message.title} : #{message.message}"
+    end)
+    |> Enum.join("\n")
+
+    # process other data
+    data = Map.delete(data, :messages)
+
+    Logger.info messages
+  end
+
+
+  defp detect_log_level(messages) do
+    try_get_level(messages, :error) ||
+      try_get_level(messages, :warn) ||
+      try_get_level(messages, :info) ||
+      try_get_level(messages, :debug)
+  end
+
+
+  defp try_get_level(messages, level) do
+    Enum.find(
+      messages,
+      fn(message) ->
+        message.level == level
+      end
+    ) && level || nil;
   end
 
 
