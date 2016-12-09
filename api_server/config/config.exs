@@ -44,6 +44,7 @@ config :api_server, ApiServer.Repo,
   database: System.get_env("POSTGRES_DATABASE"),
   hostname: System.get_env("POSTGRES_SERVER"),
   port: System.get_env("POSTGRES_PORT"),
+  loggers: [],
   pool_size: 10
 
 # Set a higher stacktrace during development. Avoid configuring such
