@@ -16,7 +16,7 @@ defmodule ApiServer.ModelCase do
 
   using do
     quote do
-      alias ApiServer.MainRepo
+      alias ApiServer.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -26,10 +26,10 @@ defmodule ApiServer.ModelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(ApiServer.MainRepo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(ApiServer.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(ApiServer.MainRepo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(ApiServer.Repo, {:shared, self()})
     end
 
     :ok
@@ -58,8 +58,6 @@ defmodule ApiServer.ModelCase do
       true
   """
   def errors_on(struct, data) do
-    struct.__struct__.changeset(struct, data)
-    |> Ecto.Changeset.traverse_errors(&ApiServer.ErrorHelpers.translate_error/1)
-    |> Enum.flat_map(fn {key, errors} -> for msg <- errors, do: {key, msg} end)
+
   end
 end

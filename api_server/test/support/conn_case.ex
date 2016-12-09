@@ -24,8 +24,7 @@ defmodule ApiServer.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      alias ApiServer.MainRepo
-      alias ApiServer.AuthRepo
+      alias ApiServer.Repo
 
       import ApiServer.Router.Helpers
 
