@@ -95,6 +95,7 @@ defmodule ApiServer.LogTrace.Core do
 
     # format other props
     str = data
+    |> Iteraptor.to_flatmap
     |> Enum.map(fn({k, v}) ->
       value = Poison.encode!(v, pretty: true)
       "\t#{k}: #{value}"
@@ -102,7 +103,7 @@ defmodule ApiServer.LogTrace.Core do
     |> Enum.join("\n")
 
     # write log
-    log_message = str <> "\n" <> messages
+    log_message = str <> "\n" <> messages <> "\n"
     write_log log_level, log_message
   end
 

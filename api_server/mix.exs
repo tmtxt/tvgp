@@ -19,7 +19,7 @@ defmodule ApiServer.Mixfile do
   def application do
     [mod: {ApiServer, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :proper_case, :comeonin, :redix]]
+                    :phoenix_ecto, :postgrex, :proper_case, :comeonin, :redix, :iteraptor]]
   end
 
   # Specifies which paths to compile per environment.
@@ -41,6 +41,7 @@ defmodule ApiServer.Mixfile do
      {:proper_case, "~> 0.1.3"},
      {:comeonin, "~> 2.5"},
      {:redix, ">= 0.0.0"},
+     {:iteraptor, "~> 0.7.0"},
      {:uuid, "~> 1.1"}]
   end
 

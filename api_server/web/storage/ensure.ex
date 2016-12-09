@@ -9,7 +9,7 @@ defmodule ApiServer.EnsureStorage do
       directory = Application.app_dir(:api_server, "priv/repo/migrations")
       LogTrace.add(log_trace, :info, "Ensure Storage - directory", directory)
 
-      Migrator.run(ApiServer.Repo, directory, :up, all: true)
+      Migrator.run(ApiServer.Repo, directory, :up, all: true, log: false)
       LogTrace.add(log_trace, :info, "Ensure Storage", "DONE!")
 
       LogTrace.stop(log_trace)
