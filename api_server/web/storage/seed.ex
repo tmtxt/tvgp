@@ -5,7 +5,6 @@ defmodule ApiServer.SeedData do
 
   def run() do
     if System.get_env("API_SERVER_SEED_DATA") == "true" do
-      {:ok, _} = Application.ensure_all_started(:api_server)
       insert_admin()
 
       IO.puts "Finish seeding data"
