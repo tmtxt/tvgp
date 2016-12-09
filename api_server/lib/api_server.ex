@@ -6,31 +6,24 @@ defmodule ApiServer do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    # Define workers and child supervisors to be supervised
-    children = [
-      # Start the Ecto repository
-      supervisor(ApiServer.Repo, []),
-      # Start the endpoint when the application starts
-      # supervisor(ApiServer.Endpoint, []),
-      # Start your own worker by calling: ApiServer.Worker.start_link(arg1, arg2, arg3)
-      # worker(ApiServer.Worker, [arg1, arg2, arg3]),
-    ]
+    # supervisors for backing services
+    children = [supervisor(ApiServer.Repo, [])]
     children = children ++ ApiServer.RedisPool.create_redis_pools(5)
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
+    # start supervisors for backing services first
     opts = [strategy: :one_for_one, name: ApiServer.Supervisor]
     {:ok, pid} = res = Supervisor.start_link(children, opts)
 
-    # spawn(ApiServer.EnsureStorage, :run, [])
-    # spawn(ApiServer.SeedData, :run, [])
+    # ensure storage + seed data if necessary
     ApiServer.EnsureStorage.run()
-    :ok = Supervisor.terminate_child(pid, ApiServer.Repo)
-    {:ok, _} = Supervisor.restart_child(pid, ApiServer.Repo)
+    :ok = Supervisor.terminate_child(pid, ApiServer.Repo)    # new type added, need to restart the connection
+    {:ok, _} = Supervisor.restart_child(pid, ApiServer.Repo) # new type added, need to restart the connection
     ApiServer.SeedData.run()
 
-    Supervisor.start_child(pid, supervisor(ApiServer.Endpoint, []))
+    # start the http server
+    {:ok, _} = Supervisor.start_child(pid, supervisor(ApiServer.Endpoint, []))
 
+    # success
     res
   end
 
