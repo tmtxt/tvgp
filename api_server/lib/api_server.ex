@@ -20,12 +20,13 @@ defmodule ApiServer do
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: ApiServer.Supervisor]
-    res = Supervisor.start_link(children, opts)
-    {:ok, pid} = res
+    {:ok, pid} = res = Supervisor.start_link(children, opts)
 
     # spawn(ApiServer.EnsureStorage, :run, [])
     # spawn(ApiServer.SeedData, :run, [])
     ApiServer.EnsureStorage.run()
+    :ok = Supervisor.terminate_child(pid, ApiServer.Repo)
+    {:ok, _} = Supervisor.restart_child(pid, ApiServer.Repo)
     ApiServer.SeedData.run()
 
     Supervisor.start_child(pid, supervisor(ApiServer.Endpoint, []))

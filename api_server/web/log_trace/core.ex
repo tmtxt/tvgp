@@ -14,7 +14,7 @@ defmodule ApiServer.LogTrace.Core do
   The return data is the process pid
   """
   @spec create(map) :: pid
-  def create(opts) do
+  def create(opts \\ %{}) do
     log_trace_data = create_log_trace_data(opts)
   {:ok, pid} = Agent.start_link(fn -> log_trace_data end)
   pid
@@ -104,6 +104,15 @@ defmodule ApiServer.LogTrace.Core do
     # write log
     log_message = str <> "\n" <> messages
     write_log log_level, log_message
+  end
+
+
+  @doc """
+  Write the whole log trace and kill the log trace instance
+  """
+  def stop(log_trace_instance) do
+    write(log_trace_instance)
+    Agent.stop(log_trace_instance)
   end
 
 
