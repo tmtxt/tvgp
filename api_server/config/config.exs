@@ -16,7 +16,7 @@ config :api_server, ApiServer.Endpoint,
   render_errors: [view: ApiServer.ErrorView, accepts: ~w(html json)],
   pubsub: [name: ApiServer.PubSub,
            adapter: Phoenix.PubSub.PG2],
-  http: [port: 4000],
+  http: [port: String.to_integer(System.get_env("API_SERVER_PORT") || "4000")],
   debug_errors: false,
   check_origin: false,
   watchers: [],
@@ -49,4 +49,11 @@ config :api_server, ApiServer.Repo,
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
-config :phoenix, :stacktrace_depth, String.to_integer(System.get_env("API_SERVER_STACKTRACE_DEPTH"))
+config :phoenix, :stacktrace_depth, String.to_integer(
+  System.get_env("API_SERVER_STACKTRACE_DEPTH") || "20"
+)
+
+# Redis config
+config :api_server, ApiServer.RedisPool,
+  hostname: System.get_env("REDIS_SERVER") || "localhost",
+  port: String.to_integer(System.get_env("REDIS_PORT") || "6379")

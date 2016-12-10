@@ -5,7 +5,7 @@ services:
   postgres:
     build: ./postgres
     ports:
-      - 5432:5432
+      - 43967:5432
 
   redis:
     image: redis:3.0.7
