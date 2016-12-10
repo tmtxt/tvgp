@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - 6
+before_install:
+  - npm install -g codecov
+script:
+  - npm run test:coverage
+  - codecov
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+cache:
+  directories:
+  - $HOME/.yarn-cache

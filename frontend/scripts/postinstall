@@ -1,0 +1,4 @@
+#!/bin/bash
+if [ $BUILD_ASSETS ]; then
+  yarn run build
+fi

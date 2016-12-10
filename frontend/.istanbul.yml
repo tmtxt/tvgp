@@ -1,0 +1,20 @@
+instrumentation:
+    root: ./app
+    extensions:
+        - .js
+        - .jsx
+    excludes: [
+      '**/__test__/*.js',
+      '**/__test__/*.jsx',
+      '**/*.marko.js',
+      'app.jsx',
+      'routes.jsx',
+      'server.js',
+      'client/test-helpers/**/*.js',
+      'client/test-helpers/**/*.jsx',
+      'client/main-reducer.js',
+      'client/main-store.js',
+      'client/libs/**/*.js'
+    ]
+    include-all-sources: true
+    es-modules: true
