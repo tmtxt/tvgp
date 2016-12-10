@@ -1,9 +1,10 @@
 import React from 'react';
 import { browserHistory, createMemoryHistory, Router, Route } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import Todos from './client/components/todos';
-import StaticPage from './client/components/static-page';
 import { selectors } from './client/components/routing/logic-bundle';
+
+import StaticPage from './client/components/static-page';
+import HomePage from './client/components/home-page';
 
 export const getClientHistory = (store) =>
   syncHistoryWithStore(browserHistory, store, {
@@ -17,7 +18,7 @@ export const getServerHistory = (store, url) =>
 
 export const getRoutes = (history) => (
   <Router history={history}>
-    <Route path="/" component={Todos} />
+    <Route path="/" component={HomePage} />
     <Route path="/static-page" component={StaticPage} />
   </Router>
 );
