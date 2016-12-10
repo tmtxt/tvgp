@@ -24,8 +24,6 @@
   },
   "settings": {
     "import/resolver": {
-      "webpack": {},
-      "babel-module": {}
     }
   }
 }
