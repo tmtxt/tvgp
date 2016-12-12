@@ -1,9 +1,18 @@
 import React from 'react';
+import { compose } from 'recompose';
 
-const HomePage = () => (
+import wrapMainLayout from 'client/layouts/main-layout.jsx';
+
+
+export const HomePage = () => (
   <div>
     Hello
   </div>
 );
 
-export default HomePage;
+
+export const enhance = compose(
+  wrapMainLayout
+);
+
+export default enhance(HomePage);
