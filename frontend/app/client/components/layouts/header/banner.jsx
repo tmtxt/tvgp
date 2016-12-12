@@ -1,6 +1,6 @@
 import React from 'react';
 
-import style from './style.scss';
+import style from './banner-style.scss';
 
 export const Banner = () => (
   <div className={`container-fluid ${style.headerBanner}`}>

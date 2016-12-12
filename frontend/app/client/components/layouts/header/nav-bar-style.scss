@@ -1,0 +1,32 @@
+@import "~client/styles/variables.scss";
+
+:local(.navBarWrapper) {
+  background-color: $yellow;
+  border-top: 2px solid $brownred;
+  border-bottom: 2px solid $brownred;
+}
+
+:local(.innerWrapper) {
+  height: 52px;
+}
+
+:local(.collapseWrapper) {
+  padding-right: 0;
+  padding-left: 0;
+  height: 52px;
+}
+
+:local(.listWrapper li) {
+  padding-top: 15px;
+  padding-left: 0;
+  padding-bottm: 13px;
+  padding-right: 25px;
+  // padding: 15px 0 13px 25px;
+  font-size: 17px;
+  font-weight: bolder;
+}
+
+:local(.listWrapper li a) {
+  padding: 0;
+  color: $brown !important;
+}
