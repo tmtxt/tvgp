@@ -10,7 +10,7 @@ tvgp-auth-token: 4163b045-1b62-48af-95d2-d4a617407c64
   "password": "hello"
 }
 
-# login
+# Login
 POST http://127.0.0.1:4000/api/login
 Content-Type: application/json
 
@@ -18,3 +18,7 @@ Content-Type: application/json
   "username": "admin",
   "password": "admin"
 }
+
+# Get current user
+GET http://127.0.0.1:4000/api/auth-users
+tvgp-auth-token: 0c723fba-ce70-4551-a656-7365af47c309

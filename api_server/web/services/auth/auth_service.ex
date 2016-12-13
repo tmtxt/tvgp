@@ -18,6 +18,7 @@ defmodule ApiServer.Services.Auth do
     expired_at: number
   }
 
+
   @typedoc """
   The return data for ensure user functions
   """
@@ -96,7 +97,7 @@ defmodule ApiServer.Services.Auth do
   """
   @spec ensure_logged_in_user(Plug.Conn) :: ensure_user_data
   def ensure_logged_in_user(conn) do
-    token = Conn.get_req_header(conn, "tvgp-auth-token")
+    token = get_token conn
     token_key = build_token_key token
 
     # find token from redis
@@ -137,6 +138,33 @@ defmodule ApiServer.Services.Auth do
     user_data
   end
 
+
+  @doc """
+  Get the current user from the request
+  """
+  def get_current_user(conn) do
+    token = get_token conn
+    token_key = build_token_key token
+
+    # find token from redis
+    {:ok, res} = RedisPool.pipeline([
+      ~w(HGET #{token_key} username),
+      ~w(HGET #{token_key} userrole)
+    ])
+
+    case res do
+      [nil, _] -> nil
+      [_, nil] -> nil
+      [username, user_role] -> %{
+                               authenticated: true,
+                               username: username,
+                               user_role: user_role
+                           }
+    end
+  end
+
+
+  defp get_token(conn), do: Conn.get_req_header(conn, "tvgp-auth-token")
 
   defp build_token_key(token), do: "auth:#{token}"
 

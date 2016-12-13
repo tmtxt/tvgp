@@ -2,8 +2,26 @@ defmodule ApiServer.AuthController do
   use ApiServer.Web, :controller
   alias ApiServer.Services.Auth, as: AuthService
 
+  @doc """
+  Get the current logged in user.
+  If not logged in
+  {
+    authenticated: false
+  }
+  If logged in
+  {
+    authenticated: true,
+    username: <string>,
+    user_role: <string>
+  }
+  """
   def get_user(conn, _params) do
-    json conn, %{id_hello: "hello"}
+    user = AuthService.get_current_user(conn)
+    if user do
+      json(conn, user)
+    else
+      json(conn, %{authenticated: false})
+    end
   end
 
 
