@@ -3,3 +3,4 @@ import 'expose-loader?React!react'; // eslint-disable-line
 
 import './twitter-bootstrap';
 import './font-awesome';
+import './lato-font';
