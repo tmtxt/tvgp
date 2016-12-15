@@ -2,22 +2,19 @@ import Koa from 'koa';
 import debug from 'debug';
 import {
   loggingLayer,
-  initialLayer,
   apiLayer,
   securityLayer,
   assetsLayer,
   renderLayer,
   errorLayer,
 } from 'server/middlewares';
-import apis from 'server/apis/base';
 import controllers from 'server/controllers/base';
 
 const app = new Koa();
 
 // setup middlewares
 loggingLayer(app);
-apiLayer(app, apis);
-initialLayer(app);
+apiLayer(app);
 assetsLayer(app);
 securityLayer(app);
 renderLayer(app, controllers);

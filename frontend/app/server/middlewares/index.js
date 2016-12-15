@@ -22,6 +22,7 @@ export const loggingLayer = app =>
   app
     .use(convert(logger())); // https://github.com/koajs/logger
 
+// not use for now since we already have elixir phoenix api server
 export const initialLayer = app =>
   app
     .use(bodyParser()) // https://github.com/koajs/bodyparser

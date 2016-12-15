@@ -11,6 +11,11 @@ const settings = {
     NODE_ENV: process.env.NODE_ENV,
   },
   assetManifest: (global.webpackIsomorphicTools && global.webpackIsomorphicTools.assets()) || {},
+
+  apiServer: {
+    host: process.env.API_SERVER_SERVER || 'localhost',
+    port: parseInt(process.env.API_SERVER_PORT || '4000', 10)
+  }
 };
 
 // ignore assets build for test
