@@ -11,6 +11,8 @@ import convert from 'koa-convert';
 import session from 'koa-generic-session';
 import compress from 'koa-compress';
 import helmet from 'koa-helmet';
+import proxy from 'koa-proxy';
+
 import settings from 'server/initializers/settings';
 import render from './render';
 import prerender from './prerender';
@@ -26,13 +28,17 @@ export const initialLayer = app =>
     .use(convert(conditionalGet())) // https://github.com/koajs/conditional-get
     .use(convert(etag())); // https://github.com/koajs/etag
 
-export const apiLayer = (app, apiRoutes) => {
+export const apiLayer = (app) => {
   const newRouter = router();
+
+  newRouter.post('/api/*', convert(proxy({
+    host: 'http://127.0.0.1:4000'
+  })));
 
   newRouter
     .use(convert(cors())); // https://github.com/koajs/cors
 
-  apiRoutes(newRouter);
+  // apiRoutes(newRouter);
 
   app
     .use(newRouter.routes())

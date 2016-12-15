@@ -16,8 +16,8 @@ const app = new Koa();
 
 // setup middlewares
 loggingLayer(app);
-initialLayer(app);
 apiLayer(app, apis);
+initialLayer(app);
 assetsLayer(app);
 securityLayer(app);
 renderLayer(app, controllers);
