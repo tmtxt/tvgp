@@ -4,7 +4,8 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { selectors } from './client/components/routing/logic-bundle';
 
 import StaticPage from './client/components/static-page';
-import HomePage from './client/components/home-page';
+import PageIndex from './client/components/page-index';
+import PageLogin from './client/components/page-login';
 
 export const getClientHistory = (store) =>
   syncHistoryWithStore(browserHistory, store, {
@@ -18,7 +19,9 @@ export const getServerHistory = (store, url) =>
 
 export const getRoutes = (history) => (
   <Router history={history}>
-    <Route path="/" component={HomePage} />
+    <Route path="/" component={PageIndex} />
     <Route path="/static-page" component={StaticPage} />
+
+    <Route path="/login" component={PageLogin} />
   </Router>
 );

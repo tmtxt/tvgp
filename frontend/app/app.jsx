@@ -6,6 +6,7 @@ import App from './client/components/main/app';
 import configureStore from './client/main-store';
 import { clientFetchData } from './client/helpers/fetch-data';
 import { getRoutes, getClientHistory } from './routes';
+import initUser from './client/initializers/user';
 
 if (process.env.NODE_ENV === 'production') {
   require('offline-plugin/runtime').install();
@@ -20,6 +21,7 @@ const render = (_store, _routes, _appDOM) => {
 };
 
 clientFetchData(history, routes, store);
+initUser(store);
 render(store, routes, appDOM);
 
 if (process.env.NODE_ENV === 'development' && module.hot) {

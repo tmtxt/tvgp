@@ -1,0 +1,8 @@
+:local(.pageLogin) {
+  composes: columnCenter from "client/styles/common.scss";
+}
+
+:local(.loginPanel) {
+  min-width: 300px;
+  width: 400px;
+}
