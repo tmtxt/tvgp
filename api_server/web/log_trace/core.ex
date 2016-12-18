@@ -8,12 +8,17 @@ defmodule ApiServer.LogTrace.Core do
   The Log Trace instance is stored as a pid
   """
 
+  @spec create(map) :: pid
+  @spec set_in(pid, List, any) :: nil
+  @spec add(pid, atom, String.t, String.t) :: nil
+  @spec write(pid) :: nil
+  @spec stop(pid) :: nil
+
 
   @doc """
   Create the Log Trace instance.
   The return data is the process pid
   """
-  @spec create(map) :: pid
   def create(opts \\ %{}) do
     log_trace_data = create_log_trace_data(opts)
   {:ok, pid} = Agent.start_link(fn -> log_trace_data end)
@@ -24,7 +29,6 @@ defmodule ApiServer.LogTrace.Core do
   @doc """
   Set data in the Log Trace map
   """
-  @spec set_in(pid, List, any) :: nil
   def set_in(log_trace_instance, path, value) do
     data = Agent.get(log_trace_instance, &(&1))
     data = put_in(data, path, value)
@@ -114,6 +118,18 @@ defmodule ApiServer.LogTrace.Core do
   def stop(log_trace_instance) do
     write(log_trace_instance)
     Agent.stop(log_trace_instance)
+  end
+
+
+  @doc """
+  Wrap the input block with the log trace instance.
+  """
+  defmacro with_log_trace(name, do: expression) do
+    quote do
+      unquote(name) = ApiServer.LogTrace.Core.create()
+      unquote(expression)
+      ApiServer.LogTrace.Core.stop(unquote(name))
+    end
   end
 
 
