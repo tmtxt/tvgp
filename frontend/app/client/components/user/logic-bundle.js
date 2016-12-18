@@ -1,5 +1,4 @@
 // @flow
-import fetch from 'isomorphic-fetch';
 import {
   Map
 } from 'immutable';
@@ -10,7 +9,7 @@ import {
 } from 'redux-actions';
 
 import globalizeSelectors from 'client/helpers/globalize-selectors';
-import getUrl from 'client/helpers/get-url';
+import api from 'client/helpers/api';
 
 import type {
   UserType,
@@ -32,18 +31,10 @@ export const SET_USER = 'user/SET_USER';
 export const setUser: SetUserActionType = createAction(SET_USER);
 export const login = (username: string, password: string) =>
   (dispatch: Function): Promise < UserType > =>
-  fetch(getUrl('/api/login'), {
-    credentials: 'same-origin',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      username,
-      password
-    })
+  api('Auth.login', null, null, {
+    username,
+    password
   })
-  .then(res => res.json())
   .then((res: UserType) => dispatch(setUser(res)));
 
 

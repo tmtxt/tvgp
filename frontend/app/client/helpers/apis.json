@@ -1,6 +1,0 @@
-{
-  "Auth.getUser": {
-    "method": "get",
-    "url": "/auth-users"
-  }
-}

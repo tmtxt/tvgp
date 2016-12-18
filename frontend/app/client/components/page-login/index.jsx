@@ -1,6 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -29,6 +28,10 @@ export class PageLogin extends Component {
 
   handlePasswordChange = (e: Object) => {
     this.props.actions.setPassword(e.target.value);
+  }
+
+  handleLogin = () => {
+
   }
 
 
@@ -64,7 +67,7 @@ export class PageLogin extends Component {
                 onChange={this.handlePasswordChange}
               />
             </div>
-            <button type="submit" className="btn btn-default">Đăng nhập</button>
+            <button onClick={this.handleLogin} type="submit" className="btn btn-default">Đăng nhập</button>
           </div>
         </div>
       </div>
