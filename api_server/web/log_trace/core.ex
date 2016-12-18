@@ -163,7 +163,7 @@ defmodule ApiServer.LogTrace.Core do
 
 
   # Create initial log trace data, including messages list, started time and the correlation id
-  defp create_log_trace_data(opts \\ %{}) do
+  defp create_log_trace_data(opts) do
     started_at = Util.now
     correlation_id = Map.get(opts, :correlation_id, UUID.uuid4()) || UUID.uuid4()
 
