@@ -24,6 +24,15 @@ export const NavBar = () => (
             <li><a href="/">Lịch sử dòng họ</a></li>
             <li><a href="/">Liên hệ</a></li>
           </ul>
+
+          <ul className="nav navbar-nav navbar-right">
+            <li className="dropdown">
+              <a href="/" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span className="caret" /></a>
+              <ul className="dropdown-menu">
+                <li><a href="/">Action</a></li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
