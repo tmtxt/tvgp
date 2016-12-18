@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import fetch from 'isomorphic-fetch';
 import UrlPattern from 'url-pattern';
+import changeCaseObject from 'change-case-object';
 
 import getUrl from 'client/helpers/get-url';
 
@@ -32,8 +33,9 @@ function getQueryString(query) {
 
 
 function api(routeName, params, query, body) {
-  params = params || {};
-  query = query || {};
+  params = changeCaseObject.snakeCase(params || {});
+  query = changeCaseObject.snakeCase(query || {});
+  body = changeCaseObject.snakeCase(body || {});
 
   const routeConfig = apiRoutes[routeName];
   const method = _.upperCase(routeConfig.method);
@@ -60,7 +62,8 @@ function api(routeName, params, query, body) {
         }
       })
     .then(checkStatus)
-    .then(parseJSON);
+    .then(parseJSON)
+    .then(changeCaseObject.camelCase);
 }
 
 export default api;

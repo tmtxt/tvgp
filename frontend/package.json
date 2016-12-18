@@ -20,6 +20,7 @@
     "babel-types": "^6.20.0",
     "bootstrap": "^3.3.7",
     "bundle-loader": "^0.5.4",
+    "change-case-object": "^2.0.0",
     "compression-webpack-plugin": "^0.3.2",
     "css-loader": "^0.26.1",
     "debug": "^2.3.3",
