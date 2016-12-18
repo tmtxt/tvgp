@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
   fromJS
 } from 'immutable';
@@ -45,21 +44,8 @@ if (process.env.RUNTIME_ENV === 'client' && window.devToolsExtension) {
   ];
 }
 
-// initial state for the store
-function getInitialState() {
-  return {
-    user: fromJS({
-      username: null,
-      userRole: null,
-      isAuthenticated: false,
-      authToken: null
-    })
-  };
-}
-
 
 export default function (initialState = {}) {
-  initialState = _.assign({}, initialState, getInitialState());
   const store = createStore(reducers, fromJS(initialState), compose(
     applyMiddleware(...middlewares),
     ...enhancers

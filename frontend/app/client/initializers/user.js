@@ -1,13 +1,7 @@
-import identity from 'lodash/identity';
-import globalizeSelectors from 'client/helpers/globalize-selectors';
-
-
-const mountPoint = 'user';
-const selectors = globalizeSelectors({
-  getUser: identity
-}, mountPoint);
-
+import {
+  setUser
+} from 'client/components/user/logic-bundle';
 
 export default function initUser(store) {
-
+  store.dispatch(setUser('aaa'));
 }
