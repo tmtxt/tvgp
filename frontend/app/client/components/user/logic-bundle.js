@@ -1,4 +1,5 @@
 // @flow
+import _ from 'lodash';
 import {
   Map
 } from 'immutable';
@@ -35,7 +36,19 @@ export const login = (username: string, password: string) =>
     username,
     password
   })
-  .then((res: UserType) => dispatch(setUser(res)));
+  .then((res: UserType) => _.assign({
+    isAuthenticated: true
+  }, res))
+  .then((res: UserType) => {
+    localStorage.setItem('username', username);
+    localStorage.setItem('password', password);
+    return res;
+  })
+  .then((res: UserType) => dispatch(setUser(res)))
+  .catch(() => {
+    localStorage.removeItem('username');
+    localStorage.removeItem('password');
+  });
 
 
 // reducer
