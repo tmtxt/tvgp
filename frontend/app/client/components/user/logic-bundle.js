@@ -33,6 +33,7 @@ export const setUser: SetUserActionType = createAction(SET_USER);
 export const login = (username: string, password: string) =>
   (dispatch: Function): Promise < UserType > =>
   fetch(getUrl('/api/login'), {
+    credentials: 'same-origin',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -50,7 +51,7 @@ export const login = (username: string, password: string) =>
 export default handleActions({
   [SET_USER]: (state, {
     payload: user
-  }) => state.set('test', user)
+  }) => state.merge(user)
 }, new Map({
   isAuthenticated: false,
   username: null,

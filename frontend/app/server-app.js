@@ -8,12 +8,14 @@ import {
   renderLayer,
   errorLayer,
 } from 'server/middlewares';
+import authentication from 'server/authentication';
 import controllers from 'server/controllers/base';
 
 const app = new Koa();
 
 // setup middlewares
 loggingLayer(app);
+authentication(app);
 apiLayer(app);
 assetsLayer(app);
 securityLayer(app);

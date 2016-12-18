@@ -6,7 +6,7 @@ import htmlMinifier from 'koa-html-minifier';
 import router from 'koa-router';
 import conditionalGet from 'koa-conditional-get';
 import etag from 'koa-etag';
-import CSRF from 'koa-csrf';
+// import CSRF from 'koa-csrf';
 import convert from 'koa-convert';
 import session from 'koa-generic-session';
 import compress from 'koa-compress';
@@ -32,8 +32,9 @@ export const initialLayer = app =>
 export const apiLayer = (app) => {
   const newRouter = router();
 
+  const apiServerUrl = `http://${settings.apiServer.host}:${settings.apiServer.port}`;
   newRouter.post('/api/*', convert(proxy({
-    host: 'http://127.0.0.1:4000'
+    host: apiServerUrl
   })));
 
   newRouter
@@ -60,14 +61,15 @@ export const securityLayer = app => {
 
   app
     .use(convert(session())) // https://github.com/koajs/session
-    .use(new CSRF({
-      invalidSessionSecretMessage: 'Invalid session secret',
-      invalidSessionSecretStatusCode: 403,
-      invalidTokenMessage: 'Invalid CSRF token',
-      invalidTokenStatusCode: 403,
-      excludedMethods: ['GET', 'HEAD', 'OPTIONS'],
-      disableQuery: false,
-    })) // https://github.com/koajs/csrf
+    // .use(new CSRF({
+    //   invalidSessionSecretMessage: 'Invalid session secret',
+    //   invalidSessionSecretStatusCode: 403,
+    //   invalidTokenMessage: 'Invalid CSRF token',
+    //   invalidTokenStatusCode: 403,
+    //   excludedMethods: ['GET', 'HEAD', 'OPTIONS'],
+    //   disableQuery: false,
+    // }))
+  // https://github.com/koajs/csrf
     .use(helmet()); // https://github.com/venables/koa-helmet
 };
 
