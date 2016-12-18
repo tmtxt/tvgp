@@ -1,8 +1,17 @@
-import { fromJS } from 'immutable';
-import { createStore, applyMiddleware, compose } from 'redux';
+import _ from 'lodash';
+import {
+  fromJS
+} from 'immutable';
+import {
+  createStore,
+  applyMiddleware,
+  compose
+} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import loggerMiddleware from 'redux-logger';
-import { persistState } from 'redux-devtools';
+import {
+  persistState
+} from 'redux-devtools';
 import reducers from './main-reducer';
 
 let middlewares = [
@@ -36,7 +45,21 @@ if (process.env.RUNTIME_ENV === 'client' && window.devToolsExtension) {
   ];
 }
 
+// initial state for the store
+function getInitialState() {
+  return {
+    user: fromJS({
+      username: null,
+      userRole: null,
+      isAuthenticated: false,
+      authToken: null
+    })
+  };
+}
+
+
 export default function (initialState = {}) {
+  initialState = _.assign({}, initialState, getInitialState());
   const store = createStore(reducers, fromJS(initialState), compose(
     applyMiddleware(...middlewares),
     ...enhancers
