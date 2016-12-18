@@ -1,7 +1,7 @@
 import {
-  setUser
+  login
 } from 'client/components/user/logic-bundle';
 
 export default function initUser(store) {
-  store.dispatch(setUser('aaa'));
+  store.dispatch(login('admin', 'admin'));
 }

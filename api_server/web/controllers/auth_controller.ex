@@ -37,6 +37,9 @@ defmodule ApiServer.AuthController do
 
   def login(conn, params) do
     log_trace = conn.assigns.log_trace
+    IO.puts "--------------------------------------------------------------------------------"
+    IO.inspect params
+    IO.puts "--------------------------------------------------------------------------------"
     %{"username" => username, "password" => password} = params
 
     res = AuthService.login(username, password)
