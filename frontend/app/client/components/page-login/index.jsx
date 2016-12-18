@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import wrapMainLayout from 'client/layouts/main-layout.jsx';
 
 import style from './style.scss';
-import { selectors, setUsername, setPassword } from './logic-bundle';
+import { selectors, setUsername, setPassword, login } from './logic-bundle';
 import type { SetUsernameActionType, SetPasswordActionType } from './types';
 
 
@@ -17,7 +17,8 @@ export class PageLogin extends Component {
     pageData: Object,
     actions: {
       setUsername: SetUsernameActionType,
-      setPassword: SetPasswordActionType
+      setPassword: SetPasswordActionType,
+      login: Function
     }
   };
 
@@ -31,7 +32,10 @@ export class PageLogin extends Component {
   }
 
   handleLogin = () => {
-
+    const { pageData } = this.props;
+    const username = pageData.get('username');
+    const password = pageData.get('password');
+    this.props.actions.login(username, password);
   }
 
 
@@ -85,7 +89,8 @@ export const enhance = compose(
     dispatch => ({
       actions: bindActionCreators({
         setUsername,
-        setPassword
+        setPassword,
+        login
       }, dispatch)
     })
   )
