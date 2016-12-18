@@ -3,7 +3,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 import { serverFetchData } from 'client/helpers/fetch-data';
-import configureStore from 'client/main-store';
+import { configureStore } from 'client/main-store';
 import App from 'client/components/main/app.jsx';
 
 const routesModule = require('app/routes.jsx');

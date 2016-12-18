@@ -4,8 +4,9 @@ import UrlPattern from 'url-pattern';
 import changeCaseObject from 'change-case-object';
 
 import getUrl from 'client/helpers/get-url';
-
 import apiRoutes from 'client/constants/api';
+import store from 'client/main-store';
+import { selectors } from 'client/components/user/logic-bundle';
 
 
 function checkStatus(response) {
@@ -31,6 +32,23 @@ function getQueryString(query) {
     .join('&');
 }
 
+function getHeaders() {
+  const state = store.getState();
+  const user = selectors.getUser(state);
+  const isAuthenticated = user.get('isAuthenticated');
+
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+
+  if (isAuthenticated) {
+    const authToken = user.get('authToken');
+    headers['tvgp-auth-token'] = authToken;
+  }
+
+  return headers;
+}
+
 
 function api(routeName, params, query, body) {
   params = changeCaseObject.snakeCase(params || {});
@@ -49,17 +67,16 @@ function api(routeName, params, query, body) {
   if (!_.isEmpty(queryString)) {
     url = `${url}?${queryString}`;
   }
-
-  //
   url = getUrl(url);
+
+  // headers
+  const headers = getHeaders();
 
   return fetch(
       url, {
         method,
         body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers
       })
     .then(checkStatus)
     .then(parseJSON)

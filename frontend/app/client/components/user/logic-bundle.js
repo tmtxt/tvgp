@@ -45,6 +45,7 @@ export default handleActions({
   }) => state.merge(user)
 }, new Map({
   isAuthenticated: false,
+  authToken: null,
   username: null,
   userRole: null
 }));

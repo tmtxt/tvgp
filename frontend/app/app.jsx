@@ -3,7 +3,7 @@ import 'client/libs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './client/components/main/app';
-import configureStore from './client/main-store';
+import store from './client/main-store';
 import { clientFetchData } from './client/helpers/fetch-data';
 import { getRoutes, getClientHistory } from './routes';
 import initUser from './client/initializers/user';
@@ -13,7 +13,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const appDOM = document.getElementById('app');
-const store = configureStore(window.prerenderData);
 const history = getClientHistory(store);
 const routes = getRoutes(history);
 const render = (_store, _routes, _appDOM) => {
