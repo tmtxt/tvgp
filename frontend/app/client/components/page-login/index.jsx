@@ -1,11 +1,21 @@
 // @flow
-import React, { Component } from 'react';
-import { compose } from 'recompose';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {
+  Component
+} from 'react';
+import {
+  compose
+} from 'recompose';
+import {
+  connect
+} from 'react-redux';
+import {
+  bindActionCreators
+} from 'redux';
 
 import wrapMainLayout from 'client/layouts/main-layout.jsx';
-import { login } from 'client/components/user/logic-bundle';
+import {
+  login
+} from 'client/components/user/logic-bundle';
 
 import style from './style.scss';
 
@@ -41,7 +51,10 @@ export class PageLogin extends Component {
   }
 
   handleLogin = () => {
-    const { username, password } = this.state;
+    const {
+      username,
+      password
+    } = this.state;
     this.props.actions.login(username, password);
   }
 
