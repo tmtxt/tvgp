@@ -16,6 +16,7 @@ import wrapMainLayout from 'client/layouts/main-layout.jsx';
 import {
   login
 } from 'client/components/user/logic-bundle';
+import push from 'client/helpers/routing';
 
 import style from './style.scss';
 
@@ -24,10 +25,12 @@ export class PageLogin extends Component {
 
   state: {
     username: string,
-    password: string
+    password: string,
+    error: bool
   } = {
     username: '',
-    password: ''
+    password: '',
+    error: false
   }
 
 
@@ -55,13 +58,43 @@ export class PageLogin extends Component {
       username,
       password
     } = this.state;
-    this.props.actions.login(username, password);
+    this.props.actions.login(username, password, {
+      done: this.handleLoginSuccess,
+      fail: this.handleLoginFail
+    });
   }
 
+  handleLoginSuccess = () => {
+    this.setState({
+      error: false
+    });
+    push('Home');
+  }
+
+  handleLoginFail = () => {
+    this.setState({
+      error: true
+    });
+  }
+
+
+  renderError() {
+    const { error } = this.state;
+    if (!error) {
+      return null;
+    }
+
+    return (
+      <div className="alert alert-danger login-message" role="alert">
+        Tên đăng nhập hoặc mật khẩu không đúng
+      </div>
+    );
+  }
 
   render() {
     return (
       <div className={style.pageLogin}>
+        { this.renderError() }
         <div className={`panel panel-warning ${style.loginPanel}`}>
           <div className="panel-heading">
             <h3 className="panel-title">Vui lòng đăng nhập</h3>

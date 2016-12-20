@@ -30,8 +30,14 @@ export const SET_USER = 'user/SET_USER';
 
 // actions
 export const setUser: SetUserActionType = createAction(SET_USER);
-export const login = (username: string, password: string) =>
-  (dispatch: Function, getState: Function): Promise<UserType> =>
+export const login = (username: string, password: string, {
+    done = _.noop,
+    fail = _.noop
+  }: {
+    done: Function,
+    fail: Function
+  } = {}) =>
+  (dispatch: Function, getState: Function): Promise < UserType > =>
   api('Auth.login', null, null, {
     username,
     password
@@ -44,7 +50,9 @@ export const login = (username: string, password: string) =>
     localStorage.setItem('password', password);
     return res;
   })
-  .then((res: UserType) => dispatch(setUser(res)));
+  .then((res: UserType) => dispatch(setUser(res)))
+  .then(done)
+  .catch(fail);
 
 
 // reducer
