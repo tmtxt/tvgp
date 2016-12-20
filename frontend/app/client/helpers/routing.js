@@ -13,11 +13,11 @@ function getQueryString(query) {
 }
 
 
-export function push(routeSelector, params = {}, query = {}) {
+export function getRoute(routeSelector, params = {}, query = {}) {
   let route = _.get(routes, routeSelector);
 
   if (!route) {
-    return;
+    return null;
   }
 
   // route and params
@@ -30,6 +30,12 @@ export function push(routeSelector, params = {}, query = {}) {
     route = `${route}?${queryString}`;
   }
 
+  return route;
+}
+
+
+export function push(routeSelector, params = {}, query = {}) {
+  const route = getRoute(routeSelector, params, query);
   browserHistory.push(route);
 }
 

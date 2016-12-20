@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Banner from './banner';
-import NavBar from './nav-bar';
+import NavBar from './nav-bar/index';
 
 export const Header = () => (
   <header className="site-header">
