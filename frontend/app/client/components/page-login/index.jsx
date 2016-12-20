@@ -58,10 +58,10 @@ export class PageLogin extends Component {
       username,
       password
     } = this.state;
-    this.props.actions.login(username, password, {
-      done: this.handleLoginSuccess,
-      fail: this.handleLoginFail
-    });
+
+    this.props.actions.login(username, password)
+      .then(this.handleLoginSuccess)
+      .catch(this.handleLoginFail);
   }
 
   handleLoginSuccess = () => {
