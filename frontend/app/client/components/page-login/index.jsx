@@ -5,43 +5,48 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import wrapMainLayout from 'client/layouts/main-layout.jsx';
+import { login } from 'client/components/user/logic-bundle';
 
 import style from './style.scss';
-import { selectors, setUsername, setPassword, login } from './logic-bundle';
-import type { SetUsernameActionType, SetPasswordActionType } from './types';
 
 
 export class PageLogin extends Component {
 
+  state: {
+    username: string,
+    password: string
+  } = {
+    username: '',
+    password: ''
+  }
+
+
   props: {
-    pageData: Object,
     actions: {
-      setUsername: SetUsernameActionType,
-      setPassword: SetPasswordActionType,
       login: Function
     }
   };
 
 
   handleUsernameChange = (e: Object) => {
-    this.props.actions.setUsername(e.target.value);
+    this.setState({
+      username: e.target.value
+    });
   }
 
   handlePasswordChange = (e: Object) => {
-    this.props.actions.setPassword(e.target.value);
+    this.setState({
+      password: e.target.value
+    });
   }
 
   handleLogin = () => {
-    const { pageData } = this.props;
-    const username = pageData.get('username');
-    const password = pageData.get('password');
+    const { username, password } = this.state;
     this.props.actions.login(username, password);
   }
 
 
   render() {
-    const { pageData } = this.props;
-
     return (
       <div className={style.pageLogin}>
         <div className={`panel panel-warning ${style.loginPanel}`}>
@@ -52,7 +57,7 @@ export class PageLogin extends Component {
             <div className="form-group">
               <label htmlFor="username">Tên đăng nhập</label>
               <input
-                value={pageData.get('username')}
+                value={this.state.username}
                 type="text"
                 className="form-control"
                 name="username"
@@ -63,7 +68,7 @@ export class PageLogin extends Component {
             <div className="form-group">
               <label htmlFor="password">Mật khẩu</label>
               <input
-                value={pageData.get('password')}
+                value={this.state.password}
                 type="password"
                 className="form-control"
                 name="password"
@@ -83,13 +88,9 @@ export class PageLogin extends Component {
 export const enhance = compose(
   wrapMainLayout,
   connect(
-    state => ({
-      pageData: selectors.getData(state)
-    }),
+    () => ({}),
     dispatch => ({
       actions: bindActionCreators({
-        setUsername,
-        setPassword,
         login
       }, dispatch)
     })

@@ -7,7 +7,7 @@ export default async (ctx: Object, next: Function) => {
     const { getRoutes, getServerHistory } = require('app/routes');
     const App = require('client/components/main/app').default;
     const { serverFetchData } = require('client/helpers/fetch-data');
-    const { configureStore } = require('client/main-store').default;
+    const configureStore = require('client/main-store').default;
 
     ctx.prerender = ctx.prerender ||
       function (template: string, parameters: Object = {}, initialState: Object = {}) {

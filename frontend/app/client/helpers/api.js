@@ -5,8 +5,9 @@ import changeCaseObject from 'change-case-object';
 
 import getUrl from 'client/helpers/get-url';
 import apiRoutes from 'client/constants/api';
-import store from 'client/main-store';
-import { selectors } from 'client/components/user/logic-bundle';
+import {
+  selectors
+} from 'client/components/user/logic-bundle';
 
 
 function checkStatus(response) {
@@ -32,25 +33,27 @@ function getQueryString(query) {
     .join('&');
 }
 
-function getHeaders() {
-  const state = store.getState();
-  const user = selectors.getUser(state);
-  const isAuthenticated = user.get('isAuthenticated');
-
+function getHeaders(getState) {
   const headers = {
     'Content-Type': 'application/json'
   };
 
-  if (isAuthenticated) {
-    const authToken = user.get('authToken');
-    headers['tvgp-auth-token'] = authToken;
+  if (getState) {
+    const state = getState();
+    const user = selectors.getUser(state);
+    const isAuthenticated = user.get('isAuthenticated');
+
+    if (isAuthenticated) {
+      const authToken = user.get('authToken');
+      headers['tvgp-auth-token'] = authToken;
+    }
   }
 
   return headers;
 }
 
 
-function api(routeName, params, query, body) {
+function api(routeName, params, query, body, getState) {
   params = changeCaseObject.snakeCase(params || {});
   query = changeCaseObject.snakeCase(query || {});
   body = changeCaseObject.snakeCase(body || {});
@@ -70,7 +73,7 @@ function api(routeName, params, query, body) {
   url = getUrl(url);
 
   // headers
-  const headers = getHeaders();
+  const headers = getHeaders(getState);
 
   return fetch(
       url, {

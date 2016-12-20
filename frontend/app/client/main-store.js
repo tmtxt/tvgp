@@ -45,7 +45,7 @@ if (process.env.RUNTIME_ENV === 'client' && window.devToolsExtension) {
 }
 
 
-export function configureStore(initialState = {}) {
+export default function configureStore(initialState = {}) {
   const store = createStore(reducers, fromJS(initialState), compose(
     applyMiddleware(...middlewares),
     ...enhancers
@@ -59,6 +59,3 @@ export function configureStore(initialState = {}) {
 
   return store;
 }
-
-
-export default configureStore();
