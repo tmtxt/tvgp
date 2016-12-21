@@ -5,7 +5,6 @@ defmodule ApiServer.Services.Auth do
   alias ApiServer.RedisPool
   alias ApiServer.Services.Auth.Errors, as: AuthErrors
   alias ApiServer.Models.Postgres.User
-  import Ecto.Query
 
 
   @typedoc """
@@ -24,7 +23,8 @@ defmodule ApiServer.Services.Auth do
   """
   @type ensure_user_data :: %{
     username: String.t,
-    user_role: String.t
+    user_role: String.t,
+    auth_token: String.t
   }
 
 
@@ -74,14 +74,14 @@ defmodule ApiServer.Services.Auth do
     redis_key = build_token_key token
 
     # write to redis
-    res = case RedisPool.pipeline([
-                ~w(HMSET #{redis_key} username #{username} userrole #{user_role}),
-                ~w(EXPIREAT #{redis_key} #{expired_at}),
-                ~w(HGETALL #{redis_key})
-              ]) do
-            {:ok, res} -> res
-            {:error, error} -> raise AuthErrors.LoginError
-          end
+    case RedisPool.pipeline([
+          ~w(HMSET #{redis_key} username #{username} userrole #{user_role}),
+          ~w(EXPIREAT #{redis_key} #{expired_at}),
+          ~w(HGETALL #{redis_key})
+        ]) do
+      {:ok, res} -> res
+      {:error, _} -> raise AuthErrors.LoginError
+    end
 
     %{
       username: username,
@@ -119,7 +119,8 @@ defmodule ApiServer.Services.Auth do
     [username, user_role] = res
     %{
       username: username,
-      user_role: user_role
+      user_role: user_role,
+      auth_token: token
     }
   end
 
@@ -161,6 +162,14 @@ defmodule ApiServer.Services.Auth do
                                user_role: user_role
                            }
     end
+  end
+
+
+  def logout(token) do
+    token_key = build_token_key(token)
+    {:ok, _} = RedisPool.pipeline([
+      ~w(DEL #{token_key})
+    ])
   end
 
 
