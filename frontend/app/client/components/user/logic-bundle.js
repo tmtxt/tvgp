@@ -14,7 +14,8 @@ import api from 'client/helpers/api';
 
 import type {
   UserType,
-  SetUserActionType
+  SetUserActionType,
+  ClearUserActionType
 } from './types';
 
 // mount point from main reducer
@@ -27,9 +28,12 @@ export const selectors = globalizeSelectors({
 
 // action types
 export const SET_USER = 'user/SET_USER';
+export const CLEAR_USER = 'user/CLEAR_USER';
 
 // actions
 export const setUser: SetUserActionType = createAction(SET_USER);
+export const clearUser: ClearUserActionType = createAction(CLEAR_USER);
+
 export const login = (username: string, password: string) =>
   (dispatch: Function, getState: Function): Promise < UserType > =>
   api('Auth.login', null, null, {
@@ -45,16 +49,28 @@ export const login = (username: string, password: string) =>
     return res;
   })
   .then((res: UserType) => dispatch(setUser(res)));
+export const logout = () =>
+  (dispatch: Function, getState: Function): Promise<*> =>
+  api('Auth.logout', null, null, null, getState)
+  .then(() => {
+    localStorage.removeItem('username');
+    localStorage.removeItem('password');
+  })
+  .then(() => dispatch(clearUser()));
 
 
 // reducer
-export default handleActions({
-  [SET_USER]: (state, {
-    payload: user
-  }) => state.merge(user)
-}, new Map({
+const getInitialState = () => Map({
   isAuthenticated: false,
   authToken: null,
   username: null,
   userRole: null
-}));
+});
+
+export default handleActions({
+  [SET_USER]: (state, {
+    payload: user
+  }) => state.merge(user),
+
+  [CLEAR_USER]: () => getInitialState()
+}, getInitialState());

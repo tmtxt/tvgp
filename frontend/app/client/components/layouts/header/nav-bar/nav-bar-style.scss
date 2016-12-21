@@ -30,3 +30,13 @@
   padding: 0;
   color: $brown !important;
 }
+
+:local(.usernameLink) {
+  color: $brown !important;
+  font-size: 17px;
+  font-weight: bolder;
+}
+
+:local(.usernameLink:focus) {
+  background-color: transparent !important;
+}

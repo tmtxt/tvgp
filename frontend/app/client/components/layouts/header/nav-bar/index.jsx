@@ -9,7 +9,7 @@ import {
 } from 'react-router';
 
 import {
-  selectors
+  selectors, logout
 } from 'client/components/user/logic-bundle';
 import {
   getRoute
@@ -21,8 +21,15 @@ import style from './nav-bar-style.scss';
 export class NavBar extends Component {
 
   props: {
-    user: Object
+    user: Object,
+    logout: Function
   };
+
+
+  handleLogout = (e) => {
+    e.preventDefault();
+    this.props.logout();
+  }
 
 
   renderRightNav() {
@@ -44,13 +51,15 @@ export class NavBar extends Component {
     const username = user.get('username');
 
     return (
-      <ul className={`nav navbar-nav navbar-right ${style.listWrapper}`}>
+      <ul className="nav navbar-nav navbar-right">
         <li className="dropdown">
-          <a href="/" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <a href="/" className={`dropdown-toggle ${style.usernameLink}`} data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             Xin chào {username} <span className="caret" />
           </a>
           <ul className="dropdown-menu">
-            <li><a href="/">Action</a></li>
+            <li>
+              <a href="/" onClick={this.handleLogout}>Thoát</a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -94,5 +103,7 @@ export default connect(
   (state) => ({
     user: selectors.getUser(state)
   }),
-  () => ({}),
+  {
+    logout
+  }
 )(NavBar);

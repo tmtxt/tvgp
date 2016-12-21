@@ -50,8 +50,11 @@ defmodule ApiServer.AuthController do
 
 
   def logout(conn, _params) do
-    %{auth_token: auth_token} = AuthService.ensure_logged_in_user(conn)
+    log_trace = conn.assigns.log_trace
+    %{auth_token: auth_token, username: username} = AuthService.ensure_logged_in_user(conn)
     AuthService.logout(auth_token)
+
+    LogTrace.add(log_trace, :info, "logout", "User #{username} logged out")
     send_resp(conn, 200, "")
   end
 end
