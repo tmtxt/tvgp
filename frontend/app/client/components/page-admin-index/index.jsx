@@ -1,16 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import wrapMainLayout from 'client/components/main-layout/index.jsx';
+import wrapAdminLayout from 'client/components/admin-layout/index.jsx';
 
 
-export class PageAdminIndex extends Component {
-  render() {
-    return (
-      <div>
-        Admin
-      </div>
-    );
-  }
-}
+const PageAdminIndex = () => (
+  <div className="panel panel-warning">
+    <div className="panel-heading">
+      <h3 className="panel-title">
+        Quản trị
+      </h3>
+    </div>
+    <div className="panel-body">
+      Xin chào admin
+    </div>
+  </div>
+);
 
-export default wrapMainLayout(PageAdminIndex);
+
+export default wrapAdminLayout(PageAdminIndex);
