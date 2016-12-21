@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Header from 'client/components/layouts/header/index.jsx';
+import Header from 'client/components/site-header/index.jsx';
 
 import './main-layout-style.css';
 

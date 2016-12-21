@@ -12,7 +12,7 @@ import {
   bindActionCreators
 } from 'redux';
 
-import wrapMainLayout from 'client/layouts/main-layout.jsx';
+import wrapMainLayout from 'client/components/main-layout/index.jsx';
 import {
   login
 } from 'client/components/user/logic-bundle';

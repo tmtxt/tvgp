@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'recompose';
 
-import wrapMainLayout from 'client/layouts/main-layout.jsx';
+import wrapMainLayout from 'client/components/main-layout/index.jsx';
 
 
 export const PageIndex = () => (

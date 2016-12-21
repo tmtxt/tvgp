@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import wrapMainLayout from 'client/layouts/main-layout.jsx';
+import wrapMainLayout from 'client/components/main-layout/index.jsx';
 
 
 export class PageAdminIndex extends Component {
