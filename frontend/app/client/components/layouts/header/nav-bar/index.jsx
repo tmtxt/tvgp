@@ -82,11 +82,11 @@ export class NavBar extends Component {
 
             <div className={`collapse navbar-collapse ${style.collapseWrapper}`} id="bs-example-navbar-collapse-1">
               <ul className={`nav navbar-nav ${style.listWrapper}`}>
-                <li><a href="/">Trang chủ</a></li>
-                <li><a href="/">Thành viên</a></li>
-                <li><a href="/">Cây gia phả</a></li>
-                <li><a href="/">Lịch sử dòng họ</a></li>
-                <li><a href="/">Liên hệ</a></li>
+                <li><Link to="/">Trang chủ</Link></li>
+                <li><Link href="/">Thành viên</Link></li>
+                <li><Link href="/">Cây gia phả</Link></li>
+                <li><Link href="/">Lịch sử dòng họ</Link></li>
+                <li><Link href="/">Liên hệ</Link></li>
               </ul>
 
               { this.renderRightNav() }
