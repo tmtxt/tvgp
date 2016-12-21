@@ -2,10 +2,12 @@ import React from 'react';
 import { browserHistory, createMemoryHistory, Router, Route } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { selectors } from './client/components/routing/logic-bundle';
+import { getRoute } from './client/helpers/routing';
 
-import StaticPage from './client/components/static-page';
 import PageIndex from './client/components/page-index';
 import PageLogin from './client/components/page-login';
+import PageAdminIndex from './client/components/page-admin-index';
+
 
 export const getClientHistory = (store) =>
   syncHistoryWithStore(browserHistory, store, {
@@ -19,9 +21,10 @@ export const getServerHistory = (store, url) =>
 
 export const getRoutes = (history) => (
   <Router history={history}>
-    <Route path="/" component={PageIndex} />
-    <Route path="/static-page" component={StaticPage} />
+    <Route path={getRoute('Home')} component={PageIndex} />
 
-    <Route path="/login" component={PageLogin} />
+    <Route path={getRoute('User.login')} component={PageLogin} />
+
+    <Route path={getRoute('Admin.index')} component={PageAdminIndex} />
   </Router>
 );

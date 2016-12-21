@@ -6,7 +6,9 @@ import wrapMainLayout from 'client/layouts/main-layout.jsx';
 
 export const PageIndex = () => (
   <div>
-    Hello
+    <div className="row">
+      Hello
+    </div>
   </div>
 );
 

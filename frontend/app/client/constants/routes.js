@@ -3,5 +3,9 @@ export default {
 
   User: {
     login: '/login'
+  },
+
+  Admin: {
+    index: '/admin'
   }
 };

@@ -23,7 +23,8 @@ export const mountPoint = 'user';
 
 // selector
 export const selectors = globalizeSelectors({
-  getUser: identity
+  getUser: identity,
+  isAdmin: (user) => user.get('userRole') === 'admin'
 }, mountPoint);
 
 // action types

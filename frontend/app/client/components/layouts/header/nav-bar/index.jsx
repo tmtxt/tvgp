@@ -22,6 +22,7 @@ export class NavBar extends Component {
 
   props: {
     user: Object,
+    isAdmin: bool,
     logout: Function
   };
 
@@ -67,6 +68,8 @@ export class NavBar extends Component {
   }
 
   render() {
+    const { isAdmin } = this.props;
+
     return (
       <nav className={`navbar navbar-default ${style.navBarWrapper}`}>
         <div className="container-fluid">
@@ -83,10 +86,11 @@ export class NavBar extends Component {
             <div className={`collapse navbar-collapse ${style.collapseWrapper}`} id="bs-example-navbar-collapse-1">
               <ul className={`nav navbar-nav ${style.listWrapper}`}>
                 <li><Link to="/">Trang chủ</Link></li>
-                <li><Link href="/">Thành viên</Link></li>
-                <li><Link href="/">Cây gia phả</Link></li>
-                <li><Link href="/">Lịch sử dòng họ</Link></li>
-                <li><Link href="/">Liên hệ</Link></li>
+                <li><Link to="/">Thành viên</Link></li>
+                <li><Link to="/">Cây gia phả</Link></li>
+                <li><Link to="/">Lịch sử dòng họ</Link></li>
+                <li><Link to="/">Liên hệ</Link></li>
+                { isAdmin && <li><Link to={getRoute('Admin.index')}>Quản trị</Link></li> }
               </ul>
 
               { this.renderRightNav() }
@@ -101,7 +105,8 @@ export class NavBar extends Component {
 
 export default connect(
   (state) => ({
-    user: selectors.getUser(state)
+    user: selectors.getUser(state),
+    isAdmin: selectors.isAdmin(state)
   }),
   {
     logout
