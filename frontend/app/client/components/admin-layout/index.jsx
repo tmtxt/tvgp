@@ -7,6 +7,9 @@ import {
 } from 'recompose';
 
 import wrapMainLayout from 'client/components/main-layout/index.jsx';
+import {
+  getRoute
+} from 'client/helpers/routing';
 
 
 const wrapAdminLayout = (WrappedComponent) => (props) => (
@@ -17,7 +20,7 @@ const wrapAdminLayout = (WrappedComponent) => (props) => (
           <div className="list-group-item list-group-item-warning">
             <strong>Thông tin tài khoản</strong>
           </div>
-          <Link to="/admin/changePassword" className="list-group-item">Đổi mật khẩu</Link>
+          <Link to={getRoute('Admin.changePassword')} className="list-group-item">Đổi mật khẩu</Link>
 
           <div className="list-group-item list-group-item-warning">
             <strong>Thông tin khác</strong>
