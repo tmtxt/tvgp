@@ -22,6 +22,11 @@ defmodule ApiServer.Models.Postgres.User do
   end
 
 
+  def hash_password(password) do
+    Comeonin.Bcrypt.hashpwsalt(password)
+  end
+
+
   def user_role_user(), do: "user"
   def user_role_admin(), do: "admin"
 

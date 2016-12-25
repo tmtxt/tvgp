@@ -60,4 +60,23 @@ defmodule ApiServer.AuthController do
     LogTrace.add(log_trace, :info, "logout", "User #{username} logged out")
     send_resp(conn, 200, "")
   end
+
+
+  def change_password(conn, params) do
+    log_trace = conn.assigns.log_trace
+
+    # ensure token
+    %{auth_token: auth_token, username: username} = AuthService.ensure_logged_in_user(conn)
+    LogTrace.add(log_trace, :info, "change_password", "authenticated")
+
+    # change password
+    %{
+      old_password: old_password,
+      new_password: new_password
+    } = params
+    AuthService.change_password(username, old_password, new_password, auth_token)
+    LogTrace.add(log_trace, :info, "change_password", "#{username}'s password changed")
+
+    send_resp(conn, 200, "")
+  end
 end

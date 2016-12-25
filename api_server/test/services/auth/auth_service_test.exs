@@ -103,4 +103,39 @@ defmodule ApiServer.Test.Services.Auth.CreateUserTest do
     end
   end
 
+
+  describe "Auth Service - Change password flow" do
+    test "Create user" do
+      AuthService.create_user(
+        %{
+          email: "test@test.com",
+          username: "admin_2",
+          password: "admin",
+          user_role: "admin"
+        }
+      )
+    end
+
+    test "Change password" do
+      # login first to get the old auth token
+      %{auth_token: auth_token} = AuthService.login("admin_2", "admin")
+
+      # change password
+      AuthService.change_password("admin_2", "admin", "new_password", auth_token)
+
+      # old token should be deleted from redis
+      redis_key = AuthService.build_token_key(auth_token)
+      {:ok, []} = RedisPool.command(~w(HGETALL #{redis_key}))
+    end
+
+    test "Login with old password, should raise error" do
+      catch_error(AuthService.login("admin_2", "admin"))
+    end
+
+    test "Login with new password, should ok" do
+      AuthService.login("admin_2", "new_password")
+    end
+
+  end
+
 end

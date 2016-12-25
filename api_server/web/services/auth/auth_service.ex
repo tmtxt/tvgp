@@ -7,9 +7,6 @@ defmodule ApiServer.Services.Auth do
   alias ApiServer.Models.Postgres.User
 
 
-  @typedoc """
-  The return data after login
-  """
   @type login_data :: %{
     username: String.t,
     user_role: String.t,
@@ -17,22 +14,23 @@ defmodule ApiServer.Services.Auth do
     expired_at: number
   }
 
-
-  @typedoc """
-  The return data for ensure user functions
-  """
   @type ensure_user_data :: %{
     username: String.t,
     user_role: String.t,
     auth_token: String.t
   }
 
+  @spec create_user(map) :: User
+  @spec login(String.t, String.t) :: login_data
+  @spec ensure_logged_in_user(Plug.Conn) :: ensure_user_data
+  @spec ensure_admin_user(Plug.Conn) :: ensure_user_data
+  @spec validate_user_password(String.t, String.t) :: User
+
 
   @doc """
   Create new user
   Raise CreateUserError if not success
   """
-  @spec create_user(map) :: User
   def create_user(user_data) do
     user = User.changeset(%User{}, user_data)
     user = case Repo.insert(user) do
@@ -46,20 +44,9 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Login with username and password, generate the auth token and write to redis
   """
-  @spec login(String.t, String.t) :: login_data
   def login(username, password) do
     # get user
-    user = User |> Repo.get_by(username: username)
-
-    if !user do
-      raise AuthErrors.LoginError
-    end
-
-    # compare password
-    match = Comeonin.Bcrypt.checkpw(password, user.password)
-    if !match do
-      raise AuthErrors.LoginError
-    end
+    user = validate_user_password(username, password)
 
     # generate auth token (username + uuid)
     %User{
@@ -95,7 +82,6 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Ensure this user is a logged in user
   """
-  @spec ensure_logged_in_user(Plug.Conn) :: ensure_user_data
   def ensure_logged_in_user(conn) do
     token = get_token conn
     token_key = build_token_key token
@@ -128,7 +114,6 @@ defmodule ApiServer.Services.Auth do
   @doc """
   Ensure this user is an admin user
   """
-  @spec ensure_admin_user(Plug.Conn) :: ensure_user_data
   def ensure_admin_user(conn) do
     user_data = ensure_logged_in_user(conn)
     %{user_role: user_role} = user_data
@@ -169,10 +154,44 @@ defmodule ApiServer.Services.Auth do
   Log the current token out
   """
   def logout(token) do
-    token_key = build_token_key(token)
-    {:ok, _} = RedisPool.pipeline([
-      ~w(DEL #{token_key})
-    ])
+    delete_redis_key(token)
+  end
+
+
+  @doc """
+  Change user password and delete auth key from redis
+  """
+  def change_password(username, old_password, new_password, token) do
+    # get the user
+    user = validate_user_password(username, old_password)
+
+    # update the password
+    user = Ecto.Changeset.change(user, password: User.hash_password(new_password))
+    {:ok, _} = Repo.update(user)
+
+    # delete the cache from redis
+    delete_redis_key(token)
+  end
+
+
+  @doc """
+  Validate the user's password, return the user model
+  """
+  def validate_user_password(username, password) do
+    # get user
+    user = User |> Repo.get_by(username: username)
+
+    if !user do
+      raise AuthErrors.LoginError
+    end
+
+    # compare password
+    match = Comeonin.Bcrypt.checkpw(password, user.password)
+    if !match do
+      raise AuthErrors.LoginError
+    end
+
+    user
   end
 
 
@@ -183,5 +202,11 @@ defmodule ApiServer.Services.Auth do
 
 
   defp get_token(conn), do: Conn.get_req_header(conn, "tvgp-auth-token")
+
+  # delete the corresponding auth key from redis for the token
+  defp delete_redis_key(token) do
+    token_key = build_token_key(token)
+    {:ok, _} = RedisPool.command(~w(DEL #{token_key}))
+  end
 
 end
