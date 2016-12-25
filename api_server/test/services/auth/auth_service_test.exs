@@ -8,6 +8,7 @@ defmodule ApiServer.Test.Services.Auth.CreateUserTest do
   alias ApiServer.Models.Postgres.User
 
   alias Plug.Conn
+  alias ApiServer.RedisPool
 
 
   setup_all do
@@ -17,7 +18,7 @@ defmodule ApiServer.Test.Services.Auth.CreateUserTest do
   end
 
 
-  describe "Auth Service" do
+  describe "Auth Service - Create user error" do
     test "Missing data - Throw changeset" do
       user_data = %{
         username: "admin",
@@ -25,8 +26,10 @@ defmodule ApiServer.Test.Services.Auth.CreateUserTest do
       }
       %AuthErrors.CreateUserError{} = catch_error(AuthService.create_user(user_data))
     end
+  end
 
 
+  describe "Auth Service - Create user, Login, Logout flow" do
     test "Create user" do
       user_data = %{
         email: "me@truongtx.me",
@@ -79,7 +82,25 @@ defmodule ApiServer.Test.Services.Auth.CreateUserTest do
       |> Conn.put_req_header("tvgp-auth-token", auth_token)
 
       # ensure
-      %{} = AuthService.ensure_admin_user(conn)
+      AuthService.ensure_admin_user(conn)
+    end
+
+
+    test "Logout" do
+      # login first
+      username = "admin_test"
+      password = "admin"
+      result = AuthService.login(username, password)
+      %{ auth_token: auth_token } = result
+
+      # logout
+      AuthService.logout(auth_token)
+
+      # check in db to see if the auth token is deleted
+      redis_key = AuthService.build_token_key(auth_token)
+      {:ok, res} = RedisPool.command(~w(HGETALL #{redis_key}))
+      [] = res
     end
   end
+
 end

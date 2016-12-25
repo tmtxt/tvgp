@@ -49,6 +49,9 @@ defmodule ApiServer.AuthController do
   end
 
 
+  @doc """
+  Logout
+  """
   def logout(conn, _params) do
     log_trace = conn.assigns.log_trace
     %{auth_token: auth_token, username: username} = AuthService.ensure_logged_in_user(conn)

@@ -165,6 +165,9 @@ defmodule ApiServer.Services.Auth do
   end
 
 
+  @doc """
+  Log the current token out
+  """
   def logout(token) do
     token_key = build_token_key(token)
     {:ok, _} = RedisPool.pipeline([
@@ -173,8 +176,12 @@ defmodule ApiServer.Services.Auth do
   end
 
 
-  defp get_token(conn), do: Conn.get_req_header(conn, "tvgp-auth-token")
+  @doc """
+  Build the key in redis for this token
+  """
+  def build_token_key(token), do: "auth:#{token}"
 
-  defp build_token_key(token), do: "auth:#{token}"
+
+  defp get_token(conn), do: Conn.get_req_header(conn, "tvgp-auth-token")
 
 end
