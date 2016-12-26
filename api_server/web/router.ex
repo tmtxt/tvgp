@@ -18,5 +18,6 @@ defmodule ApiServer.Router do
     post "/auth-users", AuthController, :create_user
     post "/login", AuthController, :login
     post "/logout", AuthController, :logout
+    post "/change-password", AuthController, :change_password
   end
 end

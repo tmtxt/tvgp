@@ -62,6 +62,9 @@ defmodule ApiServer.AuthController do
   end
 
 
+  @doc """
+  Change password
+  """
   def change_password(conn, params) do
     log_trace = conn.assigns.log_trace
 
@@ -77,6 +80,10 @@ defmodule ApiServer.AuthController do
     AuthService.change_password(username, old_password, new_password, auth_token)
     LogTrace.add(log_trace, :info, "change_password", "#{username}'s password changed")
 
-    send_resp(conn, 200, "")
+    # login again
+    res = AuthService.login(username, password)
+    LogTrace.add(log_trace, :info, "change_password", "Login again")
+
+    json(conn, res)
   end
 end
