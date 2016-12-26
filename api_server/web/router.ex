@@ -21,5 +21,6 @@ defmodule ApiServer.Router do
     post "/change-password", AuthController, :change_password
 
     get "/minor-contents/preface", MinorContentController, :get_preface
+    post "/minor-contents/preface", MinorContentController, :set_preface
   end
 end

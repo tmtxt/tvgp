@@ -21,6 +21,18 @@ defmodule ApiServer.Test.Controllers.MinorContent.Preface do
   end
 
 
+  test "Set preface api", %{conn: conn} do
+    conn = post(
+      conn, "/api/minor-contents/preface", %{
+        content: "new content"
+      }
+    )
+    %{
+      "content" => "new content"
+    } = json_response(conn, 200)
+  end
+
+
   # insert sample data
   defp insert_preface() do
     preface = MinorContent.changeset(
