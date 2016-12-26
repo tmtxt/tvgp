@@ -74,14 +74,14 @@ defmodule ApiServer.AuthController do
 
     # change password
     %{
-      old_password: old_password,
-      new_password: new_password
+      "old_password" => old_password,
+      "new_password" => new_password
     } = params
     AuthService.change_password(username, old_password, new_password, auth_token)
     LogTrace.add(log_trace, :info, "change_password", "#{username}'s password changed")
 
     # login again
-    res = AuthService.login(username, password)
+    res = AuthService.login(username, new_password)
     LogTrace.add(log_trace, :info, "change_password", "Login again")
 
     json(conn, res)

@@ -53,7 +53,13 @@ function getHeaders(getState) {
 }
 
 
-function api(routeName, params, query, body, getState) {
+function api(
+  routeName: string,
+  params: Object,
+  query: Object,
+  body: Object,
+  getState: Function
+) {
   params = changeCaseObject.snakeCase(params || {});
   query = changeCaseObject.snakeCase(query || {});
   body = changeCaseObject.snakeCase(body || {});

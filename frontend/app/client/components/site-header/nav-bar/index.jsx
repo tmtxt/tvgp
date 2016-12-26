@@ -9,9 +9,10 @@ import {
 } from 'react-router';
 
 import {
-  selectors, logout
+  selectors,
+  logout
 } from 'client/components/user/logic-bundle';
-import {
+import push, {
   getRoute
 } from 'client/helpers/routing';
 
@@ -29,7 +30,10 @@ export class NavBar extends Component {
 
   handleLogout = (e) => {
     e.preventDefault();
-    this.props.logout();
+    this.props.logout()
+      .then(() => {
+        push('User.login');
+      });
   }
 
 
@@ -68,7 +72,9 @@ export class NavBar extends Component {
   }
 
   render() {
-    const { isAdmin } = this.props;
+    const {
+      isAdmin
+    } = this.props;
 
     return (
       <nav className={`navbar navbar-default ${style.navBarWrapper}`}>
@@ -107,8 +113,7 @@ export default connect(
   (state) => ({
     user: selectors.getUser(state),
     isAdmin: selectors.isAdmin(state)
-  }),
-  {
+  }), {
     logout
   }
 )(NavBar);

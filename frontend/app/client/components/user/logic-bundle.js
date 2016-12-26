@@ -18,6 +18,13 @@ import type {
   ClearUserActionType
 } from './types';
 
+// utils
+function storeUserToLocalStorage(username, password) {
+  localStorage.setItem('username', username);
+  localStorage.setItem('password', password);
+}
+
+
 // mount point from main reducer
 export const mountPoint = 'user';
 
@@ -27,16 +34,18 @@ export const selectors = globalizeSelectors({
   isAdmin: (user) => user.get('userRole') === 'admin'
 }, mountPoint);
 
+
 // action types
 export const SET_USER = 'user/SET_USER';
 export const CLEAR_USER = 'user/CLEAR_USER';
+
 
 // actions
 export const setUser: SetUserActionType = createAction(SET_USER);
 export const clearUser: ClearUserActionType = createAction(CLEAR_USER);
 
 export const login = (username: string, password: string) =>
-  (dispatch: Function, getState: Function): Promise < UserType > =>
+  (dispatch: Function, getState: Function): Promise < * > =>
   api('Auth.login', null, null, {
     username,
     password
@@ -45,19 +54,32 @@ export const login = (username: string, password: string) =>
     isAuthenticated: true
   }, res))
   .then((res: UserType) => {
-    localStorage.setItem('username', username);
-    localStorage.setItem('password', password);
+    storeUserToLocalStorage(username, password);
     return res;
   })
   .then((res: UserType) => dispatch(setUser(res)));
+
 export const logout = () =>
-  (dispatch: Function, getState: Function): Promise<*> =>
+  (dispatch: Function, getState: Function): Promise < * > =>
   api('Auth.logout', null, null, null, getState)
   .then(() => {
     localStorage.removeItem('username');
     localStorage.removeItem('password');
   })
   .then(() => dispatch(clearUser()));
+
+export const changePassword = (username: string, oldPassword: string, newPassword: string) =>
+  (dispatch: Function, getState: Function): Promise < * > =>
+  api('Auth.changePassword', null, null, {
+    username,
+    oldPassword,
+    newPassword
+  }, getState)
+  .then((res: UserType) => {
+    storeUserToLocalStorage(username, newPassword);
+    return res;
+  })
+  .then((res: UserType) => dispatch(setUser(res)));
 
 
 // reducer
