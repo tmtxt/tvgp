@@ -9,6 +9,11 @@ import {
 } from 'react-redux';
 
 import wrapAdminLayout from 'client/components/admin-layout/index.jsx';
+import fetchDataEnhancer from 'client/helpers/fetch-data-enhancer.jsx';
+import {
+  fetchPreface
+} from 'client/components/preface/logic-bundle';
+
 
 export class PageAdminPreface extends Component {
   render() {
@@ -26,6 +31,9 @@ export class PageAdminPreface extends Component {
 
 
 export const enhance = compose(
+  fetchDataEnhancer(
+    ({ store }) => store.dispatch(fetchPreface())
+  ),
   wrapAdminLayout
 );
 

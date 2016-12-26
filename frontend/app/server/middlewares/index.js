@@ -33,6 +33,9 @@ export const apiLayer = (app) => {
   const newRouter = router();
 
   const apiServerUrl = `http://${settings.apiServer.host}:${settings.apiServer.port}`;
+  newRouter.get('/api/*', convert(proxy({
+    host: apiServerUrl
+  })));
   newRouter.post('/api/*', convert(proxy({
     host: apiServerUrl
   })));

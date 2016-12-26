@@ -81,12 +81,17 @@ function api(
   // headers
   const headers = getHeaders(getState);
 
+  // opts
+  const opts = {
+    method,
+    headers
+  };
+  if (method !== 'GET' && method !== 'HEAD') {
+    opts.body = JSON.stringify(body);
+  }
+
   return fetch(
-      url, {
-        method,
-        body: JSON.stringify(body),
-        headers
-      })
+      url, opts)
     .then(checkStatus)
     .then(parseJSON)
     .then(changeCaseObject.camelCase);
