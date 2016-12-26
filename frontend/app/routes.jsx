@@ -9,6 +9,7 @@ import PageLogin from './client/components/page-login';
 
 import PageAdminIndex from './client/components/page-admin-index';
 import PageChangePassword from './client/components/page-change-password';
+import PageAdminPreface from './client/components/page-admin-preface';
 
 
 export const getClientHistory = (store) =>
@@ -29,5 +30,6 @@ export const getRoutes = (history) => (
 
     <Route path={getRoute('Admin.index')} component={PageAdminIndex} />
     <Route path={getRoute('Admin.changePassword')} component={PageChangePassword} />
+    <Route path={getRoute('Admin.preface')} component={PageAdminPreface} />
   </Router>
 );

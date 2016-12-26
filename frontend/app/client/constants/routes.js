@@ -7,6 +7,7 @@ export default {
 
   Admin: {
     index: '/admin',
-    changePassword: '/admin/change-password'
+    changePassword: '/admin/change-password',
+    preface: '/admin/preface'
   }
 };

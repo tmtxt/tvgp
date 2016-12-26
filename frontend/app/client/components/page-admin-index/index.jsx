@@ -4,7 +4,6 @@ import {
 } from 'recompose';
 
 import wrapAdminLayout from 'client/components/admin-layout/index.jsx';
-import requiredAdmin from 'client/helpers/required-admin.jsx';
 
 
 const PageAdminIndex = () => (
@@ -22,8 +21,7 @@ const PageAdminIndex = () => (
 
 
 export const enhance = compose(
-  wrapAdminLayout,
-  requiredAdmin
+  wrapAdminLayout
 );
 
 export default enhance(PageAdminIndex);
