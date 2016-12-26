@@ -19,5 +19,7 @@ defmodule ApiServer.Router do
     post "/login", AuthController, :login
     post "/logout", AuthController, :logout
     post "/change-password", AuthController, :change_password
+
+    get "/minor-contents/preface", MinorContentController, :get_preface
   end
 end
