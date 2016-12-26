@@ -9,6 +9,7 @@ import {
 } from 'recompose';
 
 import wrapAdminLayout from 'client/components/admin-layout/index.jsx';
+import requiredAdmin from 'client/helpers/required-admin.jsx';
 import {
   changePassword,
   selectors
@@ -154,6 +155,7 @@ export class PageChangePassword extends Component {
 
 const enhance = compose(
   wrapAdminLayout,
+  requiredAdmin,
   connect(
     (state) => ({
       user: selectors.getUser(state)
