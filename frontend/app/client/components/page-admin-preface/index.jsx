@@ -24,10 +24,28 @@ import style from './style.scss';
 export class PageAdminPreface extends Component {
 
   state: {
-    content: string
+    content: string,
+    success: bool,
+    error: bool
   } = {
-    content: this.props.preface.get('content')
+    content: this.props.preface.get('content'),
+    success: false,
+    error: false,
   };
+
+  setSuccess = () => {
+    this.setState({
+      success: true,
+      error: false
+    });
+  }
+
+  setError = () => {
+    this.setState({
+      success: false,
+      error: true
+    });
+  }
 
   props: {
     preface: Object,
@@ -45,7 +63,8 @@ export class PageAdminPreface extends Component {
       content
     } = this.state;
 
-    this.props.updatePreface(content);
+    this.props.updatePreface(content)
+      .then(this.setSuccess, this.setError);
   }
 
   renderBody() {
@@ -79,6 +98,11 @@ export class PageAdminPreface extends Component {
   }
 
   render() {
+    const {
+      success,
+      error
+    } = this.state;
+
     return (
       <div className="panel panel-warning">
         <div className="panel-heading">
@@ -87,6 +111,16 @@ export class PageAdminPreface extends Component {
           </h3>
         </div>
         <div className="panel-body">
+          { success &&
+            <div className="alert alert-success" role="alert">
+              Cập nhật thành công
+            </div>
+          }
+          { error &&
+            <div className="alert alert-danger" role="alert">
+              Có lỗi xảy ra
+            </div>
+          }
           { this.renderBody() }
         </div>
       </div>
