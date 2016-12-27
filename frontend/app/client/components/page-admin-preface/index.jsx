@@ -96,11 +96,9 @@ export class PageAdminPreface extends Component {
 
 
 export const enhance = compose(
-  fetchDataEnhancer(
-    ({
-      store
-    }) => store.dispatch(fetchPreface())
-  ),
+  fetchDataEnhancer(({
+    store
+  }) => store.dispatch(fetchPreface())),
   wrapAdminLayout,
   connect(
     (state) => ({

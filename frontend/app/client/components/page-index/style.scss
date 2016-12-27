@@ -1,0 +1,29 @@
+@import "~client/styles/variables.scss";
+
+:local(.loaderContainer) {
+  composes: columnCenter from "client/styles/common.scss";
+}
+
+:local(.postContainer) {
+  composes: column from "client/styles/common.scss";
+}
+
+:local(.postHeader) {
+  flex: 1 1 width;
+  background-image: url('header-bg.png');
+  background-position: 100% 22px;
+  background-repeat: no-repeat;
+  text-transform: uppercase;
+  padding-bottom: 20px;
+}
+
+:local(.headerContent) {
+  background-color: white;
+  display: inline-block;
+  padding-right: 7px;
+  color: $brown;
+}
+
+:local(.prefaceImage) {
+  width: 100%;
+}
