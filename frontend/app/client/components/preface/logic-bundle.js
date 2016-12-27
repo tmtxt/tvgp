@@ -39,6 +39,14 @@ export const fetchPreface = () => (dispatch: Function): Promise<*> =>
   .then((res: PrefaceType) => dispatch(setPreface(res)));
 /* beautify preserve:end */
 
+/* beautify preserve:start */
+export const updatePreface = (content: string) => (dispatch: Function): Promise<*> =>
+  api('MinorContent.updatePreface', null, null, {
+    content
+  })
+  .then((res: PrefaceType) => dispatch(setPreface(res)));
+/* beautify preserve:end */
+
 
 // reducers
 export default handleActions({

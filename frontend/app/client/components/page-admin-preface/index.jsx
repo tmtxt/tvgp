@@ -12,6 +12,7 @@ import wrapAdminLayout from 'client/components/admin-layout/index.jsx';
 import fetchDataEnhancer from 'client/helpers/fetch-data-enhancer.jsx';
 import {
   fetchPreface,
+  updatePreface,
   selectors
 } from 'client/components/preface/logic-bundle';
 
@@ -22,9 +23,30 @@ import style from './style.scss';
 
 export class PageAdminPreface extends Component {
 
-  props: {
-    preface: Object
+  state: {
+    content: string
+  } = {
+    content: this.props.preface.get('content')
   };
+
+  props: {
+    preface: Object,
+    updatePreface: Function
+  };
+
+  handleOnChange = (e) => {
+    this.setState({
+      content: e.target.value
+    });
+  }
+
+  handleSubmit = () => {
+    const {
+      content
+    } = this.state;
+
+    this.props.updatePreface(content);
+  }
 
   renderBody() {
     const {
@@ -32,6 +54,7 @@ export class PageAdminPreface extends Component {
     } = this.props;
     const content = preface.get('content');
 
+    /* preface not fetched yet, render loader */
     if (!content) {
       return (
         <div className={`${style.loaderContainer}`}>
@@ -40,7 +63,19 @@ export class PageAdminPreface extends Component {
       );
     }
 
-    return 'hello';
+    /* render preface edit area */
+    const {
+      content: prefaceContent
+    } = this.state;
+    return (
+      <div>
+        <div className="form-group">
+          <label htmlFor="preface-content">Nội dung</label>
+          <textarea onChange={this.handleOnChange} className="form-control" rows="10" value={prefaceContent} />
+        </div>
+        <button onClick={this.handleSubmit} className="btn btn-default">Cập nhật</button>
+      </div>
+    );
   }
 
   render() {
@@ -70,7 +105,9 @@ export const enhance = compose(
   connect(
     (state) => ({
       preface: selectors.getPreface(state)
-    }), {}
+    }), {
+      updatePreface
+    }
   )
 );
 

@@ -17,5 +17,10 @@ export default {
   'MinorContent.getPreface': {
     method: 'get',
     url: '/api/minor-contents/preface'
+  },
+
+  'MinorContent.updatePreface': {
+    method: 'post',
+    url: '/api/minor-contents/preface'
   }
 };
