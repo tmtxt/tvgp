@@ -44,20 +44,36 @@ export const CLEAR_USER = 'user/CLEAR_USER';
 export const setUser: SetUserActionType = createAction(SET_USER);
 export const clearUser: ClearUserActionType = createAction(CLEAR_USER);
 
-export const login = (username: string, password: string) =>
-  (dispatch: Function, getState: Function): Promise < * > =>
-  api('Auth.login', null, null, {
-    username,
-    password
-  }, getState)
-  .then((res: UserType) => _.assign({
-    isAuthenticated: true
-  }, res))
-  .then((res: UserType) => {
-    storeUserToLocalStorage(username, password);
-    return res;
-  })
-  .then((res: UserType) => dispatch(setUser(res)));
+/* beautify preserve:start */
+export function login(username: string, password: string) {
+  function thunk(dispatch: Function, getState: Function): Promise <*> {
+    dispatch(setUser({
+      isUpdating: true
+    }));
+
+    return api('Auth.login', null, null, {
+      username,
+      password
+    }, getState)
+    .then((res: UserType) => _.assign({
+      isAuthenticated: true,
+      isUpdating: false
+    }, res), (e) => {
+      dispatch(setUser({
+        isUpdating: false
+      }));
+      throw e;
+    })
+    .then((res: UserType) => {
+      storeUserToLocalStorage(username, password);
+      return res;
+    })
+    .then((res: UserType) => dispatch(setUser(res)));
+  }
+
+  return thunk;
+}
+/* beautify preserve:end */
 
 export const logout = () =>
   (dispatch: Function, getState: Function): Promise < * > =>
@@ -87,7 +103,8 @@ const getInitialState = () => Map({
   isAuthenticated: false,
   authToken: null,
   username: null,
-  userRole: null
+  userRole: null,
+  isUpdating: false
 });
 
 export default handleActions({

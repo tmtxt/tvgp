@@ -19,6 +19,7 @@ import {
 import push, {
   getRoute
 } from 'client/helpers/routing';
+import Loader from 'client/components/shared/loader.jsx';
 
 /* beautify preserve:start */
 const wrapAdminLayout = (WrappedComponent: ReactClass<*>): ReactClass < * > => {
@@ -29,6 +30,11 @@ const wrapAdminLayout = (WrappedComponent: ReactClass<*>): ReactClass < * > => {
       const {
         user
       } = this.props;
+
+      const isUpdating = user.get('isUpdating');
+      if (isUpdating) {
+        return;
+      }
 
       const isAuthenticated = user.get('isAuthenticated');
       const userRole = user.get('userRole');
@@ -43,6 +49,18 @@ const wrapAdminLayout = (WrappedComponent: ReactClass<*>): ReactClass < * > => {
     };
 
     render() {
+      const {
+        user
+      } = this.props;
+      const isUpdating = user.get('isUpdating');
+      if (isUpdating) {
+        return (
+          <div>
+            <Loader size="5" />
+          </div>
+        );
+      }
+
       return (
         <div>
           <div className="row">
