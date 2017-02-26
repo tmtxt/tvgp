@@ -39,3 +39,11 @@ services:
       - API_SERVER_SEED_DATA
       - REDIS_SERVER
       - REDIS_PORT
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 10006:3000
+    environment:
+      - API_SERVER_SERVER
+      - API_SERVER_PORT

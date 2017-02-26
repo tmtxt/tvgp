@@ -9,6 +9,9 @@ export POSTGRES_DATABASE=tvgp
 export POSTGRES_USER=tvgp
 export POSTGRES_ENSURE_STORAGE=true
 
+export NEO4J_SERVER=localhost
+export NEO4J_PORT=7687
+
 export API_SERVER_SERVER=localhost
 export API_SERVER_PORT=4000
 export API_SERVER_CODE_RELOADER=true
