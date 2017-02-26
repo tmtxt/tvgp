@@ -36,35 +36,57 @@ function increment-version() {
 }
 
 # increase the tag version
-# api-server-base-0.0.2 -> api-server-base-0.0.3
+# call "increase-tag api-server-base"
+# tag will be increased to api-server-base-v0.0.2
 function increase-tag {
-    local latest_tag=`git describe --tags --match "$project_tag*" --abbrev=0 HEAD`
+    local latest_tag=`git describe --tags --match "$1-v*" --abbrev=0 HEAD`
     local version=`echo $latest_tag | egrep -o '[0-9.]+$'`
     local incremented_version=`increment-version $version`
-    local tag="$1-$incremented_version"
+    local tag="$1-v$incremented_version"
     git tag -a $tag -m "version $tag"
     echo $tag
 }
 
+
+####################
+# api server base
+# increase tag for api server base
 function increase-tag-api-server-base {
     increase-tag "api-server-base"
 }
 
-function build_api_server_base {
-    if [ $# -eq 0 ]
-    then
-        echo "You need to specify a tag"
-        return 1
-    fi
-
-    (cd api_server && docker build -f Dockerfile.base -t tmtxt/tvgp-api-server-base:$1 .)
+# build api server base with latest tag
+function build-api-server-base {
+    local latest_tag=`git describe --tags --match "api-server-base-v*" --abbrev=0 HEAD`
+    local version=`echo $latest_tag | egrep -o '[0-9.]+$'`
+    echo "Build api-server-base:$version"
+    (cd api_server && docker build -f Dockerfile.base -t tmtxt/tvgp-api-server-base:$version .)
 }
 
-function push_api_server_base {
-    if [ $# -eq 0 ]
-    then
-        echo "You need to specify a tag"
-        return 1
-    fi
-    docker push tmtxt/tvgp-api-server-base:$1
+# push api server base with latest tag
+function push-api-server-base {
+    local latest_tag=`git describe --tags --match "api-server-base-v*" --abbrev=0 HEAD`
+    local version=`echo $latest_tag | egrep -o '[0-9.]+$'`
+    echo "Push api-server-base:$version"
+    docker push tmtxt/tvgp-api-server-base:$version
+}
+
+# api server
+function increase-tag-api-server {
+    increase-tag "api-server"
+}
+
+# build api server base with latest tag
+function build-api-server {
+    local latest_tag=`git describe --tags --match "api-server-v*" --abbrev=0 HEAD`
+    local version=`echo $latest_tag | egrep -o '[0-9.]+$'`
+    echo "Build api-server:$version"
+    (cd api_server && docker build -t tmtxt/tvgp-api-server:$version .)
+}
+
+function push-api-server {
+    local latest_tag=`git describe --tags --match "api-server-v*" --abbrev=0 HEAD`
+    local version=`echo $latest_tag | egrep -o '[0-9.]+$'`
+    echo "Push api-server:$version"
+    docker push tmtxt/tvgp-api-server:$version
 }
