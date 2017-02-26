@@ -52,7 +52,16 @@ function increase-tag {
 # api server base
 # increase tag for api server base
 function increase-tag-api-server-base {
+    # increase tag
     increase-tag "api-server-base"
+
+    # replace api server base tag in dockerfile
+    local latest_tag=`git describe --tags --match "api-server-base-v*" --abbrev=0 HEAD`
+    local version=`echo $latest_tag | egrep -o '[0-9.]+$'`
+    (cd api_server &&
+         sed "s/tvgp-api-server-base:[0-9.]*/tvgp-api-server-base:$version/g" < ./Dockerfile > ./Dockerfile_new &&
+         mv ./Dockerfile_new ./Dockerfile
+    )
 }
 
 # build api server base with latest tag
@@ -73,7 +82,15 @@ function push-api-server-base {
 
 # api server
 function increase-tag-api-server {
+    # increase tag
     increase-tag "api-server"
+
+    # replace in docker compose file
+    local latest_tag=`git describe --tags --match "api-server-v*" --abbrev=0 HEAD`
+    local version=`echo $latest_tag | egrep -o '[0-9.]+$'`
+    (sed "s/tvgp-api-server:[0-9.]*/tvgp-api-server:$version/g" < ./docker-compose.prod.yml > ./docker-compose.prod.yml_new &&
+         mv ./docker-compose.prod.yml_new ./docker-compose.prod.yml
+    )
 }
 
 # build api server base with latest tag
