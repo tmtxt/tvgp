@@ -20,3 +20,22 @@ export API_SERVER_SEED_DATA=true
 
 export REDIS_SERVER=redis
 export REDIS_PORT=6379
+
+function build_api_server_base {
+    if [ $# -eq 0 ]
+    then
+        echo "You need to specify a tag"
+        return 1
+    fi
+
+    (cd api_server && docker build -f Dockerfile.base -t tmtxt/tvgp-api-server-base:$1 .)
+}
+
+function push_api_server_base {
+    if [ $# -eq 0 ]
+    then
+        echo "You need to specify a tag"
+        return 1
+    fi
+    docker push tmtxt/tvgp-api-server-base:$1
+}
