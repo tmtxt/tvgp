@@ -28,7 +28,7 @@ export class PageAdminPreface extends Component {
     success: bool,
     error: bool
   } = {
-    content: this.props.preface.get('content'),
+    content: this.props.preface.get('content') || '',
     success: false,
     error: false,
   };

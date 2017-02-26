@@ -14,10 +14,23 @@ $ dcud (docker-compose up -d)
 
 ## API Server
 
-API server are started using mix in elixir
+- API server are started using mix in elixir (version 1.3.4)
 
 ```
 $ ./dev-server.sh
+```
+
+- To compile deps
+
+```
+$ mix deps.get
+$ mix deps.compile
+```
+
+- To generate migration file
+
+```
+$ mix ecto.gen.migration create_person_table
 ```
 
 ## Frontend
