@@ -39,7 +39,7 @@ productionConfig.module.loaders.push(
     }),
   },
   {
-    test: /\.scss-loader$/,
+    test: /\.scss$/,
     loader: ExtractTextPlugin.extract({
       fallbackLoader: 'style-loader',
       loader: `css-loader${config.cssModules}!postcss-loader!sass-loader`,
