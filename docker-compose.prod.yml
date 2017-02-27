@@ -41,7 +41,7 @@ services:
       - REDIS_PORT
 
   frontend:
-    build: ./frontend
+    image: tmtxt/tvgp-frontend:0.0.2
     ports:
       - 10006:3000
     environment:
