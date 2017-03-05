@@ -1,7 +1,6 @@
 defmodule ApiServer.SeedData do
 
   require Ecto.Query
-  alias ApiServer.Models.Neo4j.Person, as: NeoPerson
   alias ApiServer.Repo
   alias ApiServer.Models.Postgres.User
   alias ApiServer.Models.Postgres.MinorContent
@@ -24,20 +23,7 @@ defmodule ApiServer.SeedData do
     count = Repo.aggregate(Person, :count, :id)
     LogTrace.add(log_trace, :info, "person count", count)
     if (count == 0) do
-      # insert to postgres
-      pg_data = Person.changeset(
-        %Person{}, %{
-          full_name: "Tommy",
-          gender: "male",
-          alive_status: "dead"
-        }
-      )
-      pg_person = Repo.insert! pg_data
-      LogTrace.add(log_trace, :info, "insert_person", "Root person inserted to postgres")
-
-      # insert to neo4j
-      res = NeoPerson.insert_person(pg_person, true)
-      LogTrace.add(log_trace, :info, "insert_person", "Root person inserted to neo4j")
+      ApiServer.SeedData.Person.seed_person_data(log_trace)
     end
   end
 
