@@ -1,4 +1,4 @@
-defmodule ApiServer.Models.Postgres.User do
+defmodule ApiServer.Models.Postgres.Person do
   use ApiServer.Web, :model
 
   @derive {Poison.Encoder, except: [:__meta__]}

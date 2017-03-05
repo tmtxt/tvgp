@@ -1,8 +1,10 @@
 defmodule ApiServer.SeedData do
 
+  require Ecto.Query
   alias ApiServer.Repo
   alias ApiServer.Models.Postgres.User
   alias ApiServer.Models.Postgres.MinorContent
+  alias ApiServer.Models.Postgres.Person
   alias ApiServer.LogTrace.Core, as: LogTrace
 
   def run() do
@@ -10,10 +12,29 @@ defmodule ApiServer.SeedData do
       log_trace = LogTrace.create()
       insert_admin(log_trace)
       insert_minor_content(log_trace)
+      insert_person(log_trace)
       LogTrace.add(log_trace, :info, "Seed data", "Seed data finish")
       LogTrace.stop(log_trace)
     end
   end
+
+
+  defp insert_person(log_trace) do
+    count = Repo.aggregate(Person, :count, :id)
+    LogTrace.add(log_trace, :info, "person count", count)
+    if (count == 0) do
+      data = Person.changeset(
+        %Person{}, %{
+          full_name: "Tommy",
+          gender: "male",
+          alive_status: "dead"
+        }
+      )
+      Repo.insert! data
+      LogTrace.add(log_trace, :info, "insert_person", "Root person inserted")
+    end
+  end
+
 
   defp insert_admin(log_trace) do
     admin = Repo.get_by(User, username: "admin")
