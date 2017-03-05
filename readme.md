@@ -59,7 +59,7 @@ $ yarn run watch
 - To start flow server
 
 ```
-$ yarn run flow
+$ yarn run flow:watch
 ```
 
 ## Default data
