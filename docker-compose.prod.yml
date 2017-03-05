@@ -43,7 +43,7 @@ services:
   frontend:
     image: tmtxt/tvgp-frontend:0.0.2
     ports:
-      - 10006:3000
+      - 3000:3000
     environment:
       - API_SERVER_SERVER
       - API_SERVER_PORT
