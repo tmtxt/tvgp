@@ -40,10 +40,11 @@ export const fetchPreface = () => (dispatch: Function): Promise<*> =>
 /* beautify preserve:end */
 
 /* beautify preserve:start */
-export const updatePreface = (content: string) => (dispatch: Function): Promise<*> =>
+export const updatePreface = (content: string) =>
+  (dispatch: Function, getState: Function): Promise<*> =>
   api('MinorContent.updatePreface', null, null, {
     content
-  })
+  }, getState)
   .then((res: PrefaceType) => dispatch(setPreface(res)));
 /* beautify preserve:end */
 

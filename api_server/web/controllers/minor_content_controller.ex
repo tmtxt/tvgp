@@ -3,6 +3,7 @@ defmodule ApiServer.MinorContentController do
 
   alias ApiServer.Repo
   alias ApiServer.Models.Postgres.MinorContent
+  alias ApiServer.Services.Auth, as: AuthService
 
   @doc """
   Response
@@ -30,6 +31,7 @@ defmodule ApiServer.MinorContentController do
   }
   """
   def set_preface(conn, params) do
+    AuthService.ensure_admin_user(conn)
     log_trace = conn.assigns.log_trace
 
     # get the current preface from database
