@@ -7,7 +7,10 @@ defmodule ApiServer do
     import Supervisor.Spec
 
     # supervisors for backing services
-    children = [supervisor(ApiServer.Repo, [])]
+    children = [
+      supervisor(ApiServer.Repo, []),
+      worker(Neo4j.Sips, [Application.get_env(:neo4j_sips, Neo4j)])
+    ]
     children = children ++ ApiServer.RedisPool.create_redis_pools(5)
 
     # start supervisors for backing services first

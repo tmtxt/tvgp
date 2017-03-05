@@ -19,7 +19,8 @@ defmodule ApiServer.Mixfile do
   def application do
     [mod: {ApiServer, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :proper_case, :comeonin, :redix, :iteraptor]]
+                    :phoenix_ecto, :postgrex, :proper_case, :comeonin, :redix, :iteraptor,
+                    :neo4j_sips]]
   end
 
   # Specifies which paths to compile per environment.
@@ -42,7 +43,8 @@ defmodule ApiServer.Mixfile do
      {:comeonin, "~> 2.5"},
      {:redix, ">= 0.0.0"},
      {:iteraptor, "~> 0.7.0"},
-     {:uuid, "~> 1.1"}]
+     {:uuid, "~> 1.1"},
+     {:neo4j_sips, "~> 0.2"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

@@ -57,3 +57,10 @@ config :phoenix, :stacktrace_depth, String.to_integer(
 config :api_server, ApiServer.RedisPool,
   hostname: System.get_env("REDIS_SERVER") || "localhost",
   port: String.to_integer(System.get_env("REDIS_PORT") || "6379")
+
+# Neo4j config
+config :neo4j_sips, Neo4j,
+  url: "http://#{System.get_env("NEO4J_SERVER")}:#{System.get_env("NEO4J_PORT")}",
+  pool_size: 5,
+  max_overflow: 2,
+  timeout: 30
