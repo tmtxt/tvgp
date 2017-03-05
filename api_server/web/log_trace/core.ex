@@ -21,8 +21,21 @@ defmodule ApiServer.LogTrace.Core do
   """
   def create(opts \\ %{}) do
     log_trace_data = create_log_trace_data(opts)
-  {:ok, pid} = Agent.start_link(fn -> log_trace_data end)
-  pid
+    {:ok, pid} = Agent.start_link(fn -> log_trace_data end)
+    pid
+  end
+
+
+  @doc """
+  Create the Log Trace instance without linking to current process.
+  You have to handle call to stop(log_trace)
+  The return data is the process pid
+  """
+  def create_no_link(opts \\ %{}) do
+    log_trace_data = create_log_trace_data(opts)
+    timeout = opts[:timeout] || 5000
+    {:ok, pid} = Agent.start(fn -> log_trace_data end, timeout: timeout)
+    pid
   end
 
 
@@ -62,6 +75,9 @@ defmodule ApiServer.LogTrace.Core do
     Agent.update(log_trace_instance, fn(data) ->
       %{ data | messages: messages }
     end)
+  end
+
+  def add(nil, _, _, _) do
   end
 
 

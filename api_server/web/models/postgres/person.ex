@@ -1,5 +1,6 @@
 defmodule ApiServer.Models.Postgres.Person do
   use ApiServer.Web, :model
+  alias ApiServer.Repo
 
   @derive {Poison.Encoder, except: [:__meta__]}
   @primary_key {:id, :id, [autogenerate: true]}
@@ -21,6 +22,20 @@ defmodule ApiServer.Models.Postgres.Person do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, fields_list())
+  end
+
+
+  @doc """
+  Insert the person map to the data base, return the model
+  """
+  def insert(person) do
+    data = changeset(%ApiServer.Models.Postgres.Person{}, person)
+    Repo.insert! data
+  end
+
+
+  def delete_all() do
+    Repo.delete_all(ApiServer.Models.Postgres.Person)
   end
 
 
