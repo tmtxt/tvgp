@@ -12,11 +12,14 @@ defmodule ApiServer.Models.Neo4j.Person do
   def insert_person(pg_person, is_root \\ false) do
     %{id: person_id} = pg_person
     query = """
-    CREATE (person:Person {person_id: \"#{person_id}\", is_root: \"#{is_root}\"})
-    RETURN person
+    CREATE (person:Person {person_id: \"#{person_id}\", is_root: #{is_root}})
+    RETURN person, id(person) AS id
     """
-    [%{"person" => neo_person}] = Neo4j.query!(Neo4j.conn, query)
-    neo_person
+    [%{"person" => neo_person, "id" => id}] = Neo4j.query!(Neo4j.conn, query)
+
+    neo_person = neo_person
+    |> Map.put("id", id)
+    |> ApiServer.Util.to_atom_map()
   end
 
 end
