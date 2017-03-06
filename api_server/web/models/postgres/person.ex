@@ -33,9 +33,18 @@ defmodule ApiServer.Models.Postgres.Person do
     Repo.insert! data
   end
 
-
+  @doc """
+  Delete all records
+  """
   def delete_all() do
     Repo.delete_all(ApiServer.Models.Postgres.Person)
+  end
+
+  @doc """
+  Get the record by id
+  """
+  def get_by_id(person_id) do
+    Repo.get_by(ApiServer.Models.Postgres.Person, id: person_id)
   end
 
 

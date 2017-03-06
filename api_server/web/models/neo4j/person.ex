@@ -7,6 +7,7 @@ defmodule ApiServer.Models.Neo4j.Person do
   defstruct [:id, :person_id]
 
   @spec insert_person(PgPerson, bool) :: ApiServer.Models.Neo4j.Person
+  @spec find_node_from_person_id(integer, pid) :: ApiServer.Models.Neo4j.Person
 
 
   @doc """
