@@ -1,5 +1,10 @@
 defmodule ApiServer.Models.Postgres.Person do
+  require Ecto.Query
   use ApiServer.Web, :model
+
+  import Ecto.Query.API, only: [in: 2]
+
+  alias ApiServer.Models.Postgres.Person
   alias ApiServer.Repo
 
   @derive {Poison.Encoder, except: [:__meta__]}
@@ -29,7 +34,7 @@ defmodule ApiServer.Models.Postgres.Person do
   Insert the person map to the data base, return the model
   """
   def insert(person) do
-    data = changeset(%ApiServer.Models.Postgres.Person{}, person)
+    data = changeset(%Person{}, person)
     Repo.insert! data
   end
 
@@ -37,14 +42,23 @@ defmodule ApiServer.Models.Postgres.Person do
   Delete all records
   """
   def delete_all() do
-    Repo.delete_all(ApiServer.Models.Postgres.Person)
+    Repo.delete_all(Person)
   end
 
   @doc """
   Get the record by id
   """
   def get_by_id(person_id) do
-    Repo.get_by(ApiServer.Models.Postgres.Person, id: person_id)
+    Repo.get_by(Person, id: person_id)
+  end
+
+
+  @doc """
+  Get all records by ids
+  """
+  def get_by_ids(person_ids) do
+    query = from p in Person, where: p.id in ^person_ids
+    ApiServer.Repo.all(query)
   end
 
 
