@@ -18,7 +18,39 @@ defmodule ApiServer.Services.Tree do
     person_entities = find_persons_from_neo_tree(neo_tree)
 
     # construct the tree with the root info is the starting tree
+    construct_tree(root_tree, neo_tree, person_entities)
+  end
 
+  #
+  defp construct_tree(tree, [], person_entities) do
+    tree
+  end
+
+  defp construct_tree(tree, [current_node|remaining_nodes], person_entities) do
+    %{"path" => path} = current_node
+    person_id = List.last(path)
+    current_tree_node = %{
+      info: Map.get(person_entities, person_id),
+      children: %{},
+      marriages: []
+    }
+    keys = path_to_keys(path)
+    tree = put_in(tree, keys, current_tree_node)
+
+    construct_tree(tree, remaining_nodes, person_entities)
+  end
+
+
+  # Util function, convert a path to the keys to set in the nested structure
+  # Input [120, 140, 150, 160]
+  # Return [:children, "140", :children, "150", :children, "160"]
+  defp path_to_keys(path) do
+    # omit the first id in the path (already the root id)
+    [_ | path] = path
+
+    path
+    |> Enum.map(fn(id) -> [:children, "#{id}"] end)
+    |> Enum.concat()
   end
 
 
@@ -47,7 +79,7 @@ defmodule ApiServer.Services.Tree do
   # %{
   #   info: the person entity,
   #   marriages: the list of all person entities that get married to this person,
-  #   children: the list of all person entities that are children of this person (empty list for now)
+  #   children: empty maps
   # }
   defp find_root_with_info(root_node, log_trace) do
     %{ person_id: person_id } = root_node
@@ -57,7 +89,7 @@ defmodule ApiServer.Services.Tree do
       node: root_node,
       info: person_info,
       marriages: [],
-      children: []
+      children: %{}
     }
   end
 
@@ -91,14 +123,14 @@ defmodule ApiServer.Services.Tree do
     MATCH p=(root:Person)-[:Father_child|Mother_child *1..5]->(child:Person)
     WHERE id(root) = #{root_node_id}
     WITH nodes(p) AS all_nodes,
-         relationships(p) AS all_relationships,
-         length(p) AS depth,
-         extract(n IN (child)-[:Husband_wife|Wife_husband]->(:Person) | last(nodes(n)).person_id) AS marriage
+    relationships(p) AS all_relationships,
+    length(p) AS depth,
+    extract(n IN (child)-[:Husband_wife|Wife_husband]->(:Person) | last(nodes(n)).person_id) AS marriage
     RETURN extract(n IN all_nodes | n.person_id) AS `path`,
-           depth AS `depth`,
-           marriage AS `marriage`,
-           last(extract(r IN all_relationships | r.`order`)) AS `last_order`,
-           extract(n IN all_nodes | n.person_id)[-2] AS `last_parent`
+    depth AS `depth`,
+    marriage AS `marriage`,
+    last(extract(r IN all_relationships | r.`order`)) AS `last_order`,
+    extract(n IN all_nodes | n.person_id)[-2] AS `last_parent`
     ORDER BY `depth`, `last_parent`, `last_order`;
     """
     Neo4j.query!(Neo4j.conn, query)
