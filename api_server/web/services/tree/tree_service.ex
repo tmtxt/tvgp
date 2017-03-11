@@ -1,7 +1,10 @@
 defmodule ApiServer.Services.Tree do
+  alias Neo4j.Sips, as: Neo4j
+
   alias ApiServer.Models.Neo4j.Person, as: NeoPerson
   alias ApiServer.Models.Postgres.Person, as: PgPerson
-  alias Neo4j.Sips, as: Neo4j
+  alias ApiServer.Models.Neo4j.MarriageRelation, as: MarriageRelation
+
 
   def get_tree(from_person_id, log_trace) do
     root_node = NeoPerson.find_node_from_person_id(from_person_id, log_trace)
@@ -56,10 +59,15 @@ defmodule ApiServer.Services.Tree do
   defp construct_tree(tree, [current_node|remaining_nodes], person_entities) do
     %{"path" => path} = current_node
     person_id = List.last(path)
+    marriages = current_node
+    |> Map.get("marriage")
+    |> Enum.map(fn(person_id) ->
+      Map.get(person_entities, person_id)
+    end)
     current_tree_node = %{
       info: Map.get(person_entities, person_id),
       children: %{},
-      marriages: []
+      marriages: marriages
     }
     keys = path_to_keys(path)
     tree = put_in(tree, keys, current_tree_node)
@@ -90,6 +98,7 @@ defmodule ApiServer.Services.Tree do
       fn(node) ->
         node
         |> Map.get("path")
+        |> Enum.concat(Map.get(node, "marriage"))
         |> List.last()
       end
     )
@@ -109,13 +118,20 @@ defmodule ApiServer.Services.Tree do
   #   children: empty maps
   # }
   defp find_root_with_info(root_node, log_trace) do
-    %{ person_id: person_id } = root_node
-    person_info = PgPerson.get_by_id(person_id)
+    %{ person_id: person_id, id: node_id } = root_node
+    [{_, {:ok, person_info}}, {_, {:ok, marriage_nodes}}] = Task.yield_many([
+      Task.async(fn -> PgPerson.get_by_id(person_id) end),
+      Task.async(fn -> MarriageRelation.find_marriages_from_node_id(node_id) end)
+    ])
+
+    marriages = marriage_nodes
+    |> Enum.map(fn(%NeoPerson{person_id: person_id}) -> person_id end)
+    |> PgPerson.get_by_ids()
 
     %{
       node: root_node,
       info: person_info,
-      marriages: [],
+      marriages: marriages,
       children: %{}
     }
   end

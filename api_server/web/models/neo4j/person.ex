@@ -42,5 +42,4 @@ defmodule ApiServer.Models.Neo4j.Person do
       person_id: person_id
     }
   end
-
 end
