@@ -93,15 +93,14 @@ defmodule ApiServer.Services.Tree do
   # Return a map, key is the person id, value is the person entity
   defp find_persons_from_neo_tree(neo_tree) do
     # extract the person_ids from the neo_tree
-    person_ids = Enum.map(
-      neo_tree,
-      fn(node) ->
-        node
-        |> Map.get("path")
-        |> Enum.concat(Map.get(node, "marriage"))
-        |> List.last()
-      end
-    )
+    person_ids = neo_tree
+    |> Enum.map(fn(node) ->
+      person_id = node
+      |> Map.get("path")
+      |> List.last()
+      [person_id | Map.get(node, "marriage", [])]
+    end)
+    |> Enum.concat()
 
     # call to model to load all person entities
     persons = PgPerson.get_by_ids(person_ids)

@@ -16,7 +16,7 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
   setup context do
     log_trace = LogTrace.create_no_link()
     LogTrace.add(log_trace, :info, "Setup()", context[:test])
-    root_person_id = insert_sample_person()
+    data = insert_sample_person()
     LogTrace.add(log_trace, :info, "Setup()", "Sample data inserted")
 
     on_exit fn ->
@@ -25,10 +25,7 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
       LogTrace.stop(log_trace)
     end
 
-    [
-      log_trace: log_trace,
-      root_person_id: root_person_id
-    ]
+    Enum.concat(data, [log_trace: log_trace])
   end
 
 
@@ -36,13 +33,52 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
     log_trace = context[:log_trace]
     root_person_id = context[:root_person_id]
 
-    res = TreeService.get_tree(root_person_id, log_trace)
-    LogTrace.add(log_trace, :info, "Get tree data", res)
+    tree = TreeService.get_tree(root_person_id, log_trace)
+    # LogTrace.add(log_trace, :info, "Get tree data", tree)
+
+    # root
+    %{
+      info: %{ full_name: "Root husband" },
+      marriages: [%{ full_name: "Root wife" }],
+      children: f1_children
+    } = tree
+
+    # f1 - 1
+    f1_husband1_child = Enum.find(
+      f1_children,
+      fn(child) ->
+        %{ info: %{ full_name: full_name }} = child
+        full_name == "F1 Husband 1"
+      end
+    )
+    %{
+      marriages: [%{ full_name: "F1 Wife 1" }],
+      children: f2_children
+    } = f1_husband1_child
+
+    # f1 - 2
+    f1_husband2_child = Enum.find(
+      f1_children,
+      fn(child) ->
+        %{ info: %{ full_name: full_name }} = child
+        full_name == "F1 Husband 2"
+      end
+    )
+    %{
+      marriages: [%{ full_name: "F1 Wife 2" }],
+      children: []
+    } = f1_husband2_child
+
+    # f2
+    [%{
+        info: %{ full_name: "F2 Husband 1" },
+        marriages: [],
+        children: []
+     }] = f2_children
   end
 
 
   # Insert sample data
-  # Return root person id
   defp insert_sample_person() do
     root_husband = PgPerson.insert(%{full_name: "Root husband"})
     root_wife = PgPerson.insert(%{full_name: "Root wife"})
@@ -71,7 +107,16 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
     PedigreeRelation.link_family(root_husband_node, root_wife_node, f1_husband2_node)
     PedigreeRelation.link_family(f1_husband1_node, f1_wife1_node, f2_husband1_node)
 
-    Map.get(root_husband, :id)
+    [
+      root_person_id: Map.get(root_husband, :id),
+      root_husband: root_husband,
+      root_wife: root_wife,
+      f1_husband1: f1_husband1,
+      f1_wife1: f1_wife1,
+      f1_husband2: f1_husband2,
+      f1_wife2: f1_wife2,
+      f2_husband1: f2_husband1
+    ]
   end
 
   defp delete_sample_person() do
