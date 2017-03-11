@@ -35,45 +35,7 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
     tree = TreeService.get_tree(root_person_id, log_trace)
     # LogTrace.add(log_trace, :info, "Get tree data", tree)
 
-    # root
-    %{
-      info: %{ full_name: "Root husband" },
-      marriages: [%{ full_name: "Root wife" }],
-      children: f1_children
-    } = tree
-
-    # f1 - 1
-    f1_husband1_child = Enum.find(
-      f1_children,
-      fn(child) ->
-        %{ info: %{ full_name: full_name }} = child
-        full_name == "F1 Husband 1"
-      end
-    )
-    %{
-      marriages: [%{ full_name: "F1 Wife 1" }],
-      children: f2_children
-    } = f1_husband1_child
-
-    # f1 - 2
-    f1_husband2_child = Enum.find(
-      f1_children,
-      fn(child) ->
-        %{ info: %{ full_name: full_name }} = child
-        full_name == "F1 Husband 2"
-      end
-    )
-    %{
-      marriages: [%{ full_name: "F1 Wife 2" }],
-      children: []
-    } = f1_husband2_child
-
-    # f2
-    [%{
-        info: %{ full_name: "F2 Husband 1" },
-        marriages: [],
-        children: []
-     }] = f2_children
+    assert_tree(tree)
   end
 
 
@@ -83,6 +45,11 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
     tree = TreeService.get_tree(log_trace)
     # LogTrace.add(log_trace, :info, "Get tree data", tree)
 
+    assert_tree(tree)
+  end
+
+
+  defp assert_tree(tree) do
     # root
     %{
       info: %{ full_name: "Root husband" },
