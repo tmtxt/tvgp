@@ -18,14 +18,41 @@ defmodule ApiServer.Services.Tree do
     person_entities = find_persons_from_neo_tree(neo_tree)
 
     # construct the tree with the root info is the starting tree
-    construct_tree(root_tree, neo_tree, person_entities)
+    tree = construct_tree(root_tree, neo_tree, person_entities)
+
+    convert_tree_to_children_list(tree)
+  end
+
+
+  # convert the tree (from construct_tree) with children is a map to children is a list
+  defp convert_tree_to_children_list(root_node) when root_node == %{} do
+    []
+  end
+
+  defp convert_tree_to_children_list(root_node) do
+    Map.update!(root_node, :children, fn(children) ->
+      children
+      |> Enum.map(fn({_, child}) ->
+        convert_tree_to_children_list(child)
+      end)
+    end)
   end
 
   # recursion function for constructing the tree
+  # return the tree structure like this
+  # %{
+  #   node: neo4j_node,
+  #   info: pg_entity,
+  #   marriages: [pg_entity],
+  #   children: %{
+  #     "#{person_id}": recur_tree_object
+  #   }
+  # }
   defp construct_tree(tree, [], person_entities) do
     tree
   end
 
+  # recursion function
   defp construct_tree(tree, [current_node|remaining_nodes], person_entities) do
     %{"path" => path} = current_node
     person_id = List.last(path)
