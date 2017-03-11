@@ -1,11 +1,14 @@
 defmodule ApiServer.Services.Tree do
-  alias Neo4j.Sips, as: Neo4j
-
   alias ApiServer.Models.Neo4j.Person, as: NeoPerson
   alias ApiServer.Models.Postgres.Person, as: PgPerson
   alias ApiServer.Models.Neo4j.Tree
   alias ApiServer.Models.Neo4j.MarriageRelation
 
+
+  def get_tree(log_trace) do
+    %{person_id: person_id} = NeoPerson.find_root_node(log_trace)
+    get_tree(person_id, log_trace)
+  end
 
   def get_tree(from_person_id, log_trace) do
     root_node = NeoPerson.find_node_from_person_id(from_person_id, log_trace)
@@ -52,7 +55,7 @@ defmodule ApiServer.Services.Tree do
   #     "#{person_id}": recur_tree_object
   #   }
   # }
-  defp construct_tree(tree, [], person_entities) do
+  defp construct_tree(tree, [], _person_entities) do
     tree
   end
 
@@ -117,7 +120,7 @@ defmodule ApiServer.Services.Tree do
   #   marriages: the list of all person entities that get married to this person,
   #   children: empty maps
   # }
-  defp find_root_with_info(root_node, log_trace) do
+  defp find_root_with_info(root_node, _log_trace) do
     %{ person_id: person_id, id: node_id } = root_node
     [{_, {:ok, person_info}}, {_, {:ok, marriage_nodes}}] = Task.yield_many([
       Task.async(fn -> PgPerson.get_by_id(person_id) end),
