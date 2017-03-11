@@ -21,7 +21,7 @@ defmodule ApiServer.Services.Tree do
     construct_tree(root_tree, neo_tree, person_entities)
   end
 
-  #
+  # recursion function for constructing the tree
   defp construct_tree(tree, [], person_entities) do
     tree
   end

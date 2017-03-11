@@ -16,7 +16,7 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
   setup context do
     log_trace = LogTrace.create_no_link()
     LogTrace.add(log_trace, :info, "Setup()", context[:test])
-    { root_person_id, wife_person_id, child_person_id } = insert_sample_person()
+    root_person_id = insert_sample_person()
     LogTrace.add(log_trace, :info, "Setup()", "Sample data inserted")
 
     on_exit fn ->
@@ -27,9 +27,7 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
 
     [
       log_trace: log_trace,
-      root_person_id: root_person_id,
-      wife_person_id: wife_person_id,
-      child_person_id: child_person_id
+      root_person_id: root_person_id
     ]
   end
 
@@ -43,20 +41,37 @@ defmodule ApiServer.Test.Services.Tree.GetTreeTest do
   end
 
 
+  # Insert sample data
+  # Return root person id
   defp insert_sample_person() do
-    # insert 3 persons to postgres and neo4j
-    root = PgPerson.insert(%{full_name: "Root husband"})
-    wife = PgPerson.insert(%{full_name: "Root wife"})
-    child = PgPerson.insert(%{full_name: "Child"})
-    root_node = NeoPerson.insert_person(root, true)
-    wife_node = NeoPerson.insert_person(wife)
-    child_node = NeoPerson.insert_person(wife)
+    root_husband = PgPerson.insert(%{full_name: "Root husband"})
+    root_wife = PgPerson.insert(%{full_name: "Root wife"})
+    root_husband_node = NeoPerson.insert_person(root_husband, true)
+    root_wife_node = NeoPerson.insert_person(root_wife)
+
+    f1_husband1 = PgPerson.insert(%{full_name: "F1 Husband 1"})
+    f1_wife1 = PgPerson.insert(%{full_name: "F1 Wife 1"})
+    f1_husband1_node = NeoPerson.insert_person(f1_husband1)
+    f1_wife1_node = NeoPerson.insert_person(f1_wife1)
+
+    f1_husband2 = PgPerson.insert(%{full_name: "F1 Husband 2"})
+    f1_wife2 = PgPerson.insert(%{full_name: "F1 Wife 2"})
+    f1_husband2_node = NeoPerson.insert_person(f1_husband2)
+    f1_wife2_node = NeoPerson.insert_person(f1_wife2)
+
+    f2_husband1 = PgPerson.insert(%{full_name: "F2 Husband 1"})
+    f2_husband1_node = NeoPerson.insert_person(f2_husband1)
 
     # link relationship
-    MarriageRelation.link_people(root_node, wife_node)
-    PedigreeRelation.link_family(root_node, wife_node, child_node)
+    MarriageRelation.link_people(root_husband_node, root_wife_node)
+    MarriageRelation.link_people(f1_husband1_node, f1_wife1_node)
+    MarriageRelation.link_people(f1_husband2_node, f1_wife2_node)
 
-    {Map.get(root, :id), Map.get(wife, :id), Map.get(child, :id)}
+    PedigreeRelation.link_family(root_husband_node, root_wife_node, f1_husband1_node)
+    PedigreeRelation.link_family(root_husband_node, root_wife_node, f1_husband2_node)
+    PedigreeRelation.link_family(f1_husband1_node, f1_wife1_node, f2_husband1_node)
+
+    Map.get(root_husband, :id)
   end
 
   defp delete_sample_person() do
