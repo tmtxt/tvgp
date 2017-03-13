@@ -28,7 +28,7 @@ defmodule ApiServer.Models.Neo4j.Tree do
     }
   ]
   """
-  def get_neo_tree_from_node_id(root_node_id, log_trace) do
+  def get_neo_tree_from_node_id(root_node_id, _log_trace) do
     query = """
     MATCH p=(root:Person)-[:Father_child|Mother_child *1..5]->(child:Person)
     WHERE id(root) = #{root_node_id}

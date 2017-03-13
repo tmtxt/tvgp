@@ -6,13 +6,13 @@ defimpl Poison.Encoder, for: Tuple do
 end
 
 defimpl Poison.Encoder, for: PID do
-  def encode(pid, options) do
+  def encode(_pid, _options) do
     "PID"
   end
 end
 
 defimpl Poison.Encoder, for: Reference do
-  def encode(pid, options) do
+  def encode(_pid, _options) do
     "Reference"
   end
 end

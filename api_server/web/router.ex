@@ -4,10 +4,10 @@ defmodule ApiServer.Router do
   pipeline :api do
     plug :accepts, ["json"]
     plug ApiServer.LogTrace.HttpLogTrace
-    plug Plug.Parsers,
-      parsers: [:urlencoded, :multipart, :json],
-      pass: ["*/*"],
-      json_decoder: Poison
+    # plug Plug.Parsers,
+    #   parsers: [:urlencoded, :multipart, :json],
+    #   pass: ["*/*"],
+    #   json_decoder: Poison
   end
 
   # Other scopes may use custom stacks.
@@ -22,5 +22,8 @@ defmodule ApiServer.Router do
 
     get "/minor-contents/preface", MinorContentController, :get_preface
     post "/minor-contents/preface", MinorContentController, :set_preface
+
+    get "/trees", TreeController, :get_tree_from_default_root
+    post "/trees/:person_id", TreeController, :get_tree_from_person
   end
 end

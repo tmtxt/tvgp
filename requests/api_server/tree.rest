@@ -1,0 +1,5 @@
+# Get tree from default root
+GET http://127.0.0.1:4000/api/trees
+
+# Get tree from person
+POST http://127.0.0.1:4000/api/trees/102

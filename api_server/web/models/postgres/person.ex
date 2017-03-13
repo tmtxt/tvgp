@@ -2,8 +2,6 @@ defmodule ApiServer.Models.Postgres.Person do
   require Ecto.Query
   use ApiServer.Web, :model
 
-  import Ecto.Query.API, only: [in: 2]
-
   alias ApiServer.Models.Postgres.Person
   alias ApiServer.Repo
 
