@@ -3,6 +3,7 @@ defmodule ApiServer.Services.Tree do
   alias ApiServer.Models.Postgres.Person, as: PgPerson
   alias ApiServer.Models.Neo4j.Tree
   alias ApiServer.Models.Neo4j.MarriageRelation
+  alias ApiServer.LogTrace.Core, as: LogTrace
 
 
   def get_tree(log_trace) do
@@ -11,8 +12,12 @@ defmodule ApiServer.Services.Tree do
   end
 
   def get_tree(from_person_id, log_trace) do
+    LogTrace.add(log_trace, :info, "get_tree", "Root person id #{from_person_id}")
+
+    # find the root node from neo4j
     root_node = NeoPerson.find_node_from_person_id(from_person_id, log_trace)
     %{id: root_node_id} = root_node
+    LogTrace.add(log_trace, :info, "get_tree", "Root node id #{root_node_id}")
 
     # construct the root node (the starting of the tree) and query the tree structure from neo4j
     res = Task.yield_many([

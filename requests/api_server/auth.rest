@@ -26,4 +26,4 @@ tvgp-auth-token: becf0f84-68aa-40f4-b920-8bd6b0ea6a63
 
 # Get current user
 GET http://127.0.0.1:4000/api/auth-users
-tvgp-auth-token: 0c723fba-ce70-4551-a656-7365af47c309
+tvgp-auth-token: 0d288f30-8b5f-4bb6-833d-0382dd47f9ad

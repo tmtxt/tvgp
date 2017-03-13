@@ -4,10 +4,11 @@ defmodule ApiServer.Router do
   pipeline :api do
     plug :accepts, ["json"]
     plug ApiServer.LogTrace.HttpLogTrace
-    # plug Plug.Parsers,
-    #   parsers: [:urlencoded, :multipart, :json],
-    #   pass: ["*/*"],
-    #   json_decoder: Poison
+    plug ApiServer.Plug.Params
+    plug Plug.Parsers,
+      parsers: [:urlencoded, :multipart, :json],
+      pass: ["*/*"],
+      json_decoder: Poison
   end
 
   # Other scopes may use custom stacks.
