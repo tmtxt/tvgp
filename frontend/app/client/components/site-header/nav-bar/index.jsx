@@ -93,7 +93,7 @@ export class NavBar extends Component {
               <ul className={`nav navbar-nav ${style.listWrapper}`}>
                 <li><Link to="/">Trang chủ</Link></li>
                 <li><Link to="/">Thành viên</Link></li>
-                <li><Link to="/">Cây gia phả</Link></li>
+                <li><Link to="/tree">Cây gia phả</Link></li>
                 <li><Link to="/">Lịch sử dòng họ</Link></li>
                 <li><Link to="/">Liên hệ</Link></li>
                 { isAdmin && <li><Link to={getRoute('Admin.index')}>Quản trị</Link></li> }

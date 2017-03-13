@@ -1,5 +1,6 @@
 export default {
   Home: '/',
+  Tree: '/tree',
 
   User: {
     login: '/login'

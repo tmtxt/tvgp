@@ -6,6 +6,7 @@ import { getRoute } from './client/helpers/routing';
 
 import PageIndex from './client/components/page-index';
 import PageLogin from './client/components/page-login';
+import PageTree from './client/components/page-tree';
 
 import PageAdminIndex from './client/components/page-admin-index';
 import PageChangePassword from './client/components/page-change-password';
@@ -25,8 +26,8 @@ export const getServerHistory = (store, url) =>
 export const getRoutes = (history) => (
   <Router history={history}>
     <Route path={getRoute('Home')} component={PageIndex} />
-
     <Route path={getRoute('User.login')} component={PageLogin} />
+    <Route path={getRoute('Tree')} component={PageTree} />
 
     <Route path={getRoute('Admin.index')} component={PageAdminIndex} />
     <Route path={getRoute('Admin.changePassword')} component={PageChangePassword} />
