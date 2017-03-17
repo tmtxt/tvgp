@@ -1,29 +1,22 @@
 // @flow
 import React, { Component } from 'react';
-import d3 from 'd3';
-import { Map as ImmutableMap } from 'immutable';
 import dimensions from 'react-dimensions';
 import { compose } from 'recompose';
+import { connect } from 'react-redux';
+
+import { selectors as treeSelectors } from 'client/components/tree/logic-bundle';
+
+import type { TreeIdType } from 'client/components/tree/types';
 
 type ExportedPropsType = {
-  tree: ImmutableMap<string, any>
+  treeId: TreeIdType
 };
 type PropsType = {
-  tree: ImmutableMap<string, any>,
-  containerWidth: number,
-  containerHeight: number
+  nodesList: Array<Object>,
+  linksList: Array<Object>
 };
 
-export const Tree = ({ tree, containerWidth, containerHeight }: PropsType) => {
-  const root = tree.toJS();
-  const treeLayout = d3.layout.tree().size([containerWidth, containerHeight]);
-  const nodesList = treeLayout.nodes(root).reverse();
-  nodesList.forEach(d => {
-    d.y = d.depth * 200;
-    d.y += 80;
-  });
-  const linksList = treeLayout.links(nodesList);
-
+export const Tree = ({ nodesList, linksList }: PropsType) => {
   return (
     <div>
       Hello
@@ -31,9 +24,17 @@ export const Tree = ({ tree, containerWidth, containerHeight }: PropsType) => {
   );
 };
 
-const enhance = compose(dimensions());
+const mapStateToProps = (state: Object, props: Object) => {
+  const { treeId, containerWidth } = props;
+  const { nodesList, linksList } = treeSelectors.selectTreeData(state, treeId, containerWidth);
 
-export const TreeComponent: Class<Component<void, ExportedPropsType, void>> = enhance(
-  Tree
-);
+  return {
+    nodesList,
+    linksList
+  };
+};
+
+const enhance = compose(dimensions(), connect(mapStateToProps));
+
+export const TreeComponent: Class<Component<void, ExportedPropsType, void>> = enhance(Tree);
 export default TreeComponent;

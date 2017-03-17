@@ -1,6 +1,7 @@
 // @flow
-
 import treeReducer from './reducers';
+
+export default treeReducer;
 
 // selectors
 export { default as selectors } from './selectors';
@@ -11,4 +12,5 @@ export { mountPoint } from './constants';
 // actions
 export { setTree, toggleIndirectChildren, toggleAllChildren, getTreeFromDefaultRoot } from './actions';
 
-export default treeReducer;
+// types
+export type { TreeIdType } from './types';

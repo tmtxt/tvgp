@@ -27,7 +27,7 @@ export const PageTree = ({ tree }: PropsType) => {
 
   return (
     <div>
-      <Tree tree={tree} />
+      <Tree treeId="root" />
     </div>
   );
 };
