@@ -56,7 +56,7 @@ const wrapAdminLayout = (WrappedComponent: ReactClass<*>): ReactClass < * > => {
       if (isUpdating) {
         return (
           <div>
-            <Loader size="5" />
+            <Loader size={5} />
           </div>
         );
       }

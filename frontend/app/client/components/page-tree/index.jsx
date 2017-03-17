@@ -12,12 +12,17 @@ import {
   getTreeFromDefaultRoot
 } from 'client/components/tree/logic-bundle';
 // import { selectors as routingSelectors } from 'client/components/routing/logic-bundle';
+import Loader from 'client/components/shared/loader.jsx';
 
 type PropsType = {
   tree: ImmutableMap<string, any>
 };
 
 export const PageTree = ({ tree }: PropsType) => {
+  if (!tree) {
+    return <Loader />;
+  }
+
   return (
     <div>
       Hello

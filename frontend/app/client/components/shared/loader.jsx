@@ -1,11 +1,12 @@
+// @flow
 import _ from 'lodash';
-import React, {
-  Component
-} from 'react';
+import React, { Component } from 'react';
 
-
+/**
+* Loader
+* optional props with size
+*/
 class Loader extends Component {
-
   getSizeClassName() {
     const {
       size
@@ -15,11 +16,11 @@ class Loader extends Component {
       return '';
     }
 
-    if (size === '1') {
+    if (size === 1) {
       return 'fa-lg';
     }
 
-    if (_.includes(['2', '3', '4', '5'], size)) {
+    if (_.includes([2, 3, 4, 5], size)) {
       return `fa-${size}x`;
     }
 
@@ -27,7 +28,7 @@ class Loader extends Component {
   }
 
   props: {
-    size: number
+    size?: number
   };
 
   render() {
