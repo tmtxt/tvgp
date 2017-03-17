@@ -14,6 +14,8 @@ import {
 // import { selectors as routingSelectors } from 'client/components/routing/logic-bundle';
 import Loader from 'client/components/shared/loader.jsx';
 
+import Tree from './tree';
+
 type PropsType = {
   tree: ImmutableMap<string, any>
 };
@@ -25,7 +27,7 @@ export const PageTree = ({ tree }: PropsType) => {
 
   return (
     <div>
-      Hello
+      <Tree tree={tree} />
     </div>
   );
 };
