@@ -15,18 +15,14 @@ type PropsType = {
 };
 
 export const Tree = ({ tree, containerWidth, containerHeight }: PropsType) => {
-  // const root = tree.toJS();
-  // const treeLayout = d3.layout.tree().size([containerWidth, containerHeight]);
-  // const nodesList = treeLayout.nodes(root).reverse();
-  // nodesList.forEach(d => {
-  //   d.y = d.depth * 200;
-  //   d.y += 80;
-  // });
-  // const linksList = treeLayout.links(nodesList);
-
-  console.log('--------------------------------------------------------------------------------');
-  console.log(tree.toJS());
-  console.log('--------------------------------------------------------------------------------');
+  const root = tree.toJS();
+  const treeLayout = d3.layout.tree().size([containerWidth, containerHeight]);
+  const nodesList = treeLayout.nodes(root).reverse();
+  nodesList.forEach(d => {
+    d.y = d.depth * 200;
+    d.y += 80;
+  });
+  const linksList = treeLayout.links(nodesList);
 
   return (
     <div>

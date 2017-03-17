@@ -36,7 +36,7 @@ export const enhance = compose(
   fetchDataEnhancer(({ store }) => store.dispatch(getTreeFromDefaultRoot())),
   wrapMainLayout,
   connect(state => ({
-    tree: treeSelectors.getRootTree(state)
+    tree: treeSelectors.selectTreeById(state, 'root')
   }))
 );
 
