@@ -11,6 +11,7 @@ import { selectors as treeSelectors } from 'client/components/tree/logic-bundle'
 import type { TreeIdType } from 'client/components/tree/types';
 
 import PersonNode from './person-node';
+import PedigreeLink from './pedigree-link';
 
 type ExportedPropsType = {
   treeId: TreeIdType
@@ -21,19 +22,20 @@ type PropsType = {
   containerWidth: number
 };
 
-export const Tree = ({ nodesList, linksList, containerWidth }: PropsType) => {
-  return (
-    <div>
-      <svg height="1000" width={containerWidth}>
-        <g>
-          <g transform="translate(0,0)">
-            {map(nodesList, (nodeConfig, key) => <PersonNode key={key} nodeConfig={nodeConfig} />)}
-          </g>
+export const Tree = ({ nodesList, linksList, containerWidth }: PropsType) => (
+  <div>
+    <svg height="1000" width={containerWidth}>
+      <g>
+        <g transform="translate(0,0)">
+          {map(linksList, (linkConfig, key) => <PedigreeLink key={key} linkConfig={linkConfig} />)}
         </g>
-      </svg>
-    </div>
-  );
-};
+        <g transform="translate(0,0)">
+          {map(nodesList, (nodeConfig, key) => <PersonNode key={key} nodeConfig={nodeConfig} />)}
+        </g>
+      </g>
+    </svg>
+  </div>
+);
 
 const computeTreeData = (root, treeWidth) => {
   const treeLayout = d3.layout.tree().size([treeWidth, 0]);
