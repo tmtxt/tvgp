@@ -1,7 +1,12 @@
 // @flow
 import api from 'client/helpers/api';
 
-import { SET_TREE, TOGGLE_INDIRECT_CHILDREN, TOGGLE_ALL_CHILDREN } from './action-types';
+import {
+  SET_TREE,
+  TOGGLE_INDIRECT_CHILDREN,
+  TOGGLE_ALL_CHILDREN,
+  TOGGLE_CHILDREN_FOR_NODE
+} from './action-types';
 
 import type { TreeIdType } from './types';
 
@@ -24,8 +29,13 @@ export const toggleAllChildren = (treeId: TreeIdType) => ({
   treeId
 });
 
-export const getTreeFromDefaultRoot = () =>
-  (dispatch: Function): Promise<*> =>
-    api('Tree.getTreeFromDefaultRoot')
-      .then((res: Object) => dispatch(setTree('root', res)))
-      .then(() => dispatch(toggleIndirectChildren('root')));
+export const getTreeFromDefaultRoot = () => (dispatch: Function): Promise<*> =>
+  api('Tree.getTreeFromDefaultRoot')
+    .then((res: Object) => dispatch(setTree('root', res)))
+    .then(() => dispatch(toggleIndirectChildren('root')));
+
+export const toggleChildrenForNode = (treeId: TreeIdType, path: Array<number>) => ({
+  type: TOGGLE_CHILDREN_FOR_NODE,
+  treeId,
+  path
+});

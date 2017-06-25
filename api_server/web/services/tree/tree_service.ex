@@ -26,9 +26,6 @@ defmodule ApiServer.Services.Tree do
     ])
     [{_, {:ok, root_tree}}, {_, {:ok, neo_tree}}] = res
 
-    # assign the initial path into the root tree
-    root_tree = Map.put(root_tree, :path, [root_node_id])
-
     # find all the person entities that exist in the tree
     person_entities = find_persons_from_neo_tree(neo_tree)
 
@@ -144,7 +141,8 @@ defmodule ApiServer.Services.Tree do
       node: root_node,
       info: person_info,
       marriages: marriages,
-      children: %{}
+      children: %{},
+      path: [person_id]
     }
   end
 

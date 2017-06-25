@@ -10,7 +10,13 @@ export { default as selectors } from './selectors';
 export { mountPoint } from './constants';
 
 // actions
-export { setTree, toggleIndirectChildren, toggleAllChildren, getTreeFromDefaultRoot } from './actions';
+export {
+  setTree,
+  toggleIndirectChildren,
+  toggleAllChildren,
+  toggleChildrenForNode,
+  getTreeFromDefaultRoot
+} from './actions';
 
 // types
 export type { TreeIdType } from './types';

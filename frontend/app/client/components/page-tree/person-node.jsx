@@ -25,8 +25,14 @@ const styles = {
 export class PersonNode extends Component {
   static displayName = 'PersonNode';
 
+  onClick = () => {
+    const { nodeConfig } = this.props;
+    this.props.onClick(nodeConfig);
+  };
+
   props: {
-    nodeConfig: any
+    nodeConfig: any,
+    onClick: Function
   };
 
   renderCircle() {
@@ -36,7 +42,7 @@ export class PersonNode extends Component {
       .assign(nodeConfig.children ? styles.circleEmpty : styles.circleFill)
       .value();
 
-    return <circle r="10" style={style} />;
+    return <circle r="10" style={style} onClick={this.onClick} />;
   }
 
   renderName() {
