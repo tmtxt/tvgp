@@ -1,4 +1,3 @@
-# docker-compose up
 dev-server:
 	. ../dev.sh && mix phoenix.server
 
