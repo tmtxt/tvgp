@@ -10,7 +10,7 @@ export POSTGRES_USER=tvgp
 export POSTGRES_ENSURE_STORAGE=true
 
 export NEO4J_SERVER=neo4j
-export NEO4J_PORT=7687
+export NEO4J_PORT=7474
 
 export API_SERVER_SERVER=api_server
 export API_SERVER_PORT=4000
