@@ -113,10 +113,20 @@ defmodule ApiServer.Services.Tree do
     |> Enum.concat()
 
     # call to model to load all person entities
-    persons = PgPerson.get_by_ids(person_ids)
+    persons = person_ids
+    |> PgPerson.get_by_ids
+    |> Enum.map(&ensure_person_picture/1)
 
     # convert the result into a map with key is person id, value is the person entity
     Enum.reduce(persons, %{}, fn(person, res) -> Map.put(res, Map.get(person, :id), person) end)
+  end
+
+  defp ensure_person_picture(person) do
+    default_picture = :api_server
+    |> Application.get_env(ApiServer.Services.Tree)
+    |> Keyword.get(:default_person_picture)
+    picture = Map.get(person, :picture, default_picture) || default_picture
+    Map.put(person, :picture, picture)
   end
 
   # Construct the root node in the tree (this is actually the tree object, without the children)
@@ -132,6 +142,8 @@ defmodule ApiServer.Services.Tree do
       Task.async(fn -> PgPerson.get_by_id(person_id) end),
       Task.async(fn -> MarriageRelation.find_marriages_from_node_id(node_id) end)
     ])
+
+    person_info = ensure_person_picture(person_info)
 
     marriages = marriage_nodes
     |> Enum.map(fn(%NeoPerson{person_id: person_id}) -> person_id end)

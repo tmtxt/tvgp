@@ -64,3 +64,6 @@ config :neo4j_sips, Neo4j,
   pool_size: 5,
   max_overflow: 2,
   timeout: 30
+
+config :api_server, ApiServer.Services.Tree,
+  default_person_picture: System.get_env("DEFAULT_PERSON_PICTURE")

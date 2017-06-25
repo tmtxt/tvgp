@@ -20,3 +20,5 @@ export API_SERVER_SEED_DATA=false
 
 export REDIS_SERVER=localhost
 export REDIS_PORT=40003
+
+export DEFAULT_PERSON_IMAGE=/img/userbasic.jpg
