@@ -15,6 +15,7 @@ import type { TreeIdType } from 'client/components/tree/types';
 
 import PersonNode from './person-node';
 import PedigreeLink from './pedigree-link';
+import type { NodeConfigType, LinkConfigType } from './type';
 
 type ExportedPropsType = {
   treeId: TreeIdType
@@ -25,15 +26,15 @@ type PropsType = {
   containerWidth: number,
 
   // connect props
-  nodesList: Array<Object>,
-  linksList: Array<Object>,
+  nodesList: Array<NodeConfigType>,
+  linksList: Array<LinkConfigType>,
 
   // connect actions
   toggleChildrenForNode: typeof toggleChildrenForNode
 };
 
 export class Tree extends Component {
-  onNodeClicked = (nodeConfig: Object) => {
+  onNodeClicked = (nodeConfig: NodeConfigType) => {
     const { treeId } = this.props;
     const path = nodeConfig.path;
 
@@ -50,12 +51,12 @@ export class Tree extends Component {
         <svg height="1000" width={containerWidth}>
           <g>
             <g transform="translate(0,0)">
-              {map(linksList, (linkConfig, key) => (
+              {map(linksList, (linkConfig: LinkConfigType, key: number) => (
                 <PedigreeLink key={key} linkConfig={linkConfig} />
               ))}
             </g>
             <g transform="translate(0,0)">
-              {map(nodesList, (nodeConfig, key) => (
+              {map(nodesList, (nodeConfig: NodeConfigType, key: number) => (
                 <PersonNode key={key} nodeConfig={nodeConfig} onClick={this.onNodeClicked} />
               ))}
             </g>

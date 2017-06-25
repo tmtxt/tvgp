@@ -2,6 +2,8 @@
 import { chain } from 'lodash';
 import React, { Component } from 'react';
 
+import type { NodeConfigType } from './type';
+
 const styles = {
   circle: {
     cursor: 'pointer',
@@ -31,8 +33,8 @@ export class PersonNode extends Component {
   };
 
   props: {
-    nodeConfig: any,
-    onClick: Function
+    nodeConfig: NodeConfigType,
+    onClick: (nodeConfig: NodeConfigType) => void
   };
 
   renderCircle() {

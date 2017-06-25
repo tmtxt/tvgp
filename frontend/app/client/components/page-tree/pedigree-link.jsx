@@ -2,11 +2,13 @@
 import React from 'react';
 import d3 from 'd3';
 
-const diagonal = d3.svg.diagonal().projection(d => [d.x, d.y]);
+import type { LinkConfigType } from './type';
 
 type PropsType = {
-  linkConfig: any
+  linkConfig: LinkConfigType
 };
+
+const diagonal = d3.svg.diagonal().projection(d => [d.x, d.y]);
 
 const styles = {
   link: {

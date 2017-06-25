@@ -15,6 +15,9 @@ import {
 
 import type { TreeIdType } from './types';
 
+/**
+ * Toggle children -> _children, _children -> children for the input node
+ */
 const toggle = (d: ImmutableMap<string, any>) => {
   if (d.get('children')) {
     const children = d.get('children');
@@ -24,6 +27,9 @@ const toggle = (d: ImmutableMap<string, any>) => {
   return d.delete('_children').set('children', children);
 };
 
+/**
+ * Toggle children for the input node and all its descendant nodes
+ */
 const toggleAll = (d: ImmutableMap<string, any>) => {
   if (!d.get('children')) {
     return d;
@@ -33,7 +39,12 @@ const toggleAll = (d: ImmutableMap<string, any>) => {
   return toggle(d);
 };
 
-const convertRawPathToTreePath = (treeNode, rawPath) => {
+/**
+ * Convert a raw path of a node to a path that can be traverse in the tree structure
+ * rawPath: [1, 5, 7]
+ * output: ['children', 0, 'children', 1]
+ */
+function convertRawPathToTreePath(treeNode: ImmutableMap<string, any>, rawPath: Array<number>) {
   const convert = (_treeNode, _rawPath, _treePath) => {
     if (_rawPath.length === 0) {
       return null;
@@ -59,8 +70,12 @@ const convertRawPathToTreePath = (treeNode, rawPath) => {
   };
 
   return convert(treeNode, rawPath, []);
-};
+}
 
+/**
+ * Toggle children for all the indirect children of the input tree
+ * (the nodes with depth 3 and above from root)
+ */
 export const handleToggleIndirectChildren = (
   state: ImmutableMap<TreeIdType, any>,
   { treeId }: { treeId: TreeIdType }
@@ -73,6 +88,9 @@ export const handleToggleIndirectChildren = (
   return state.updateIn([treeId, 'children'], children => children.map(toggleAll));
 };
 
+/**
+ * Toggle children for root node and all its descendant nodes
+ */
 export const handleToggleAllChildren = (
   state: ImmutableMap<TreeIdType, any>,
   { treeId }: { treeId: TreeIdType }
@@ -85,6 +103,9 @@ export const handleToggleAllChildren = (
   return state.update(treeId, toggleAll);
 };
 
+/**
+ * Toggle children for the node in the path
+ */
 export const handleToggleChildrenForNode = (
   state: ImmutableMap<TreeIdType, any>,
   { treeId, path }: { treeId: TreeIdType, path: Array<number> }
@@ -94,13 +115,13 @@ export const handleToggleChildrenForNode = (
     return state;
   }
 
-  path = convertRawPathToTreePath(tree, path);
-  if (!path) {
+  let fullPath = convertRawPathToTreePath(tree, path);
+  if (!fullPath) {
     return state;
   }
 
-  path = [treeId].concat(path);
-  state = state.updateIn(path, toggle);
+  fullPath = [treeId].concat(fullPath);
+  state = state.updateIn(fullPath, toggle);
   return state;
 };
 
