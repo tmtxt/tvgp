@@ -17,16 +17,46 @@ type ExportedPropsType = {
   treeId: TreeIdType
 };
 type PropsType = {
+  containerWidth: number,
+  treeData: Object
+};
+type StateType = {
   nodesList: Array<Object>,
-  linksList: Array<Object>,
-  containerWidth: number
+  linksList: Array<Object>
+};
+
+const computeTreeData = (root, treeWidth) => {
+  const treeLayout = d3.layout.tree().size([treeWidth, 0]);
+  const nodesList: Array<Object> = treeLayout.nodes(root).reverse();
+  nodesList.forEach(d => {
+    d.y = d.depth * 200;
+    d.y += 80;
+  });
+  const linksList: Array<Object> = treeLayout.links(nodesList);
+
+  return {
+    nodesList,
+    linksList
+  };
 };
 
 export class Tree extends Component {
+  state: StateType = {
+    nodesList: [],
+    linksList: []
+  };
+
+  componentWillMount() {
+    const { treeData, containerWidth } = this.props;
+    const { nodesList, linksList } = computeTreeData(treeData, containerWidth);
+    this.setState({ nodesList, linksList });
+  }
+
   props: PropsType;
 
   render() {
-    const { containerWidth, nodesList, linksList } = this.props;
+    const { containerWidth } = this.props;
+    const { nodesList, linksList } = this.state;
 
     return (
       <div>
@@ -49,29 +79,12 @@ export class Tree extends Component {
   }
 }
 
-const computeTreeData = (root, treeWidth) => {
-  const treeLayout = d3.layout.tree().size([treeWidth, 0]);
-  const nodesList: Array<Object> = treeLayout.nodes(root).reverse();
-  nodesList.forEach(d => {
-    d.y = d.depth * 200;
-    d.y += 80;
-  });
-  const linksList: Array<Object> = treeLayout.links(nodesList);
-
-  return {
-    nodesList,
-    linksList
-  };
-};
-
 const mapStateToProps = (state: Object, props: Object) => {
-  const { treeId, containerWidth } = props;
-  const root = treeSelectors.selectTreeById(state, treeId).toJS();
-  const { nodesList, linksList } = computeTreeData(root, containerWidth);
+  const { treeId } = props;
+  const treeData = treeSelectors.selectTreeById(state, treeId).toJS();
 
   return {
-    nodesList,
-    linksList
+    treeData
   };
 };
 
