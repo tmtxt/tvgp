@@ -23,7 +23,7 @@ services:
 
   # services
   api_server:
-    image: tmtxt/tvgp-api-server:0.0.6
+    image: tmtxt/tvgp-api-server:0.0.7
     ports:
       - 10005:4000
     environment:
@@ -41,7 +41,7 @@ services:
       - REDIS_PORT
 
   frontend:
-    image: tmtxt/tvgp-frontend:0.0.2
+    image: tmtxt/tvgp-frontend:0.0.3
     ports:
       - 3000:3000
     environment:

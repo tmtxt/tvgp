@@ -1,4 +1,4 @@
-FROM tmtxt/tvgp-frontend-base:0.0.2
+FROM tmtxt/tvgp-frontend-base:0.0.4
 
 COPY . .
 
