@@ -23,7 +23,7 @@ services:
 
   # services
   api_server:
-    image: tmtxt/tvgp-api-server:0.0.7
+    image: tmtxt/tvgp-api-server:0.0.8
     ports:
       - 10005:4000
     environment:
