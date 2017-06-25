@@ -8,71 +8,80 @@ defmodule ApiServer.SeedData.Person do
   alias ApiServer.Repo
 
   def seed_person_data(log_trace) do
-    root_node = insert_root(log_trace)
-    wife_node = insert_root_wife(log_trace)
-    child_node = insert_child(log_trace)
-
-    MarriageRelation.link_people(root_node, wife_node)
-    PedigreeRelation.link_family(root_node, wife_node, child_node)
-  end
-
-  defp insert_root(log_trace) do
-    # insert to postgres
-    pg_data = Person.changeset(
-      %Person{}, %{
+    root_node = insert_person(
+      %{
         full_name: "Root",
         gender: "male",
         alive_status: "dead"
-      }
-    )
-    pg_person = Repo.insert! pg_data
-    LogTrace.add(log_trace, :info, "insert_person", "Root person inserted to postgres")
-
-    # insert to neo4j
-    res = NeoPerson.insert_person(pg_person, true)
-    LogTrace.add(log_trace, :info, "insert_person", "Root person inserted to neo4j")
-    # LogTrace.add(log_trace, :info, "insert_person", res)
-
-    res
-  end
-
-
-  defp insert_root_wife(log_trace) do
-    # insert to postgres
-    pg_data = Person.changeset(
-      %Person{}, %{
+      }, true, log_trace)
+    wife_node = insert_person(
+      %{
         full_name: "Root wife",
         gender: "female",
         alive_status: "dead"
-      }
-    )
-    pg_person = Repo.insert! pg_data
-    LogTrace.add(log_trace, :info, "insert_person", "Root wife inserted to postgres")
+      }, false, log_trace)
+    f1_1_husband_node = insert_person(
+      %{
+        full_name: "F1-1 husband",
+        gender: "male",
+        alive_status: "dead"
+      }, false, log_trace)
+    f1_1_wife_node = insert_person(
+      %{
+        full_name: "F1-2 wife",
+        gender: "female",
+        alive_status: "dead"
+      }, false, log_trace)
+    f1_2_husband_node = insert_person(
+      %{
+        full_name: "F1-2 husband",
+        gender: "male",
+        alive_status: "dead"
+      }, false, log_trace)
+    f1_2_wife_node = insert_person(
+      %{
+        full_name: "F1-2 wife",
+        gender: "female",
+        alive_status: "dead"
+      }, false, log_trace)
+    f2_1_husband_node = insert_person(
+      %{
+        full_name: "F2-1 husband",
+        gender: "male",
+        alive_status: "dead"
+      }, false, log_trace)
+    f2_1_wife_node = insert_person(
+      %{
+        full_name: "F2-2 wife",
+        gender: "female",
+        alive_status: "dead"
+      }, false, log_trace)
+    f2_2_husband_node = insert_person(
+      %{
+        full_name: "F2-2 husband",
+        gender: "male",
+        alive_status: "dead"
+      }, false, log_trace)
 
-    # insert to neo4j
-    res = NeoPerson.insert_person(pg_person, false)
-    LogTrace.add(log_trace, :info, "insert_person", "Root wife inserted to neo4j")
+    MarriageRelation.link_people(root_node, wife_node)
+    MarriageRelation.link_people(f1_1_husband_node, f1_1_wife_node)
+    MarriageRelation.link_people(f1_2_husband_node, f1_2_wife_node)
+    MarriageRelation.link_people(f2_1_husband_node, f2_1_wife_node)
 
-    res
+    PedigreeRelation.link_family(root_node, wife_node, f1_1_husband_node)
+    PedigreeRelation.link_family(root_node, wife_node, f1_2_husband_node)
+    PedigreeRelation.link_family(f1_1_husband_node, f1_1_wife_node, f2_1_husband_node)
+    PedigreeRelation.link_family(f1_2_husband_node, f1_2_wife_node, f2_2_husband_node)
   end
 
+  defp insert_person(person_data, is_root, log_trace) do
+    %{full_name: full_name} = person_data
+    person_data = Person.changeset(%Person{}, person_data)
 
-  defp insert_child(log_trace) do
-    # insert to postgres
-    pg_data = Person.changeset(
-      %Person{}, %{
-        full_name: "Child",
-        gender: "male",
-        alive_status: "alive"
-      }
-    )
-    pg_person = Repo.insert! pg_data
-    LogTrace.add(log_trace, :info, "insert_person", "Child inserted to postgres")
+    pg_person = Repo.insert!(person_data)
+    node = NeoPerson.insert_person(pg_person, is_root)
 
-    # insert to neo4j
-    res = NeoPerson.insert_person(pg_person, false)
-    LogTrace.add(log_trace, :info, "insert_person", "Child inserted to neo4j")
-
-    res
+    LogTrace.add(log_trace, :info, "insert_person", "Person #{full_name} inserted")
+    node
   end
 end
