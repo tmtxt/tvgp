@@ -22,20 +22,32 @@ type PropsType = {
   containerWidth: number
 };
 
-export const Tree = ({ nodesList, linksList, containerWidth }: PropsType) => (
-  <div>
-    <svg height="1000" width={containerWidth}>
-      <g>
-        <g transform="translate(0,0)">
-          {map(linksList, (linkConfig, key) => <PedigreeLink key={key} linkConfig={linkConfig} />)}
-        </g>
-        <g transform="translate(0,0)">
-          {map(nodesList, (nodeConfig, key) => <PersonNode key={key} nodeConfig={nodeConfig} />)}
-        </g>
-      </g>
-    </svg>
-  </div>
-);
+export class Tree extends Component {
+  props: PropsType;
+
+  render() {
+    const { containerWidth, nodesList, linksList } = this.props;
+
+    return (
+      <div>
+        <svg height="1000" width={containerWidth}>
+          <g>
+            <g transform="translate(0,0)">
+              {map(linksList, (linkConfig, key) => (
+                <PedigreeLink key={key} linkConfig={linkConfig} />
+              ))}
+            </g>
+            <g transform="translate(0,0)">
+              {map(nodesList, (nodeConfig, key) => (
+                <PersonNode key={key} nodeConfig={nodeConfig} />
+              ))}
+            </g>
+          </g>
+        </svg>
+      </div>
+    );
+  }
+}
 
 const computeTreeData = (root, treeWidth) => {
   const treeLayout = d3.layout.tree().size([treeWidth, 0]);
