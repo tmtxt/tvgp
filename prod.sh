@@ -21,7 +21,7 @@ export API_SERVER_SEED_DATA=true
 export REDIS_SERVER=redis
 export REDIS_PORT=6379
 
-export DEFAULT_PERSON_IMAGE=/img/userbasic.jpg
+export DEFAULT_PERSON_PICTURE=/img/userbasic.jpg
 
 # increase the input version
 # 0.0.2 -> 0.0.3
