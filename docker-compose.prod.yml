@@ -39,6 +39,7 @@ services:
       - API_SERVER_SEED_DATA
       - REDIS_SERVER
       - REDIS_PORT
+      - DEFAULT_PERSON_PICTURE
 
   frontend:
     image: tmtxt/tvgp-frontend:0.0.3
