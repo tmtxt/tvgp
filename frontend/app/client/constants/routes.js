@@ -10,5 +10,9 @@ export default {
     index: '/admin',
     changePassword: '/admin/change-password',
     preface: '/admin/preface'
+  },
+
+  Person: {
+    detail: '/person/:id'
   }
 };

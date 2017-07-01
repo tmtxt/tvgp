@@ -1,8 +1,9 @@
 import React from 'react';
 import { browserHistory, createMemoryHistory, Router, Route } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { selectors } from './client/components/routing/logic-bundle';
-import { getRoute } from './client/helpers/routing';
+
+import { selectors } from 'client/components/routing/logic-bundle';
+import RoutePaths from 'client/constants/routes';
 
 import PageIndex from './client/components/page-index';
 import PageLogin from './client/components/page-login';
@@ -12,8 +13,9 @@ import PageAdminIndex from './client/components/page-admin-index';
 import PageChangePassword from './client/components/page-change-password';
 import PageAdminPreface from './client/components/page-admin-preface';
 
+import PagePersonDetail from './client/components/page-person-detail';
 
-export const getClientHistory = (store) =>
+export const getClientHistory = store =>
   syncHistoryWithStore(browserHistory, store, {
     selectLocationState: selectors.selectLocationState
   });
@@ -23,14 +25,16 @@ export const getServerHistory = (store, url) =>
     selectLocationState: selectors.selectLocationState
   });
 
-export const getRoutes = (history) => (
+export const getRoutes = history => (
   <Router history={history}>
-    <Route path={getRoute('Home')} component={PageIndex} />
-    <Route path={getRoute('User.login')} component={PageLogin} />
-    <Route path={getRoute('Tree')} component={PageTree} />
+    <Route path={RoutePaths.Home} component={PageIndex} />
+    <Route path={RoutePaths.User.login} component={PageLogin} />
+    <Route path={RoutePaths.Tree} component={PageTree} />
 
-    <Route path={getRoute('Admin.index')} component={PageAdminIndex} />
-    <Route path={getRoute('Admin.changePassword')} component={PageChangePassword} />
-    <Route path={getRoute('Admin.preface')} component={PageAdminPreface} />
+    <Route path={RoutePaths.Admin.index} component={PageAdminIndex} />
+    <Route path={RoutePaths.Admin.changePassword} component={PageChangePassword} />
+    <Route path={RoutePaths.Admin.preface} component={PageAdminPreface} />
+
+    <Route path={RoutePaths.Person.detail} component={PagePersonDetail} />
   </Router>
 );
