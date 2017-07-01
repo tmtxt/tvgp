@@ -2,6 +2,8 @@
 import { chain } from 'lodash';
 import React, { Component } from 'react';
 
+import { openNewPage } from 'client/helpers/routing';
+
 import type { NodeConfigType } from './type';
 
 const styles = {
@@ -21,15 +23,24 @@ const styles = {
 
   name: {
     fillOpacity: 1
+  },
+
+  personPicture: {
+    cursor: 'pointer',
   }
 };
 
 export class PersonNode extends Component {
   static displayName = 'PersonNode';
 
-  onClick = () => {
+  onCircleClick = () => {
     const { nodeConfig } = this.props;
     this.props.onClick(nodeConfig);
+  };
+
+  onPictureClick = () => {
+    const { nodeConfig: { info: { id } } } = this.props;
+    openNewPage('Person.detail', { personId: id });
   };
 
   props: {
@@ -44,7 +55,7 @@ export class PersonNode extends Component {
       .assign(nodeConfig.children ? styles.circleEmpty : styles.circleFill)
       .value();
 
-    return <circle r="10" style={style} onClick={this.onClick} />;
+    return <circle r="10" style={style} onClick={this.onCircleClick} />;
   }
 
   renderName() {
@@ -59,7 +70,17 @@ export class PersonNode extends Component {
   renderPicture() {
     const { nodeConfig } = this.props;
 
-    return <image href={nodeConfig.info.picture} x="-20" y="-68" width="40px" height="40px" />;
+    return (
+      <image
+        onClick={this.onPictureClick}
+        style={styles.personPicture}
+        href={nodeConfig.info.picture}
+        x="-20"
+        y="-68"
+        width="40px"
+        height="40px"
+      />
+    );
   }
 
   render() {

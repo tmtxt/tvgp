@@ -13,6 +13,6 @@ export default {
   },
 
   Person: {
-    detail: '/person/:id'
+    detail: '/person/:personId'
   }
 };

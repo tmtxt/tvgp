@@ -4,14 +4,10 @@ import { browserHistory } from 'react-router';
 
 import routes from 'client/constants/routes';
 
-
 function getQueryString(query) {
   const esc = encodeURIComponent;
-  return Object.keys(query)
-    .map(k => `${esc(k)}=${esc(query[k])}`)
-    .join('&');
+  return Object.keys(query).map(k => `${esc(k)}=${esc(query[k])}`).join('&');
 }
-
 
 export function getRoute(routeSelector, params = {}, query = {}) {
   let route = _.get(routes, routeSelector);
@@ -33,10 +29,15 @@ export function getRoute(routeSelector, params = {}, query = {}) {
   return route;
 }
 
-
 export function push(routeSelector, params = {}, query = {}) {
   const route = getRoute(routeSelector, params, query);
   browserHistory.push(route);
+}
+
+// open route in new page
+export function openNewPage(routeSelector, params = {}, query = {}) {
+  const route = getRoute(routeSelector, params, query);
+  window.open(route, '_blank');
 }
 
 export default push;

@@ -26,5 +26,7 @@ defmodule ApiServer.Router do
 
     get "/trees", TreeController, :get_tree_from_default_root
     post "/trees/:person_id", TreeController, :get_tree_from_person
+
+    get "/person/:person_id", PersonController, :get_person_by_id
   end
 end

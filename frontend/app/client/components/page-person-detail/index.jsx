@@ -9,9 +9,7 @@ export class PagePersonDetail extends Component {
   }
 
   render() {
-    console.log('--------------------------------------------------------------------------------');
-    console.log(this.props);
-    console.log('--------------------------------------------------------------------------------');
+
 
     return (
       <div>
