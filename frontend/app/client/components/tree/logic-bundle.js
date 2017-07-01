@@ -19,4 +19,4 @@ export {
 } from './actions';
 
 // types
-export type { TreeIdType, PersonInfoType } from './types';
+export type { TreeIdType } from './types';

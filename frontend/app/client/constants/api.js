@@ -28,5 +28,10 @@ export default {
   'Tree.getTreeFromPerson': {
     method: 'get',
     url: '/api/trees/:personId'
+  },
+
+  'Person.getPersonById': {
+    method: 'get',
+    url: '/api/person/:personId'
   }
 };

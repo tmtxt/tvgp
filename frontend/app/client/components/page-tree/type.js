@@ -1,5 +1,5 @@
 // @flow
-import type { PersonInfoType } from 'client/components/tree/logic-bundle';
+import type { PersonInfoType } from 'client/components/person';
 
 export type NodeConfigType = {
   x: number,
