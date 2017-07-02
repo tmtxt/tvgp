@@ -48,6 +48,7 @@ defmodule ApiServer.Models.Postgres.Person do
   """
   def get_by_id(person_id) do
     Repo.get_by(Person, id: person_id)
+    |> ensure_person_picture()
   end
 
 
@@ -57,9 +58,18 @@ defmodule ApiServer.Models.Postgres.Person do
   def get_by_ids(person_ids) do
     query = from p in Person, where: p.id in ^person_ids
     ApiServer.Repo.all(query)
+    |> Enum.map(&ensure_person_picture/1)
   end
 
 
   defp fields_list(), do: [:full_name, :birth_date, :death_date, :alive_status, :job, :address,
                            :picture, :gender, :phone_no, :summary]
+
+  defp ensure_person_picture(person) do
+    default_picture = :api_server
+    |> Application.get_env(ApiServer.Services.Tree)
+    |> Keyword.get(:default_person_picture)
+    picture = Map.get(person, :picture, default_picture) || default_picture
+    Map.put(person, :picture, picture)
+  end
 end
