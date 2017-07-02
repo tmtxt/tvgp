@@ -1,6 +1,7 @@
 defmodule ApiServer.Models.Postgres.Person do
   require Ecto.Query
   use ApiServer.Web, :model
+  use Ecto.Schema
 
   alias ApiServer.Models.Postgres.Person
   alias ApiServer.Repo
@@ -10,8 +11,8 @@ defmodule ApiServer.Models.Postgres.Person do
 
   schema "person" do
     field :full_name, :string
-    field :birth_date, :integer
-    field :death_date, :integer
+    field :birth_date, Ecto.DateTime
+    field :death_date, Ecto.DateTime
     field :alive_status, :string
     field :job, :string
     field :address, :string

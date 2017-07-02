@@ -12,7 +12,9 @@ defmodule ApiServer.SeedData.Person do
       %{
         full_name: "Root",
         gender: "male",
-        alive_status: "dead"
+        alive_status: "dead",
+        birth_date: "1900-03-02 00:00:00",
+        death_date: "1950-04-06 00:00:00"
       }, true, log_trace)
     wife_node = insert_person(
       %{
