@@ -35,7 +35,7 @@ export const withPersonInfo = (
     };
 
     render() {
-      const props = _.chain(this.props).omit(['getPersonById']);
+      const props = _.omit(this.props, ['getPersonById']);
       return <WrappedComponent {...props} />;
     }
   }

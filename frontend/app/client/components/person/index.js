@@ -25,6 +25,7 @@ export const SET_PERSON = 'person/SET_PERSON';
 // actions
 export const setPerson = (personId: number, person: PersonInfoType) => ({
   type: SET_PERSON,
+  personId,
   person
 });
 export const getPersonById = (personId: number) => (

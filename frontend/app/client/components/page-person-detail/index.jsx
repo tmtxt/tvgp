@@ -1,27 +1,25 @@
 // @flow
-import React, { Component } from 'react';
+import React from 'react';
 
-import withPersonInfo from 'client/components/person/with-person-info';
+import wrapMainLayout from 'client/components/main-layout/index.jsx';
+import withPersonInfo from 'client/components/person/with-person-info.jsx';
 
 import PersonDetailPage from './person-detail-page';
 
-const PersonDetailPageComponent = withPersonInfo(PersonDetailPage);
+let PersonDetailPageComponent;
+PersonDetailPageComponent = wrapMainLayout(PersonDetailPage);
+PersonDetailPageComponent = withPersonInfo(PersonDetailPageComponent);
 
-export class PersonDetailPageWrapper extends Component {
-  static displayName = 'PersonDetailPageWrapper';
-
-  props: {
-    params: {
-      personId: string
-    }
+type PropsType = {
+  params: {
+    personId: string
   }
+};
 
-  render() {
-    let personId = this.props.params.personId;
-    personId = parseInt(personId, 10);
+export const PersonDetailPageWrapper = (props: PropsType) => {
+  const personId = parseInt(props.params.personId, 10);
 
-    return <PersonDetailPageComponent personId={personId} />;
-  }
-}
+  return <PersonDetailPageComponent personId={personId} />;
+};
 
 export default PersonDetailPageWrapper;
