@@ -1,7 +1,7 @@
 // @flow
 
-export type AliveStatusType = 'alive'|'dead'|'unknown';
-export type GenderType = 'male'|'female'|'gay'|'les'|'unknown';
+export type AliveStatusType = 'alive' | 'dead' | 'unknown';
+export type GenderType = 'male' | 'female' | 'gay' | 'les' | 'unknown';
 export type PersonInfoType = {
   address: ?string,
   aliveStatus: ?AliveStatusType,

@@ -47,6 +47,7 @@
     "gulp": "^3.9.1",
     "gulp-env": "^0.4.0",
     "gulp-util": "^3.0.7",
+    "hoist-non-react-statics": "^2.0.0",
     "immutable": "^3.8.1",
     "imports-loader": "^0.7.0",
     "isomorphic-fetch": "^2.2.1",

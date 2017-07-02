@@ -6,12 +6,13 @@ import routingReducer, { mountPoint as routingMountPoint } from './components/ro
 import userReducer, { mountPoint as userMountPoint } from './components/user/logic-bundle';
 import prefaceReducer, { mountPoint as prefaceMountPoint } from './components/preface/logic-bundle';
 import treeReducer, { mountPoint as treeMountPoint } from './components/tree/logic-bundle';
-
+import personReducer, { mountPoint as personMountPoint } from './components/person';
 
 export default combineReducers({
   [todosMountPoint]: todosReducer,
   [routingMountPoint]: routingReducer,
   [userMountPoint]: userReducer,
   [prefaceMountPoint]: prefaceReducer,
-  [treeMountPoint]: treeReducer
+  [treeMountPoint]: treeReducer,
+  [personMountPoint]: personReducer
 });

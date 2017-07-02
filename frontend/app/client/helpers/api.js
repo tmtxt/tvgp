@@ -60,7 +60,8 @@ function api(
   body: Object,
   getState: Function
 ) {
-  params = changeCaseObject.snakeCase(params || {});
+  params = params || {};
+  // params = changeCaseObject.snakeCase(params || {});
   query = changeCaseObject.snakeCase(query || {});
   body = changeCaseObject.snakeCase(body || {});
 
