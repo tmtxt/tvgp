@@ -32,6 +32,6 @@ export default {
 
   'Person.getPersonById': {
     method: 'get',
-    url: '/api/person/:personId'
+    url: '/api/persons/:personId'
   }
 };

@@ -1,2 +1,2 @@
 # Get person by id
-GET http://127.0.0.1:4000/api/person/1
+GET http://127.0.0.1:4000/api/persons/1

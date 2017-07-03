@@ -13,6 +13,20 @@ defmodule ApiServer.Models.Neo4j.PedigreeRelation do
   # Code
   alias Neo4j.Sips, as: Neo4j
 
+  def get_parent_nodes(person_id) do
+    query = """
+    MATCH (child:Person {person_id: #{person_id}})<-[relation:Father_child|Mother_child]-(parent:Person)
+    RETURN type(relation) AS `type`, parent AS `node`
+    """
+
+    parents = Neo4j.query!(Neo4j.conn, query)
+    parents = Enum.map(parents, fn(%{"type" => type, "node" => node}) ->
+      Map.put(node, "type", type)
+    end)
+
+    parents
+  end
+
   @doc """
   Link family nodes
   """
