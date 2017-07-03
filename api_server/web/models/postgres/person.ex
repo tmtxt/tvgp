@@ -62,6 +62,20 @@ defmodule ApiServer.Models.Postgres.Person do
     |> Enum.map(&ensure_person_picture/1)
   end
 
+  @doc """
+  Similar to the above get_by_ids function, return a map with key is the person id
+  instead of a list
+  """
+  def get_by_ids(person_ids, "return-map") do
+    persons = get_by_ids(person_ids)
+    Enum.reduce(
+      persons,
+      %{},
+      fn(person, res) ->
+        Map.put(res, Map.get(person, :id), person)
+      end
+    )
+  end
 
   defp fields_list(), do: [:full_name, :birth_date, :death_date, :alive_status, :job, :address,
                            :picture, :gender, :phone_no, :summary]
