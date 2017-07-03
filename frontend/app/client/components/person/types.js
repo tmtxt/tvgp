@@ -7,6 +7,13 @@ export type ParentInfoType = {
 };
 export type ParentsType = Array<ParentInfoType>;
 
+export type ChildInfoType = {
+  id: number,
+  fullName: ?string,
+  picture: string
+};
+export type ChildrenType = Array<ChildInfoType>;
+
 export type AliveStatusType = 'alive' | 'dead' | 'unknown';
 export type GenderType = 'male' | 'female' | 'gay' | 'les' | 'unknown';
 export type PersonInfoType = {

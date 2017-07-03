@@ -38,5 +38,9 @@ export default {
   'PedigreeRelation.getParentsByPersonId': {
     method: 'get',
     url: '/api/persons/:personId/parents'
+  },
+  'PedigreeRelation.getChildrenByPersonId': {
+    method: 'get',
+    url: '/api/persons/:personId/children'
   }
 };
