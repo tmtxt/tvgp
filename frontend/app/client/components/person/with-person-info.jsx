@@ -27,6 +27,15 @@ export const withPersonInfo = (
       this.props.getPersonById(personId);
     }
 
+    componentWillReceiveProps(nextProps) {
+      const { personId: currentId } = this.props;
+      const { personId: nextId } = nextProps;
+
+      if (currentId !== nextId) {
+        this.props.getPersonById(nextId);
+      }
+    }
+
     props: {
       personId: number,
       getPersonById: typeof getPersonById,
