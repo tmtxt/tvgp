@@ -15,7 +15,11 @@ export const ParentsTable = (props: PropsType) => {
   const { person: { parents } } = props;
 
   if (!parents) {
-    return <Loader />;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   if (!parents.length) {

@@ -29,5 +29,6 @@ export type PersonInfoType = {
   picture: string,
   summary: string,
 
-  parents?: ParentsType
+  parents?: ParentsType,
+  children?: ChildrenType
 };

@@ -6,6 +6,7 @@ import type { PersonInfoType } from 'client/components/person/types';
 
 import PersonInfoTable from './person-info-table';
 import ParentsTable from './parents-table';
+import ChildrenTable from './children-table';
 
 type PropsType = { person: PersonInfoType };
 
@@ -32,6 +33,7 @@ export const PersonDetailPage = (props: PropsType) => {
         </div>
         <div className="col-md-3">
           <ParentsTable person={person} />
+          <ChildrenTable person={person} />
         </div>
       </div>
     </div>
