@@ -1,26 +1,25 @@
 // @flow
 import globalizeSelectors from 'client/helpers/globalize-selectors';
-import { Map as ImmutableMap } from 'immutable';
+import { Map as ImmutableMap, fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 
 import api from 'client/helpers/api';
 
-import type { PersonInfoType } from './types';
+import type { PersonInfoType, ParentsType } from './types';
 
 // mount point from main reducer
 export const mountPoint = 'person';
 
 // selectors
 const selectPersonById = (state: Object, personId: number) => state.get(personId);
-export const selectors = globalizeSelectors({
-  selectPersonById
-}, mountPoint);
+export const selectors = globalizeSelectors({ selectPersonById }, mountPoint);
 
 // types
 export type { PersonInfoType } from './types';
 
 // action types
 export const SET_PERSON = 'person/SET_PERSON';
+export const SET_PARENTS = 'person/SET_PARENTS';
 
 // actions
 export const setPerson = (personId: number, person: PersonInfoType) => ({
@@ -28,17 +27,37 @@ export const setPerson = (personId: number, person: PersonInfoType) => ({
   personId,
   person
 });
+export const setParents = (personId: number, parents: ParentsType) => ({
+  type: SET_PARENTS,
+  personId,
+  parents
+});
+
+export const getParentsByPersonId = (personId: number) => (
+  dispatch: Function,
+  getState: Function
+): Promise<*> =>
+  api(
+    'PedigreeRelation.getParentsByPersonId',
+    { personId },
+    null,
+    null,
+    getState
+  ).then((parents: ParentsType) => dispatch(setParents(personId, parents)));
+
 export const getPersonById = (personId: number) => (
   dispatch: Function,
   getState: Function
 ): Promise<*> =>
-  api('Person.getPersonById', { personId }, null, null, getState).then((person: PersonInfoType) =>
-    dispatch(setPerson(personId, person))
-  );
+  api('Person.getPersonById', { personId }, null, null, getState)
+    .then((person: PersonInfoType) => dispatch(setPerson(personId, person)))
+    .then(() => dispatch(getParentsByPersonId(personId)));
 
 export default handleActions(
   {
-    [SET_PERSON]: (state, { personId, person }) => state.set(personId, person)
+    [SET_PERSON]: (state, { personId, person }) => state.set(personId, fromJS(person)),
+    [SET_PARENTS]: (state, { personId, parents }) =>
+      state.setIn([personId, 'parents'], fromJS(parents))
   },
   ImmutableMap()
 );

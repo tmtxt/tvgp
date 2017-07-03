@@ -1,4 +1,11 @@
 // @flow
+export type ParentInfoType = {
+  id: number,
+  type: 'Mother_child'|'Father_child',
+  fullName: ?string,
+  picture: string
+};
+export type ParentsType = Array<ParentInfoType>;
 
 export type AliveStatusType = 'alive' | 'dead' | 'unknown';
 export type GenderType = 'male' | 'female' | 'gay' | 'les' | 'unknown';
@@ -13,5 +20,7 @@ export type PersonInfoType = {
   job: ?string,
   phoneNo: ?string,
   picture: string,
-  summary: string
+  summary: string,
+
+  parents?: ParentsType
 };

@@ -43,7 +43,7 @@ export const withPersonInfo = (
   function mapStateToProps(state: Object, ownProps: Object) {
     const { personId } = ownProps;
     const person = selectors.selectPersonById(state, personId);
-    return { person };
+    return { person: person && person.toJS() };
   }
   let WithPersonInfoComponent = hoistStatics(WithPersonInfo, WrappedComponent);
   WithPersonInfoComponent = connect(mapStateToProps, { getPersonById })(WithPersonInfoComponent);

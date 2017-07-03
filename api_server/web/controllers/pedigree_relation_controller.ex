@@ -7,7 +7,7 @@ defmodule ApiServer.PedigreeRelationController do
   @doc """
   Get the parent info by the input person id
   """
-  def get_parent_by_person_id(conn, params) do
+  def get_parents_by_person_id(conn, params) do
     log_trace = conn.assigns.log_trace
 
     # parse person id
