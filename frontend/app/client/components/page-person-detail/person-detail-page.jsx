@@ -5,6 +5,7 @@ import Loader from 'client/components/shared/loader.jsx';
 import type { PersonInfoType } from 'client/components/person/types';
 
 import PersonInfoTable from './person-info-table';
+import ParentsTable from './parents-table';
 
 type PropsType = { person: PersonInfoType };
 
@@ -23,14 +24,14 @@ export const PersonDetailPage = (props: PropsType) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-3">
-          <img className="img-responsive" alt="" src={person.picture} />
+          <img className="img-responsive img-rounded" alt="" src={person.picture} />
         </div>
         <div className="col-md-6">
           <h1>{person.fullName}</h1>
           <PersonInfoTable person={person} />
         </div>
         <div className="col-md-3">
-          Family
+          <ParentsTable person={person} />
         </div>
       </div>
     </div>
