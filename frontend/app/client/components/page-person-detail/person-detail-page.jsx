@@ -4,6 +4,7 @@ import React from 'react';
 import Loader from 'client/components/shared/loader.jsx';
 import type { PersonInfoType } from 'client/components/person/types';
 import withUserInfo from 'client/components/user/with-user-info';
+import push from 'client/helpers/routing';
 
 import PersonInfoTable from './person-info-table';
 import ParentsTable from './parents-table';
@@ -39,7 +40,12 @@ export const PersonDetailPage = (props: PropsType) => {
     <div className="container-fluid">
       {isAdmin &&
         <div style={styles.buttonsContainer}>
-          <input className="btn btn-primary" type="button" value="Thêm con" />
+          <input
+            className="btn btn-primary"
+            type="button"
+            value="Thêm con"
+            onClick={() => push('Person.add', { personId: person.id, role: 'parent' })}
+          />
         </div>}
       <div className="row">
         <div className="col-md-3">

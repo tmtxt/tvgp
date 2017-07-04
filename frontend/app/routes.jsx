@@ -14,6 +14,7 @@ import PageChangePassword from './client/components/page-change-password';
 import PageAdminPreface from './client/components/page-admin-preface';
 
 import PagePersonDetail from './client/components/page-person-detail';
+import PageAddPerson from './client/components/page-add-person';
 
 export const getClientHistory = store =>
   syncHistoryWithStore(browserHistory, store, {
@@ -36,5 +37,6 @@ export const getRoutes = history => (
     <Route path={RoutePaths.Admin.preface} component={PageAdminPreface} />
 
     <Route path={RoutePaths.Person.detail} component={PagePersonDetail} />
+    <Route path={RoutePaths.Person.add} component={PageAddPerson} />
   </Router>
 );

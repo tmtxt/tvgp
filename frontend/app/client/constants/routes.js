@@ -13,6 +13,7 @@ export default {
   },
 
   Person: {
+    add: '/persons/:personId/add/:role',
     detail: '/persons/:personId'
   }
 };
