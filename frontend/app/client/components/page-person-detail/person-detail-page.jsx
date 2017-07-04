@@ -3,15 +3,29 @@ import React from 'react';
 
 import Loader from 'client/components/shared/loader.jsx';
 import type { PersonInfoType } from 'client/components/person/types';
+import withUserInfo from 'client/components/user/with-user-info';
 
 import PersonInfoTable from './person-info-table';
 import ParentsTable from './parents-table';
 import ChildrenTable from './children-table';
 
-type PropsType = { person: PersonInfoType };
+type PropsType = {
+  // passed from parent
+  person: PersonInfoType,
+
+  // injected by hoc
+  isAdmin: boolean
+};
+
+const styles = {
+  buttonsContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  }
+};
 
 export const PersonDetailPage = (props: PropsType) => {
-  const { person } = props;
+  const { person, isAdmin } = props;
 
   if (!person) {
     return (
@@ -23,6 +37,10 @@ export const PersonDetailPage = (props: PropsType) => {
 
   return (
     <div className="container-fluid">
+      {isAdmin &&
+        <div style={styles.buttonsContainer}>
+          <input className="btn btn-primary" type="button" value="Thêm con" />
+        </div>}
       <div className="row">
         <div className="col-md-3">
           <img className="img-responsive img-rounded" alt="" src={person.picture} />
@@ -40,4 +58,4 @@ export const PersonDetailPage = (props: PropsType) => {
   );
 };
 
-export default PersonDetailPage;
+export default withUserInfo(PersonDetailPage);
