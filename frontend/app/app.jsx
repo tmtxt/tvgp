@@ -1,4 +1,5 @@
 import 'client/libs';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,6 +8,8 @@ import configureStore from './client/main-store';
 import { clientFetchData } from './client/helpers/fetch-data';
 import { getRoutes, getClientHistory } from './routes';
 import initUser from './client/initializers/user';
+
+injectTapEventPlugin();
 
 if (process.env.NODE_ENV === 'production') {
   require('offline-plugin/runtime').install();

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const App = ({ store, routes }: { store: Object, routes: Object }) => {
   if (process.env.NODE_ENV === 'development') {
@@ -8,7 +9,9 @@ const App = ({ store, routes }: { store: Object, routes: Object }) => {
     return (
       <AppContainer>
         <Provider key="provider" store={store}>
-          {routes}
+          <MuiThemeProvider>
+            {routes}
+          </MuiThemeProvider>
         </Provider>
       </AppContainer>
     );
@@ -16,7 +19,9 @@ const App = ({ store, routes }: { store: Object, routes: Object }) => {
 
   return (
     <Provider key="provider" store={store}>
-      {routes}
+      <MuiThemeProvider>
+        {routes}
+      </MuiThemeProvider>
     </Provider>
   );
 };

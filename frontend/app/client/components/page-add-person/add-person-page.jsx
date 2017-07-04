@@ -3,37 +3,74 @@ import React, { Component } from 'react';
 
 import Loader from 'client/components/shared/loader.jsx';
 
-import type { PersonInfoType } from 'client/components/person/types';
+import type { PersonInfoType, AliveStatusType, GenderType } from 'client/components/person/types';
 
-const styles = {
-  pictureButtonContainer: {
-    marginTop: 10,
-    display: 'flex',
-    justifyContent: 'center'
-  }
-};
+import PersonInfoForm from './person-info-form';
 
 export class AddPersonPage extends Component {
   static displayName = 'AddPersonPage';
 
   state: {
-    pictureLink: string,
-    pictureChanged: boolean
+    fullName: string,
+    birthDate: string,
+    deathDate: string,
+    aliveStatus: AliveStatusType,
+    gender: GenderType,
+    job: string,
+    address: string,
+    summary: string
   } = {
-    pictureLink: '/img/userbasic.jpg',
-    pictureChanged: false
+    fullName: '',
+    birthDate: '',
+    deathDate: '',
+    aliveStatus: 'unknown',
+    gender: 'unknown',
+    job: '',
+    address: '',
+    summary: ''
   };
 
-  onSelectPicture = () => {};
+  onPersonDataChanged = (dataKey: string, value: any) => {
+    this.setState({ [dataKey]: value });
+  };
 
   props: {
     fromRole: string,
     person: PersonInfoType
   };
 
+  renderPersonInfoForm() {
+    const {
+      fullName,
+      birthDate,
+      deathDate,
+      aliveStatus,
+      gender,
+      job,
+      address,
+      summary
+    } = this.state;
+    const { onPersonDataChanged } = this;
+
+    return (
+      <PersonInfoForm
+        {...{
+          fullName,
+          birthDate,
+          deathDate,
+          aliveStatus,
+          gender,
+          job,
+          address,
+          summary,
+          onPersonDataChanged
+        }}
+      />
+    );
+  }
+
   render() {
     const { person: fromPerson } = this.props;
-    const { pictureLink } = this.state;
 
     if (!fromPerson) {
       return <Loader />;
@@ -48,12 +85,7 @@ export class AddPersonPage extends Component {
                 <h3 className="panel-title">Thông tin chung</h3>
               </div>
               <div className="panel-body">
-                <form>
-                  <div className="form-group">
-                    <label htmlFor="exampleInputEmail1">Họ và Tên</label>
-                    <input type="email" className="form-control" id="fullNameInput" placeholder="Họ và Tên" />
-                  </div>
-                </form>
+                {this.renderPersonInfoForm()}
               </div>
             </div>
           </div>
