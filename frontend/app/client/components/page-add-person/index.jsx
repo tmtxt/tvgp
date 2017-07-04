@@ -10,9 +10,15 @@ import AddPersonPage from './add-person-page';
 const withPersonId = (WrappedComponent: ReactClass<*>) => (props: Object) => {
   const { params: { personId } } = props;
 
-  return <WrappedComponent personId={personId} />;
+  return <WrappedComponent personId={personId} {...props} />;
 };
 
-const hoc = compose(withPersonId, withPersonInfo, wrapMainLayout);
+const withFromRole = (WrappedComponent: ReactClass<*>) => (props: Object) => {
+  const { params: { role } } = props;
+
+  return <WrappedComponent fromRole={role} {...props} />;
+};
+
+const hoc = compose(withPersonId, withPersonInfo, wrapMainLayout, withFromRole);
 
 export default hoc(AddPersonPage);
