@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import DatePicker from 'material-ui/DatePicker';
 
 import type { AliveStatusType, GenderType } from 'client/components/person/types';
-import { formatDate } from 'client/helpers/date-time';
+import { formatVNDate, fromVNDate } from 'client/helpers/date-time';
 
 export class PersonInfoForm extends Component {
   static displayName = 'PersonInfoForm';
@@ -24,7 +24,7 @@ export class PersonInfoForm extends Component {
   };
 
   render() {
-    const { fullName } = this.props;
+    const { fullName, birthDate, aliveStatus } = this.props;
     const { onPersonDataChanged } = this.props;
 
     return (
@@ -44,15 +44,20 @@ export class PersonInfoForm extends Component {
         <div className="form-group">
           <label htmlFor="birthDateInput">Ngày sinh</label>
           <DatePicker
-            formatDate={formatDate}
+            value={birthDate && fromVNDate(birthDate)}
+            formatDate={formatVNDate}
             hintText="Ngày sinh"
-            onChange={(e, d) => console.log(d)}
+            onChange={(e, d) => onPersonDataChanged('birthDate', formatVNDate(d))}
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="aliveStatusInput">Tình trạng</label>
-          <select className="form-control">
+          <select
+            value={aliveStatus}
+            className="form-control"
+            onChange={e => onPersonDataChanged('aliveStatus', e.target.value)}
+          >
             <option value="unknown">Không rõ</option>
             <option value="alive">Còn sống</option>
             <option value="dead">Đã mất</option>

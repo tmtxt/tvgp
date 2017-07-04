@@ -12,8 +12,8 @@ export class AddPersonPage extends Component {
 
   state: {
     fullName: string,
-    birthDate: string,
-    deathDate: string,
+    birthDate: ?string,
+    deathDate: ?string,
     aliveStatus: AliveStatusType,
     gender: GenderType,
     job: string,
@@ -21,8 +21,8 @@ export class AddPersonPage extends Component {
     summary: string
   } = {
     fullName: '',
-    birthDate: '',
-    deathDate: '',
+    birthDate: null,
+    deathDate: null,
     aliveStatus: 'unknown',
     gender: 'unknown',
     job: '',
