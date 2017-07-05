@@ -6,6 +6,7 @@ import Loader from 'client/components/shared/loader.jsx';
 import type { PersonInfoType, AliveStatusType, GenderType } from 'client/components/person/types';
 
 import PersonInfoForm from './person-info-form';
+import ParentInfoForm from './parent-info-form';
 
 export class AddPersonPage extends Component {
   static displayName = 'AddPersonPage';
@@ -36,7 +37,7 @@ export class AddPersonPage extends Component {
 
   props: {
     fromRole: string,
-    person: PersonInfoType
+    person: PersonInfoType // from person
   };
 
   renderPersonInfoForm() {
@@ -69,6 +70,16 @@ export class AddPersonPage extends Component {
     );
   }
 
+  renderRelationInfoForm() {
+    const { fromRole, person: fromPerson } = this.props;
+
+    if (fromRole === 'parent') {
+      return <ParentInfoForm fromParentPerson={fromPerson} />;
+    }
+
+    return null;
+  }
+
   render() {
     const { person: fromPerson } = this.props;
 
@@ -90,7 +101,14 @@ export class AddPersonPage extends Component {
             </div>
           </div>
           <div className="col-md-4">
-            Info
+            <div className="panel panel-warning">
+              <div className="panel-heading">
+                <h3 className="panel-title">Thông tin thêm</h3>
+              </div>
+              <div className="panel-body">
+                {this.renderRelationInfoForm()}
+              </div>
+            </div>
           </div>
         </div>
       </div>
