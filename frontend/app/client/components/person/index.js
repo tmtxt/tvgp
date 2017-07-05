@@ -5,7 +5,7 @@ import { handleActions } from 'redux-actions';
 
 import api from 'client/helpers/api';
 
-import type { PersonInfoType, ParentsType, ChildrenType } from './types';
+import type { PersonInfoType, ParentsType, ChildrenType, MarriagesType } from './types';
 
 // mount point from main reducer
 export const mountPoint = 'person';
@@ -21,6 +21,7 @@ export type { PersonInfoType } from './types';
 export const SET_PERSON = 'person/SET_PERSON';
 export const SET_PARENTS = 'person/SET_PARENTS';
 export const SET_CHILDREN = 'person/SET_CHILDREN';
+export const SET_MARRIAGES = 'person/SET_MARRIAGES';
 
 // actions
 export const setPerson = (personId: number, person: PersonInfoType) => ({
@@ -37,6 +38,11 @@ export const setChildren = (personId: number, children: ChildrenType) => ({
   type: SET_CHILDREN,
   personId,
   children
+});
+export const setMarriages = (personId: number, marriages: MarriagesType) => ({
+  type: SET_MARRIAGES,
+  personId,
+  marriages
 });
 
 export const getParentsByPersonId = (personId: number) => (
@@ -63,16 +69,29 @@ export const getChildrenByPersonId = (personId: number) => (
     getState
   ).then((children: ChildrenType) => dispatch(setChildren(personId, children)));
 
+export const getMarriagesByPersonId = (personId: number) => (
+  dispatch: Function,
+  getState: Function
+): Promise<*> =>
+  api(
+    'MarriageRelation.getMarriagesByPersonId',
+    { personId },
+    null,
+    null,
+    getState
+  ).then((marriages: MarriagesType) => dispatch(setMarriages(personId, marriages)));
+
 export const getPersonById = (personId: number) => (
   dispatch: Function,
   getState: Function
 ): Promise<*> =>
   api('Person.getPersonById', { personId }, null, null, getState)
     .then((person: PersonInfoType) => dispatch(setPerson(personId, person)))
-  .then(() => {
-    dispatch(getParentsByPersonId(personId));
-    dispatch(getChildrenByPersonId(personId));
-  });
+    .then(() => {
+      dispatch(getParentsByPersonId(personId));
+      dispatch(getChildrenByPersonId(personId));
+      dispatch(getMarriagesByPersonId(personId));
+    });
 
 export default handleActions(
   {
@@ -80,7 +99,9 @@ export default handleActions(
     [SET_PARENTS]: (state, { personId, parents }) =>
       state.setIn([personId, 'parents'], fromJS(parents)),
     [SET_CHILDREN]: (state, { personId, children }) =>
-      state.setIn([personId, 'children'], fromJS(children))
+      state.setIn([personId, 'children'], fromJS(children)),
+    [SET_MARRIAGES]: (state, { personId, marriages }) =>
+      state.setIn([personId, 'marriages'], fromJS(marriages))
   },
   ImmutableMap()
 );

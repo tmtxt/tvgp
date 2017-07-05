@@ -14,6 +14,13 @@ export type ChildInfoType = {
 };
 export type ChildrenType = Array<ChildInfoType>;
 
+export type MarriageInfoType = {
+  id: number,
+  fullName: ?string,
+  picture: string
+};
+export type MarriagesType = Array<MarriageInfoType>;
+
 export type AliveStatusType = 'alive' | 'dead' | 'unknown';
 export type GenderType = 'male' | 'female' | 'gay' | 'les' | 'unknown';
 export type PersonInfoType = {
@@ -30,5 +37,6 @@ export type PersonInfoType = {
   summary: string,
 
   parents?: ParentsType,
-  children?: ChildrenType
+  children?: ChildrenType,
+  marriages?: MarriagesType
 };
