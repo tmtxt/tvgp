@@ -18,6 +18,14 @@ defmodule ApiServer.Models.Neo4j.MarriageRelation do
     ])
   end
 
+  def find_marriages_from_person_id(person_id) do
+    query = """
+    MATCH (:Person {person_id: #{person_id}})-[:Husband_wife|Wife_husband]->(m:Person)
+    RETURN m
+    """
+
+    Neo4j.query!(Neo4j.conn, query)
+  end
 
   @doc """
   Find all person nodes that get married with this person

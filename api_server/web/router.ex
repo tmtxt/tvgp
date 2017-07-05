@@ -31,5 +31,7 @@ defmodule ApiServer.Router do
 
     get "/persons/:person_id/parents", PedigreeRelationController, :get_parents_by_person_id
     get "/persons/:person_id/children", PedigreeRelationController, :get_children_by_person_id
+
+    get "/persons/:person_id/marriages", MarriageRelationController, :get_marriages_by_person_id
   end
 end

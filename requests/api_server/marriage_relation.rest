@@ -1,0 +1,2 @@
+# Get parents by person id
+GET http://127.0.0.1:4000/api/persons/3/marriages
