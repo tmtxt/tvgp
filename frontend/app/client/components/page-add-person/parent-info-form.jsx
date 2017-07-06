@@ -1,7 +1,10 @@
 // @flow
+import _ from 'lodash';
 import React, { Component } from 'react';
 
-import type { PersonInfoType, GenderType } from 'client/components/person/types';
+import Loader from 'client/components/shared/loader.jsx';
+
+import type { PersonInfoType, GenderType, MarriageInfoType } from 'client/components/person/types';
 
 const styles = {
   parentRow: {
@@ -24,11 +27,23 @@ const getParentLabel = (gender: ?GenderType) => {
   return 'Mẹ';
 };
 
+const getMatchingParentLabel = (gender: ?GenderType) => {
+  const parentLabel = getParentLabel(gender);
+
+  if (parentLabel === 'Cha') {
+    return 'Mẹ';
+  }
+
+  return 'Cha';
+};
+
 export class ParentInfoForm extends Component {
   static displayName = 'ParentInfoForm';
 
   props: {
-    fromParentPerson: PersonInfoType
+    fromParentPerson: PersonInfoType,
+    matchingParentId: ?number,
+    onMatchingParentSelect: (matchingParentId: string) => void
   };
 
   renderFromParentPerson() {
@@ -46,10 +61,37 @@ export class ParentInfoForm extends Component {
     );
   }
 
+  renderMatchingParentsSelect() {
+    const { fromParentPerson, onMatchingParentSelect, matchingParentId } = this.props;
+    const { marriages } = fromParentPerson;
+
+    if (!marriages) {
+      return <Loader />;
+    }
+
+    const matchingParentLabel = getMatchingParentLabel(fromParentPerson.gender);
+    return (
+      <div className="form-group">
+        <label htmlFor="parentMarriageStatusInput">Chọn {matchingParentLabel}</label>
+        <select
+          value={matchingParentId}
+          className="form-control"
+          onChange={e => onMatchingParentSelect(e.target.value)}
+        >
+          <option value="">Không có {matchingParentLabel}</option>
+          {_.map(marriages, (marriage: MarriageInfoType, idx: number) => (
+            <option key={idx} value={marriage.id}>{marriage.fullName}</option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div>
         {this.renderFromParentPerson()}
+        {this.renderMatchingParentsSelect()}
       </div>
     );
   }

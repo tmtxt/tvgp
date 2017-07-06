@@ -19,7 +19,9 @@ export class AddPersonPage extends Component {
     gender: GenderType,
     job: string,
     address: string,
-    summary: string
+    summary: string,
+
+    matchingParentId: string
   } = {
     fullName: '',
     birthDate: null,
@@ -28,12 +30,13 @@ export class AddPersonPage extends Component {
     gender: 'unknown',
     job: '',
     address: '',
-    summary: ''
+    summary: '',
+    matchingParentId: ''
   };
 
-  onPersonDataChanged = (dataKey: string, value: any) => {
-    this.setState({ [dataKey]: value });
-  };
+  onPersonDataChanged = (dataKey: string, value: any) => this.setState({ [dataKey]: value });
+
+  onMatchingParentSelect = (matchingParentId: string) => this.setState({ matchingParentId });
 
   props: {
     fromRole: string,
@@ -74,7 +77,10 @@ export class AddPersonPage extends Component {
     const { fromRole, person: fromPerson } = this.props;
 
     if (fromRole === 'parent') {
-      return <ParentInfoForm fromParentPerson={fromPerson} />;
+      const fromParentPerson = fromPerson;
+      const { onMatchingParentSelect } = this;
+      const { matchingParentId } = this.state;
+      return <ParentInfoForm {...{ fromParentPerson, matchingParentId, onMatchingParentSelect }} />;
     }
 
     return null;
