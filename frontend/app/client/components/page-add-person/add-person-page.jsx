@@ -38,6 +38,10 @@ export class AddPersonPage extends Component {
 
   onMatchingParentSelect = (matchingParentId: string) => this.setState({ matchingParentId });
 
+  onSubmit = () => {
+
+  };
+
   props: {
     fromRole: string,
     person: PersonInfoType // from person
@@ -113,6 +117,17 @@ export class AddPersonPage extends Component {
               </div>
               <div className="panel-body">
                 {this.renderRelationInfoForm()}
+              </div>
+            </div>
+
+            <div className="panel panel-warning">
+              <div className="panel-body">
+                <input
+                  onClick={this.onSubmit}
+                  className="btn btn-primary"
+                  type="button"
+                  value="Hoàn tất"
+                />
               </div>
             </div>
           </div>

@@ -42,7 +42,7 @@ export class ParentInfoForm extends Component {
 
   props: {
     fromParentPerson: PersonInfoType,
-    matchingParentId: ?number,
+    matchingParentId: string,
     onMatchingParentSelect: (matchingParentId: string) => void
   };
 
