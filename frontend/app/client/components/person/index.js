@@ -1,11 +1,18 @@
 // @flow
-import globalizeSelectors from 'client/helpers/globalize-selectors';
+import _ from 'lodash';
 import { Map as ImmutableMap, fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 
+import globalizeSelectors from 'client/helpers/globalize-selectors';
 import api from 'client/helpers/api';
 
-import type { PersonInfoType, ParentsType, ChildrenType, MarriagesType } from './types';
+import type {
+  PersonInfoType,
+  ParentsType,
+  ChildrenType,
+  MarriagesType,
+  NewPersonType
+} from './types';
 
 // mount point from main reducer
 export const mountPoint = 'person';
@@ -92,6 +99,23 @@ export const getPersonById = (personId: number) => (
       dispatch(getChildrenByPersonId(personId));
       dispatch(getMarriagesByPersonId(personId));
     });
+
+export const addPersonFromParent = (
+  person: NewPersonType,
+  parentId: number,
+  matchingParentId: ?number,
+  done: ?(personId: number) => void
+) => (dispatch: Function, getState: Function): Promise<*> =>
+  api(
+    'Person.addPerson',
+    null,
+    null,
+    { fromRole: 'parent', person, parentId, matchingParentId },
+    getState
+  ).then((personResult: PersonInfoType) => {
+    dispatch(setPerson(personResult.id, personResult));
+    if (done) done(personResult.id);
+  });
 
 export default handleActions(
   {

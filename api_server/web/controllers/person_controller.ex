@@ -7,6 +7,10 @@ defmodule ApiServer.PersonController do
     defexception message: "Person not found", plug_status: 404
   end
 
+  defmodule FromRoleNotSupportedError do
+    defexception message: "From role not supported", plug_status: 400
+  end
+
   @doc """
   Get the person info
   """
@@ -43,7 +47,8 @@ defmodule ApiServer.PersonController do
                    person, parent_id, matching_parent_id, log_trace
                  )
                _ ->
-                 nil
+                 raise FromRoleNotSupportedError,
+                   message: "From role '#{from_role}' not supported"
              end
 
     json(conn, person)

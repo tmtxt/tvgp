@@ -1,7 +1,7 @@
 // @flow
 export type ParentInfoType = {
   id: number,
-  type: 'Mother_child'|'Father_child',
+  type: 'Mother_child' | 'Father_child',
   fullName: ?string,
   picture: string
 };
@@ -39,4 +39,15 @@ export type PersonInfoType = {
   parents?: ParentsType,
   children?: ChildrenType,
   marriages?: MarriagesType
+};
+
+export type NewPersonType = {
+  address: ?string,
+  aliveStatus: ?AliveStatusType,
+  birthDate: ?string,
+  deathDate: ?string,
+  fullName: ?string,
+  gender: ?GenderType,
+  job: ?string,
+  summary: ?string
 };

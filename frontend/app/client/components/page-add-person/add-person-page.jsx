@@ -1,17 +1,26 @@
 // @flow
 import React, { Component } from 'react';
+import Dialog from 'material-ui/Dialog';
 
 import Loader from 'client/components/shared/loader.jsx';
+import { addPersonFromParent } from 'client/components/person';
 
 import type { PersonInfoType, AliveStatusType, GenderType } from 'client/components/person/types';
 
 import PersonInfoForm from './person-info-form';
 import ParentInfoForm from './parent-info-form';
 
+const styles = {
+  updatingDialog: {
+    width: 180
+  }
+};
+
 export class AddPersonPage extends Component {
   static displayName = 'AddPersonPage';
 
   state: {
+    // person info
     fullName: string,
     birthDate: ?string,
     deathDate: ?string,
@@ -21,8 +30,13 @@ export class AddPersonPage extends Component {
     address: string,
     summary: string,
 
-    matchingParentId: string
+    // from person info
+    matchingParentId: string,
+
+    // whether the page is sending api request
+    isUpdating: boolean
   } = {
+    // person info
     fullName: '',
     birthDate: null,
     deathDate: null,
@@ -31,7 +45,12 @@ export class AddPersonPage extends Component {
     job: '',
     address: '',
     summary: '',
-    matchingParentId: ''
+
+    // from person info
+    matchingParentId: '',
+
+    //
+    isUpdating: false
   };
 
   onPersonDataChanged = (dataKey: string, value: any) => this.setState({ [dataKey]: value });
@@ -39,12 +58,50 @@ export class AddPersonPage extends Component {
   onMatchingParentSelect = (matchingParentId: string) => this.setState({ matchingParentId });
 
   onSubmit = () => {
+    const { fromRole, person: fromPerson } = this.props;
+    const {
+      fullName,
+      birthDate,
+      deathDate,
+      aliveStatus,
+      gender,
+      job,
+      address,
+      summary
+    } = this.state;
+    const personInfo = {
+      fullName,
+      birthDate,
+      deathDate,
+      aliveStatus,
+      gender,
+      job,
+      address,
+      summary
+    };
 
+    this.setState({ isUpdating: true });
+
+    if (fromRole === 'parent') {
+      const parentId = fromPerson.id;
+      const { matchingParentId } = this.state;
+      let parsedMatchingParentId;
+      if (matchingParentId !== '') {
+        parsedMatchingParentId = parseInt(matchingParentId, 10);
+      }
+      this.props.addPersonFromParent(personInfo, parentId, parsedMatchingParentId, () =>
+        this.setState({ isUpdating: false })
+      );
+    }
   };
 
   props: {
+    // data
     fromRole: string,
-    person: PersonInfoType // from person
+    person: PersonInfoType, // from person
+
+    // actions
+    addPersonFromParent: typeof addPersonFromParent
   };
 
   renderPersonInfoForm() {
@@ -74,6 +131,16 @@ export class AddPersonPage extends Component {
           onPersonDataChanged
         }}
       />
+    );
+  }
+
+  renderUpdatingDialog() {
+    const { isUpdating } = this.state;
+
+    return (
+      <Dialog title="Đang xử lý" modal contentStyle={styles.updatingDialog} open={isUpdating}>
+        <Loader size={5} />
+      </Dialog>
     );
   }
 
@@ -132,6 +199,8 @@ export class AddPersonPage extends Component {
             </div>
           </div>
         </div>
+
+        {this.renderUpdatingDialog()}
       </div>
     );
   }
