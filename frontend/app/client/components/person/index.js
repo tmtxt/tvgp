@@ -1,5 +1,4 @@
 // @flow
-import _ from 'lodash';
 import { Map as ImmutableMap, fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 

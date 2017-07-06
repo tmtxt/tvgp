@@ -1,9 +1,11 @@
 // @flow
+import _ from 'lodash';
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 
 import Loader from 'client/components/shared/loader.jsx';
 import { addPersonFromParent } from 'client/components/person';
+import { push } from 'client/helpers/routing';
 
 import type { PersonInfoType, AliveStatusType, GenderType } from 'client/components/person/types';
 
@@ -54,46 +56,39 @@ export class AddPersonPage extends Component {
   };
 
   onPersonDataChanged = (dataKey: string, value: any) => this.setState({ [dataKey]: value });
-
   onMatchingParentSelect = (matchingParentId: string) => this.setState({ matchingParentId });
-
+  onFinishAddingPerson = (personId: number) => push('Person.detail', { personId });
   onSubmit = () => {
-    const { fromRole, person: fromPerson } = this.props;
-    const {
-      fullName,
-      birthDate,
-      deathDate,
-      aliveStatus,
-      gender,
-      job,
-      address,
-      summary
-    } = this.state;
-    const personInfo = {
-      fullName,
-      birthDate,
-      deathDate,
-      aliveStatus,
-      gender,
-      job,
-      address,
-      summary
-    };
-
+    const { fromRole } = this.props;
     this.setState({ isUpdating: true });
 
     if (fromRole === 'parent') {
-      const parentId = fromPerson.id;
-      const { matchingParentId } = this.state;
-      let parsedMatchingParentId;
-      if (matchingParentId !== '') {
-        parsedMatchingParentId = parseInt(matchingParentId, 10);
-      }
-      this.props.addPersonFromParent(personInfo, parentId, parsedMatchingParentId, () =>
-        this.setState({ isUpdating: false })
-      );
+      this.addPersonFromParent();
     }
   };
+
+  getPersonInfo() {
+    return _.pick(
+      this.state,
+      ['fullName', 'birthDate', 'deathDate', 'aliveStatus', 'gender', 'job', 'address', 'summary']
+    );
+  }
+
+  addPersonFromParent() {
+    const personInfo = this.getPersonInfo();
+    const { person: { id: parentId } } = this.props;
+    const { matchingParentId } = this.state;
+    let parsedMatchingParentId;
+    if (matchingParentId !== '') {
+      parsedMatchingParentId = parseInt(matchingParentId, 10);
+    }
+    this.props.addPersonFromParent(
+      personInfo,
+      parentId,
+      parsedMatchingParentId,
+      this.onFinishAddingPerson
+    );
+  }
 
   props: {
     // data
