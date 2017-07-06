@@ -1,2 +1,14 @@
 # Get person by id
 GET http://127.0.0.1:4000/api/persons/1
+
+# Insert person from parent
+POST http://127.0.0.1:4000/api/persons
+Content-Type: application/json
+
+{
+  "from_role": "parent",
+  "person": {
+    "full_name": "Test"
+  },
+  "parent_id": 1
+}

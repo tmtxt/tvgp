@@ -28,6 +28,7 @@ defmodule ApiServer.Router do
     post "/trees/:person_id", TreeController, :get_tree_from_person
 
     get "/persons/:person_id", PersonController, :get_person_by_id
+    post "/persons", PersonController, :add_person
 
     get "/persons/:person_id/parents", PedigreeRelationController, :get_parents_by_person_id
     get "/persons/:person_id/children", PedigreeRelationController, :get_children_by_person_id
