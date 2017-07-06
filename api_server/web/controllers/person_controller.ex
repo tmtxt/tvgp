@@ -37,15 +37,15 @@ defmodule ApiServer.PersonController do
     } = params
     matching_parent_id = Map.get(params, "matching_parent_id")
 
-    res = case from_role do
-            "parent" ->
-              PersonService.insert_person_from_parent(
-                person, parent_id, matching_parent_id, log_trace
-              )
-            _ ->
-              nil
-          end
+    person = case from_role do
+               "parent" ->
+                 PersonService.insert_person_from_parent(
+                   person, parent_id, matching_parent_id, log_trace
+                 )
+               _ ->
+                 nil
+             end
 
-    json(conn, res)
+    json(conn, person)
   end
 end

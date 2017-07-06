@@ -67,10 +67,16 @@ defmodule ApiServer.Models.Neo4j.PedigreeRelation do
     end
 
     res = Task.yield_many(db_tasks)
-    case res do
-      [{_, {:ok, _}}, {_, {:ok, _}}] -> "OK"
-      _ -> raise LinkFamilyError, message: "Cannot link family member"
-    end
+    Enum.each(
+      res,
+      fn(res) ->
+        case res do
+          {_, {:ok, _}} -> "OK"
+          _ -> raise LinkFamilyError, message: "Cannot link family member"
+        end
+      end
+    )
+    "OK"
   end
 
 
