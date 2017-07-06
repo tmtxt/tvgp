@@ -15,8 +15,11 @@ defmodule ApiServer.MarriageRelationController do
 
     # get nodes from neo4j
     marriage_person_ids = person_id
-    |> MarriageRelation.find_marriages_from_node_id()
-    |> Enum.map(fn(node) -> Map.get(node, :person_id) end)
+    |> MarriageRelation.find_marriages_from_person_id()
+    |> Enum.map(fn(node) ->
+      %{"node" => %{ "person_id" => person_id }} = node
+      person_id
+    end)
 
     marriage_persons = PgPerson.get_by_ids(marriage_person_ids)
 

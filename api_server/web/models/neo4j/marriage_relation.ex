@@ -20,8 +20,8 @@ defmodule ApiServer.Models.Neo4j.MarriageRelation do
 
   def find_marriages_from_person_id(person_id) do
     query = """
-    MATCH (:Person {person_id: #{person_id}})-[:Husband_wife|Wife_husband]->(m:Person)
-    RETURN m
+    MATCH (p:Person {person_id: #{person_id}})-[:Husband_wife|Wife_husband]->(m:Person)
+    RETURN m AS `node`
     """
 
     Neo4j.query!(Neo4j.conn, query)
